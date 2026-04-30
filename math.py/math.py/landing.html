@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/landing.css">
+    <title>TECCY - Master Math with AI</title>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Master Math with Your AI-Powered Study Buddy</h1>
+            <p class="hero-subtitle">Personalized learning paths, instant diagnosis, and real study partners. Level up
+                your
+                math skills the fun way.</p>
+            <button class="cta-btn" onclick="scrollToAuth()">Get Started Free</button>
+        </div>
+        <div class="hero-decoration">
+            <div class="floating-card">📊</div>
+            <div class="floating-card">🎯</div>
+            <div class="floating-card">🤝</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <h2 class="section-title">Why Choose TECCY?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>AI Diagnosis</h3>
+                <p>Know your exact level in seconds with adaptive testing across all math topics</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Buddy System</h3>
+                <p>Connect with real study partners who match your goals and skill level</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3>Gamified Learning</h3>
+                <p>Earn rewards, grow crops, and track progress in your personal greenhouse</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Smart Dashboard</h3>
+                <p>Visualize your growth across Algebra, Geometry, Calculus, and more</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Practice</h3>
+                <p>AI-generated questions tailored to your exact skill level</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Targeted Flashcards</h3>
+                <p>Focus on your weak areas automatically with smart recommendations</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Take Diagnosis</h3>
+                <p>AI assesses your level in just 15 questions</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Get Matched</h3>
+                <p>Connect with study buddies at your level</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Level Up</h3>
+                <p>Practice, earn rewards, track progress</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Section -->
+    <section class="auth-section" id="auth-section">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="showLogin()">Login</button>
+                <button class="auth-tab" onclick="showSignup()">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form" id="login-form">
+                <h2>Welcome Back!</h2>
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <div class="error-message" id="login-error"></div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+
+            <!-- Signup Form -->
+            <form class="auth-form hidden" id="signup-form">
+                <h2>Join TECCY Today!</h2>
+                <div class="form-group">
+                    <label for="signup-username">Username</label>
+                    <input type="text" id="signup-username" required minlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" required minlength="6">
+                </div>
+                <div class="error-message" id="signup-error"></div>
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <p>© 2025 TECCY - AI Learning Platform | Made with ❤️ for Math Learners</p>
+    </footer>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Supabase JS - Load synchronously BEFORE landing.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase client immediately
+        const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        window.supabaseClient = supabaseClient;
+    </script>
+
+    <script src="scripts/landing.js"></script>
+</body>
+
+</html>

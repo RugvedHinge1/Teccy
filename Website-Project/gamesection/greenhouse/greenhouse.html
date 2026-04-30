@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Greenhouse</title>
+  <link rel="stylesheet" href="greenhouse.css">
+</head>
+<body>
+
+  <!-- Tool sidebar -->
+  <div class="tool-bar">
+    <img
+      src="/assets/tools/hoe_idle.png"
+      class="tool"
+      data-tool="hoe"
+      data-idle="/assets/tools/hoe_idle.png"
+      data-hover="/assets/tools/hoe_hover.png"
+      draggable="false"
+    >
+
+    <img src="/assets/tools/clippers.png" class="tool">
+    <img src="/assets/tools/panning.png" class="tool">
+  </div>
+
+  <!-- Greenhouse area -->
+  <div class="greenhouse" id="greenhouse"></div>
+
+
+  <!-- Seed selector ka ti dynamic daih bc seeds neih zat tur kan hre si loa LL emoni a hmang ka chiang ltk tawh lo -->
+  <div class="seed-bar" id="seedBar"></div>
+
+  
+  <script src="greenhouse.js"></script>
+</body>
+</html>

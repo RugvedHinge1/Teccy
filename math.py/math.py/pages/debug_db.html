@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Debug Database</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function checkDB() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                document.body.innerHTML += "<p>No user logged in.</p>";
+                return;
+            }
+            document.body.innerHTML += `<p>User ID: ${user.id}</p>`;
+
+            const { data, error } = await supabase
+                .from('user_progress')
+                .select('*')
+                .eq('user_id', user.id);
+
+            if (error) {
+                document.body.innerHTML += `<p style="color:red">Error: ${JSON.stringify(error)}</p>`;
+            } else {
+                document.body.innerHTML += "<h3>User Progress Rows:</h3>";
+                document.body.innerHTML += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+
+                // Analyze topics
+                data.forEach(row => {
+                    document.body.innerHTML += `<p>Topic found: "<strong>${row.topic}</strong>" (Length: ${row.topic.length})</p>`;
+                    // Check against 'Algebra'
+                    if (row.topic === 'Algebra') document.body.innerHTML += "Matches 'Algebra' exactly.<br>";
+                    else document.body.innerHTML += `Does NOT match 'Algebra'. Comparison: '${row.topic}' vs 'Algebra'<br>`;
+                });
+            }
+        }
+
+        window.onload = checkDB;
+    </script>
+</head>
+
+<body>
+    <h1>Database Debugger</h1>
+</body>
+
+</html>

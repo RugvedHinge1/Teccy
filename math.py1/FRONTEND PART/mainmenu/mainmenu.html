@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="menustyle.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Level selection modal -->
+  <div class="modal" id="levelModal">
+    <div class="modal-content">
+      <h2 id="modalTitle">What level are you?</h2>
+      <p id="modalDescription">Select your current skill level</p>
+      <div class="level-buttons" id="levelButtons"></div>
+      <button class="roadmap-btn" id="nextLevelBtn" style="width: 100%; margin-top: 20px;" disabled>Next</button>
+    </div>
+  </div>
+
+  <div class="sidebar">
+  <h2>Teccy</h2>
+
+  <!-- Topics -->
+  <a onclick="showCard('Algebra')">Algebra</a>
+  <a onclick="showCard('Geometry')">Geometry</a>
+  <a onclick="showCard('Calculus')">Calculus</a>
+  <a onclick="showCard('Probability')">Probability</a>
+  <a onclick="showCard('Trigonometry')">Trigonometry</a>
+
+  <div class="sidebar-divider"></div>
+
+  <!-- Learning Tools -->
+  <a href="dashboard.html">Dashboard</a>
+  <a href="buddy.html">Buddy System</a>
+  <a href="flashcards.html">Flashcards</a>
+
+  <div class="sidebar-divider"></div>
+
+  <!-- Game Area -->
+  <a href="/gamesection/greenhouse/greenhouse.html" target="blank">☘︎ Greenhouse</a>
+  <a href="store.html">🛒 General Store</a>
+  <a href="almanac.html">ᝰ Almanac</a>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1>Welcome to Teccy</h1>
+      <p>Your personalized AI tutor for Maths</p>
+    </div>
+
+    <h1 class="section-title">Choose a topic</h1>
+
+    <div class="features">
+      <!-- Algebra -->
+      <div class="card algebra-extra" id="card-diagnosis-algebra">
+        <h3>Algebra Practice</h3>
+        <p>Interactive equation builder & graph visualizer</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Algebra" target="_blank">Start Diagnosis</a>
+      </div>
+
+      <div class="card" id="card-practice-algebra" style="display:none;">
+        <span class="level-badge" id="level-badge-algebra">Level: Beginner</span>
+        <h3>Algebra</h3>
+        <p>Slope, intercepts, solving, forms</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Algebra')">Generate Question</button>
+          <a class="roadmap-btn" href="final-test.html?topic=Algebra" target="_blank"
+            style="background-color: #28a745;">Final Test</a>
+        </div>
+      </div>
+
+
+      <!-- Geometry -->
+      <div class="card geometry-extra" id="card-diagnosis-geometry">
+        <h3>Geometry Practice</h3>
+        <p>Explore 2D & 3D shapes with examples</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Geometry" target="_blank">Start Diagnosis</a>
+      </div>
+
+      <div class="card" id="card-practice-geometry" style="display:none;">
+        <span class="level-badge" id="level-badge-geometry">Level: Beginner</span>
+        <h3>Geometry</h3>
+        <p>Shapes, area, perimeter & angles</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Geometry')">Generate Question</button>
+          <a class="roadmap-btn" href="final-test.html?topic=Geometry" target="_blank"
+            style="background-color: #28a745;">Final Test</a>
+        </div>
+      </div>
+
+      <!-- Calculus -->
+      <div class="card calculus-extra" id="card-diagnosis-calculus">
+        <h3>Calculus Practice</h3>
+        <p>Visualize derivative graphs and slopes</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Calculus" target="_blank">Start Diagnosis</a>
+      </div>
+      <div class="card" id="card-practice-calculus" style="display:none;">
+        <span class="level-badge" id="level-badge-calculus">Level: Beginner</span>
+        <h3>Calculus</h3>
+        <p>Limits, derivatives & integration</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Calculus')">Generate Question</button>
+          <a class="roadmap-btn" href="final-test.html?topic=Calculus" target="_blank"
+            style="background-color: #28a745;">Final Test</a>
+        </div>
+      </div>
+
+
+      <!-- Probability -->
+      <div class="card probability-extra" id="card-diagnosis-probability">
+        <h3>Probability Practice</h3>
+        <p>Interactive simulations and examples</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Probability" target="_blank">Start Diagnosis</a>
+      </div>
+      <div class="card" id="card-practice-probability" style="display:none;">
+        <span class="level-badge" id="level-badge-probability">Level: Beginner</span>
+        <h3>Probability</h3>
+        <p>Combinations, permutations & events</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Probability')">Generate Question</button>
+          <a class="roadmap-btn" href="final-test.html?topic=Probability" target="_blank"
+            style="background-color: #28a745;">Final Test</a>
+        </div>
+      </div>
+
+
+      <!-- Trigonometry -->
+      <div class="card trigonometry-extra" id="card-diagnosis-trigonometry">
+        <h3>Trigonometry Practice</h3>
+        <p>Graph sine, cosine & tangent visually</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Trigonometry" target="_blank">Start Diagnosis</a>
+      </div>
+      <div class="card" id="card-practice-trigonometry" style="display:none;">
+        <span class="level-badge" id="level-badge-trigonometry">Level: Beginner</span>
+        <h3>Trigonometry</h3>
+        <p>Identities, functions & equations</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Trigonometry')">Generate Question</button>
+          <a class="roadmap-btn" href="final-test.html?topic=Trigonometry" target="_blank"
+            style="background-color: #28a745;">Final Test</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card greenhouse">
+      <h3>Greenhouse</h3>
+      <p>Grow crops and sell them!~</p>
+      <div class="card-actions">
+      <a class="roadmap-btn" href="/greenhouse/greenhouse.html">Enter</a>
+  </div>
+</div>
+
+    <script src="menuscript.js"></script>
+
+    <footer>
+      © 2025 Teccy - AI Learning Platform
+    </footer>
+  </div>
+</body>
+</html>

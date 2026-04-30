@@ -1,0 +1,41 @@
+.jersey-10-regular {
+  font-family: "Jersey 10", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+button.greenhouse{
+    font-family: "Jersey 10", san-serif;
+    background-color: #f7b327;
+    padding: 0.75rem 1rem;
+    border-radius: 0.25rem;
+    border: solid 0.125 #121212;
+    box-shadow: 0.25rem 0.25rem #121212;
+    cursor: pointer;  
+    transition: translate 200ms, box-shadow 200ms; 
+    width: 200px;
+    height: auto;
+}
+
+.greenshouse:active{
+    translate: 0.125rem 0.125rem;
+    box-shadow: 0.125rem 0.125rem #121212;
+}
+
+button.mainmenu{
+    font-family: "Jersey 10", san-serif;
+    background-color: #f7b327;
+    padding: 0.75rem 1rem;
+    border-radius: 0.25rem;
+    border: solid 0.125 #121212;
+    box-shadow: 0.25rem 0.25rem #121212;
+    cursor: pointer;  
+    transition: translate 200ms, box-shadow 200ms; 
+    width: 200px;
+    height: auto;
+}
+
+.mainmenu:active{
+    translate: 0.125rem 0.125rem;
+    box-shadow: 0.125rem 0.125rem #121212;
+}

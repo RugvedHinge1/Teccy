@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Results - Teccy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+  <style>
+    /* GLOBAL RESET & FONT */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Jersey 10', sans-serif;
+    }
+
+    /* PIXELATION */
+    html {
+      image-rendering: pixelated;
+    }
+
+    /* THEME VARIABLES */
+    :root {
+      --bg-dark: #ffffb7;
+      --bg-panel: #ffd400;
+      --bg-card: #fff192;
+      --text-primary: #121212;
+      --text-secondary: #333333;
+      --border-color: #121212;
+      --accent-highlight: #ffdd3c;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-size: 18px;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 230px;
+      background-color: var(--bg-panel);
+      border-right: 4px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 30px;
+      color: var(--text-primary);
+      font-size: 1.8rem;
+    }
+
+    .sidebar a {
+      color: var(--text-primary);
+      text-decoration: none;
+      width: 90%;
+      text-align: center;
+      padding: 12px;
+      margin: 6px 0;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      background-color: #fff192;
+      box-shadow: 4px 4px var(--border-color);
+      transition: all 0.15s ease;
+      display: block;
+      cursor: pointer;
+    }
+
+    .sidebar a:hover {
+      background-color: var(--accent-highlight);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    .sidebar-divider {
+      width: 80%;
+      height: 3px;
+      background: var(--border-color);
+      margin: 40px 0;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background: var(--bg-dark);
+      overflow-y: auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: var(--text-primary);
+      font-size: 2.5rem;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+      font-size: 1.2rem;
+    }
+
+    /* ===== RESULTS CONTAINER ===== */
+    .results-container {
+      background-color: var(--bg-card);
+      border: 3px solid var(--border-color);
+      border-radius: 4px;
+      box-shadow: 8px 8px var(--border-color);
+      padding: 40px;
+      color: var(--text-primary);
+    }
+
+    .results-container h2 {
+      color: var(--text-primary);
+      margin-bottom: 30px;
+      font-size: 2rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background-color: #ffffff;
+      padding: 20px;
+      border: 2px solid var(--border-color);
+      box-shadow: 4px 4px var(--border-color);
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .value {
+      color: var(--text-primary);
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .recommendations {
+      background-color: #ffffff;
+      padding: 20px;
+      border: 2px solid var(--border-color);
+      margin-bottom: 30px;
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .recommendations h3 {
+      color: var(--text-primary);
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .video-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .video-list li {
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .video-list li:last-child {
+      border-bottom: none;
+    }
+
+    .video-list a {
+      color: var(--text-primary);
+      text-decoration: underline;
+      font-size: 1.1rem;
+    }
+
+    .video-list a:hover {
+      background-color: var(--accent-highlight);
+    }
+
+    /* ===== BUTTONS ===== */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.15s ease;
+      font-weight: 500;
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .btn:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    .btn-primary {
+      background-color: var(--bg-panel);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary {
+      background-color: #ffffff;
+      color: var(--text-primary);
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      margin-top: 28px;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    @media (max-width: 880px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+
+      .results-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <h2>Teccy</h2>
+    <a href="index.html">Back to Topics</a>
+    <div class="sidebar-divider"></div>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="buddy.html">Buddy System</a>
+    <a href="flashcards.html">Flashcards</a>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1>Your Results</h1>
+      <p>Detailed analysis of your diagnosis test</p>
+    </div>
+
+    <div class="results-container">
+      <h2 id="topicTitle">Algebra Results</h2>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Score</h3>
+          <div class="value" id="scoreValue">0%</div>
+        </div>
+        <div class="stat-card">
+          <h3>Correct</h3>
+          <div class="value" id="correctValue">0/20</div>
+        </div>
+        <div class="stat-card">
+          <h3>Level</h3>
+          <div class="value" id="levelValue">Beginner</div>
+        </div>
+      </div>
+
+      <div class="recommendations">
+        <h3>Recommended Videos for You</h3>
+        <ul class="video-list" id="videoList"></ul>
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-secondary" onclick="goToDashboard()">View Dashboard</button>
+        <button class="btn btn-primary" onclick="startFlashcards()">Generate Flashcards</button>
+        <button class="btn btn-primary" onclick="takeFinalTest()">Take Final Test</button>
+      </div>
+    </div>
+
+    <footer>Personalized Learning for Everyone</footer>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const topic = (urlParams.get('topic') || 'algebra').toLowerCase();
+
+    const topicTitles = {
+      algebra: 'Algebra',
+      geometry: 'Geometry',
+      calculus: 'Calculus',
+      probability: 'Probability',
+      trigonometry: 'Trigonometry'
+    };
+
+    const videoDatabase = {
+      algebra: {
+        'Linear Equations': 'https://youtu.be/JUyLMW7yW6A?si=nNmld3VgSh5Rb5gC',
+        'Simplification': 'https://youtu.be/aR6phzMLuKM?si=MhKji7p-sO3kyAtO',
+        'Expansion': 'https://youtu.be/0zY1Kbo3TyI?si=7dI04iTru2kVU4JQ'
+      },
+      geometry: {
+        'Angles': 'https://youtu.be/c0RWBk6wonk?si=j84X3O6NKTG5jddt',
+        'Area': 'https://youtu.be/JnLDmw3bbuw?si=6mbUxvnOOiMZpdJI',
+        'Polygons': 'https://youtu.be/E_-3ulbtcLk?si=Kno2ZJsAuVMipyYC'
+      },
+      calculus: {
+        'Derivatives': 'https://youtu.be/BcOPKQAZcn0?si=0NoyB90aMW5YCGRK',
+        'Integrals': 'https://youtu.be/WsQQvHm4lSw?si=xJJSkFrEGWtJLUM1',
+        'Limits': 'https://youtu.be/riXcZT2ICjA?si=_rnJEZLE5mM_FhET'
+      },
+      probability: {
+        'Basic Probability': 'https://youtu.be/iLaSpfgVmCA?si=3T9-i5QuuoTT1QQw',
+        'Independent Events': 'https://youtu.be/LS-_ihDKr2M?si=aLno7lndYYl9Dkxm',
+        'Permutations': 'https://youtu.be/0NAASclUm4k?si=vCEXD7K6a8a81_0v'
+      },
+      trigonometry: {
+        'Trigonometric Values': 'https://youtu.be/mhd9FXYdf4s?si=qAnfB41VAINANHnt',
+        'Definitions': 'https://youtu.be/mhd9FXYdf4s?si=qAnfB41VAINANHnt',
+        'Identities': 'https://youtu.be/mhd9FXYdf4s?si=qAnfB41VAINANHnt'
+      }
+    };
+
+    function loadResults() {
+      const score = sessionStorage.getItem('diagnosisScore_' + topic) || 0;
+      const correctCount = sessionStorage.getItem('correctCount_' + topic) || 0;
+      const weakTopics = JSON.parse(sessionStorage.getItem('weakTopics_' + topic) || '[]');
+
+      document.getElementById('topicTitle').textContent = topicTitles[topic] + ' Results';
+      document.getElementById('scoreValue').textContent = score + '%';
+      document.getElementById('correctValue').textContent = correctCount + '/20';
+
+      // Determine level based on score
+      let level = 'Beginner';
+      if (score >= 70) level = 'Pro';
+      else if (score >= 50) level = 'Intermediate';
+      document.getElementById('levelValue').textContent = level;
+
+      // Populate video recommendations
+      const videoList = document.getElementById('videoList');
+      videoList.innerHTML = '';
+
+      const videos = videoDatabase[topic] || {};
+      Object.entries(videos).slice(0, 3).forEach(([subtopic, url]) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${url}" target="_blank">${subtopic} - Watch Video</a>`;
+        videoList.appendChild(li);
+      });
+    }
+
+    function goToDashboard() {
+      window.location.href = 'dashboard.html';
+    }
+
+    function startFlashcards() {
+      sessionStorage.setItem('flashcardTopic', topic);
+      window.location.href = 'flashcards.html';
+    }
+
+    function takeFinalTest() {
+      window.location.href = 'final-test.html?topic=' + topic;
+    }
+
+    loadResults();
+  </script>
+</body>
+
+</html>

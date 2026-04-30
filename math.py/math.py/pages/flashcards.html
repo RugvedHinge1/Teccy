@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Memory Training</title>
+
+  <!-- MathJax for formula rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    /* Background */
+    body {
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      background: #6fb04f;
+      background-image: radial-gradient(#7fcb5e 20%, transparent 20%);
+      background-size: 40px 40px;
+    }
+
+    /* Main Container */
+    .container {
+      width: 85%;
+      margin: 40px auto;
+      background: #e6b88f;
+      border: 6px solid #5c3b1e;
+      border-radius: 12px;
+      box-shadow: 8px 8px 0 #3e2a17;
+      display: flex;
+      padding: 20px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      border-right: 3px solid #5c3b1e;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+    }
+
+    .menu-btn {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border: 3px solid #5c3b1e;
+      background: #f2e2cf;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .menu-btn.active {
+      background: #f4d03f;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Header */
+    .header {
+      font-size: 28px;
+      font-weight: bold;
+      color: #8c2f1b;
+    }
+
+    /* Card Counter */
+    .counter {
+      background: #ddd;
+      padding: 10px;
+      margin: 20px 0;
+      border: 3px solid #5c3b1e;
+      font-weight: bold;
+    }
+
+    /* Flashcard */
+    .flashcard {
+      width: 70%;
+      margin: 20px auto;
+      min-height: 180px;
+      background: #e5e5e5;
+      border: 4px solid #5c3b1e;
+      box-shadow: 6px 6px 0 #b08968;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      position: relative;
+      padding: 20px 20px 40px 20px;
+      box-sizing: border-box;
+      line-height: 1.6;
+    }
+
+    .card-content {
+      text-align: center;
+      word-break: break-word;
+    }
+
+    .card-content sup { font-size: 0.72em; vertical-align: super; }
+    .card-content sub { font-size: 0.72em; vertical-align: sub; }
+
+    .flip-note {
+      position: absolute;
+      bottom: 10px;
+      right: 15px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* Buttons */
+    .controls {
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      margin: 10px;
+      border: 3px solid #5c3b1e;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .prev {
+      background: #e0c4a8;
+    }
+
+    .next {
+      background: #d3543c;
+      color: white;
+    }
+
+    .back {
+      background: #dcdcdc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="sidebar">
+      <h2>Teccy</h2>
+
+      <div class="menu-btn active" onclick="selectTopic('algebra', this)">Algebra</div>
+      <div class="menu-btn" onclick="selectTopic('geometry', this)">Geometry</div>
+      <div class="menu-btn" onclick="selectTopic('calculus', this)">Calculus</div>
+      <div class="menu-btn" onclick="selectTopic('probability', this)">Probability</div>
+      <div class="menu-btn" onclick="selectTopic('trigonometry', this)">Trigonometry</div>
+
+    </div>
+
+    <div class="main">
+
+      <div class="header">// MEMORY TRAINING</div>
+      <div class="counter" id="counter">CARD 1 OF 20</div>
+
+      <div class="flashcard" onclick="flipCard()" id="card">
+        <div class="card-content" id="card-content">Click a topic to start</div>
+        <div class="flip-note">CLICK TO FLIP</div>
+      </div>
+
+      <div class="controls">
+        <button class="btn prev" onclick="prevCard()">[ PREV ]</button>
+        <button class="btn next" onclick="nextCard()">[ NEXT ]</button>
+        <button class="btn back" onclick="goBack()">[ BACK ]</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let flashcards = [];
+    let currentCard = 0;
+    let flipped = false;
+
+    /* --- FORMULA DATABASE ---
+       Uses HTML <sup>/<sub> for exponents/subscripts.
+       Use \( ... \) for MathJax inline math where needed.
+    */
+    const formulaDatabase = {
+      /* -------- ALGEBRA -------- */
+      algebra: [
+        { q: "Linear Equation",    a: "ax + b = c &rarr; x = (c &minus; b) / a" },
+        { q: "Quadratic Formula",  a: "x = [&minus;b &plusmn; &radic;(b<sup>2</sup> &minus; 4ac)] / 2a" },
+        { q: "Slope Formula",      a: "m = (y<sub>2</sub> &minus; y<sub>1</sub>) / (x<sub>2</sub> &minus; x<sub>1</sub>)" },
+        { q: "Distance Formula",   a: "&radic;[(x<sub>2</sub> &minus; x<sub>1</sub>)<sup>2</sup> + (y<sub>2</sub> &minus; y<sub>1</sub>)<sup>2</sup>]" },
+        { q: "Midpoint Formula",   a: "((x<sub>1</sub>+x<sub>2</sub>)/2 , (y<sub>1</sub>+y<sub>2</sub>)/2)" },
+        { q: "(a + b)<sup>2</sup>",a: "a<sup>2</sup> + 2ab + b<sup>2</sup>" },
+        { q: "(a &minus; b)<sup>2</sup>", a: "a<sup>2</sup> &minus; 2ab + b<sup>2</sup>" },
+        { q: "a<sup>2</sup> &minus; b<sup>2</sup>", a: "(a + b)(a &minus; b)" },
+        { q: "a<sup>m</sup> &times; a<sup>n</sup>", a: "a<sup>m+n</sup>" },
+        { q: "a<sup>m</sup> / a<sup>n</sup>",       a: "a<sup>m&minus;n</sup>" },
+        { q: "(a<sup>m</sup>)<sup>n</sup>",          a: "a<sup>mn</sup>" },
+        { q: "log(ab)",   a: "log a + log b" },
+        { q: "log(a/b)",  a: "log a &minus; log b" },
+        { q: "log(a<sup>n</sup>)", a: "n &middot; log a" },
+        { q: "AP n<sup>th</sup> term", a: "a + (n &minus; 1)d" },
+        { q: "GP n<sup>th</sup> term", a: "a &middot; r<sup>n&minus;1</sup>" },
+        { q: "GP Sum",    a: "a(1 &minus; r<sup>n</sup>) / (1 &minus; r)" },
+        { q: "Common Factor",  a: "ax + ay = a(x + y)" },
+        { q: "Inequality Rule",a: "Reverse sign when multiplying / dividing by negative" },
+        { q: "Substitution",   a: "Replace variable with known value" }
+      ],
+
+      /* -------- GEOMETRY -------- */
+      geometry: [
+        { q: "Triangle Angle Sum",  a: "180&deg;" },
+        { q: "Quadrilateral Sum",   a: "360&deg;" },
+        { q: "Polygon Angle Sum",   a: "(n &minus; 2) &times; 180&deg;" },
+        { q: "Area of Rectangle",   a: "l &times; w" },
+        { q: "Area of Triangle",    a: "&frac12; &times; b &times; h" },
+        { q: "Area of Circle",      a: "&pi;r<sup>2</sup>" },
+        { q: "Circumference",       a: "2&pi;r" },
+        { q: "Pythagoras Theorem",  a: "a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup>" },
+        { q: "Volume of Cube",      a: "s<sup>3</sup>" },
+        { q: "Volume of Cylinder",  a: "&pi;r<sup>2</sup>h" },
+        { q: "Volume of Sphere",    a: "(4/3)&pi;r<sup>3</sup>" },
+        { q: "Surface Area of Cube",   a: "6s<sup>2</sup>" },
+        { q: "Surface Area of Sphere", a: "4&pi;r<sup>2</sup>" },
+        { q: "Complementary Angles",   a: "Sum = 90&deg;" },
+        { q: "Supplementary Angles",   a: "Sum = 180&deg;" },
+        { q: "Interior Angle (Regular Polygon)", a: "[(n&minus;2)/n] &times; 180&deg;" },
+        { q: "Diagonal of Rectangle",  a: "&radic;(l<sup>2</sup> + w<sup>2</sup>)" },
+        { q: "Arc Length",  a: "(&theta;/360) &times; 2&pi;r" },
+        { q: "Sector Area", a: "(&theta;/360) &times; &pi;r<sup>2</sup>" },
+        { q: "Parallel Lines", a: "Alternate angles are equal" }
+      ],
+
+      /* -------- CALCULUS -------- */
+      calculus: [
+        { q: "Power Rule",           a: "d/dx (x<sup>n</sup>) = n &middot; x<sup>n&minus;1</sup>" },
+        { q: "Derivative of Constant", a: "0" },
+        { q: "Derivative of e<sup>x</sup>",   a: "e<sup>x</sup>" },
+        { q: "Derivative of sin x",  a: "cos x" },
+        { q: "Derivative of cos x",  a: "&minus;sin x" },
+        { q: "Derivative of tan x",  a: "sec<sup>2</sup> x" },
+        { q: "Derivative of ln x",   a: "1/x" },
+        { q: "Product Rule",  a: "d/dx(uv) = u dv + v du" },
+        { q: "Quotient Rule", a: "d/dx(u/v) = (v du &minus; u dv) / v<sup>2</sup>" },
+        { q: "Chain Rule",    a: "d/dx f(g(x)) = f&prime;(g(x)) &middot; g&prime;(x)" },
+        { q: "Integral of x<sup>n</sup>",      a: "x<sup>n+1</sup>/(n+1) + C" },
+        { q: "Integral of sin x",  a: "&minus;cos x + C" },
+        { q: "Integral of cos x",  a: "sin x + C" },
+        { q: "Integral of e<sup>x</sup>",      a: "e<sup>x</sup> + C" },
+        { q: "Limit of 1/x",       a: "0 as x &rarr; &infin;" },
+        { q: "L&rsquo;H&ocirc;pital Rule", a: "Used for 0/0 or &infin;/&infin; indeterminate forms" },
+        { q: "Critical Point",     a: "f&prime;(x) = 0 or undefined" },
+        { q: "Second Derivative Test", a: "Determines concavity / local extrema" },
+        { q: "Fundamental Theorem of Calculus", a: "&int;<sub>a</sub><sup>b</sup> f(x)dx = F(b) &minus; F(a)" },
+        { q: "Concave Up",  a: "f&prime;&prime;(x) &gt; 0" }
+      ],
+
+      /* -------- PROBABILITY -------- */
+      probability: [
+        { q: "Basic Probability",    a: "P(A) = favourable outcomes / total outcomes" },
+        { q: "Range of Probability", a: "0 &le; P(A) &le; 1" },
+        { q: "Independent Events",   a: "P(A &cap; B) = P(A) &times; P(B)" },
+        { q: "Mutually Exclusive",   a: "P(A &cup; B) = P(A) + P(B)" },
+        { q: "Addition Rule",        a: "P(A &cup; B) = P(A) + P(B) &minus; P(A &cap; B)" },
+        { q: "Conditional Probability", a: "P(A|B) = P(A &cap; B) / P(B)" },
+        { q: "Permutation",  a: "P(n,r) = n! / (n &minus; r)!" },
+        { q: "Combination",  a: "C(n,r) = n! / [r! (n &minus; r)!]" },
+        { q: "Factorial",    a: "n! = n &times; (n &minus; 1) &times; &hellip; &times; 1" },
+        { q: "Expected Value",      a: "E(X) = &Sigma; x &middot; P(x)" },
+        { q: "Mean",                a: "&mu; = &Sigma;x / n" },
+        { q: "Variance",            a: "&sigma;<sup>2</sup> = &Sigma;(x &minus; &mu;)<sup>2</sup> / n" },
+        { q: "Standard Deviation",  a: "&sigma; = &radic;(variance)" },
+        { q: "Binomial Formula",    a: "P(X=r) = C(n,r) &middot; p<sup>r</sup> &middot; (1&minus;p)<sup>n&minus;r</sup>" },
+        { q: "Complement Rule",     a: "P(A&prime;) = 1 &minus; P(A)" },
+        { q: "Sample Space",        a: "Set of all possible outcomes (S)" },
+        { q: "Event",               a: "A subset of the sample space" },
+        { q: "Random Variable",     a: "A variable representing a numeric outcome" },
+        { q: "Bayes&rsquo; Theorem", a: "P(A|B) = P(B|A) &middot; P(A) / P(B)" },
+        { q: "Uniform Distribution", a: "All outcomes have equal probability" }
+      ],
+
+      /* -------- TRIGONOMETRY -------- */
+      trigonometry: [
+        { q: "sin &theta;",  a: "Opposite / Hypotenuse" },
+        { q: "cos &theta;",  a: "Adjacent / Hypotenuse" },
+        { q: "tan &theta;",  a: "Opposite / Adjacent" },
+        { q: "sin<sup>2</sup>&theta; + cos<sup>2</sup>&theta;", a: "1" },
+        { q: "1 + tan<sup>2</sup>&theta;", a: "sec<sup>2</sup>&theta;" },
+        { q: "1 + cot<sup>2</sup>&theta;", a: "csc<sup>2</sup>&theta;" },
+        { q: "sin 30&deg;",  a: "1/2" },
+        { q: "sin 45&deg;",  a: "&radic;2 / 2" },
+        { q: "sin 60&deg;",  a: "&radic;3 / 2" },
+        { q: "cos 30&deg;",  a: "&radic;3 / 2" },
+        { q: "cos 45&deg;",  a: "&radic;2 / 2" },
+        { q: "cos 60&deg;",  a: "1/2" },
+        { q: "tan 45&deg;",  a: "1" },
+        { q: "Double Angle — sin", a: "sin 2&theta; = 2 sin&theta; cos&theta;" },
+        { q: "Double Angle — cos", a: "cos 2&theta; = cos<sup>2</sup>&theta; &minus; sin<sup>2</sup>&theta;" },
+        { q: "Area of Triangle (Trig)", a: "Area = &frac12; ab sin C" },
+        { q: "Law of Sines",   a: "a/sin A = b/sin B = c/sin C" },
+        { q: "Law of Cosines", a: "c<sup>2</sup> = a<sup>2</sup> + b<sup>2</sup> &minus; 2ab cos C" },
+        { q: "Radians to Degrees", a: "Multiply by 180/&pi;" },
+        { q: "Degrees to Radians", a: "Multiply by &pi;/180" }
+      ]
+
+    };
+
+    function selectTopic(topic, element) {
+      document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+      element.classList.add('active');
+      flashcards = formulaDatabase[topic];
+      currentCard = 0;
+      flipped = false;
+      showCard();
+    }
+
+    function goBack() {
+      window.location.href = "../index.html";
+    }
+
+    function showCard() {
+      if (!flashcards || flashcards.length === 0) return;
+      const content = flipped ? flashcards[currentCard].a : flashcards[currentCard].q;
+      document.getElementById("card-content").innerHTML = content;
+      document.getElementById("counter").innerText =
+        "CARD " + (currentCard + 1) + " OF " + flashcards.length;
+
+      // Re-run MathJax on the card element if loaded
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([document.getElementById("card-content")]).catch(() => {});
+      }
+    }
+
+    function flipCard() {
+      flipped = !flipped;
+      showCard();
+    }
+
+    function nextCard() {
+      if (!flashcards.length) return;
+      currentCard = (currentCard + 1) % flashcards.length;
+      flipped = false;
+      showCard();
+    }
+
+    function prevCard() {
+      if (!flashcards.length) return;
+      currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+      flipped = false;
+      showCard();
+    }
+
+    // Auto-load Algebra on page open
+    window.onload = () => selectTopic('algebra', document.querySelector('.menu-btn.active'));
+  </script>
+
+</body>
+
+</html>

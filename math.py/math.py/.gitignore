@@ -1,0 +1,9 @@
+.env
+node_modules/
+__pycache__/
+.venv/
+venv/
+.streamlit/
+*.pyc
+.system_generated/
+.gemini/

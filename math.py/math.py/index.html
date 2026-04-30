@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles/menustyle.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+  <title>Teccy Dashboard</title>
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Initialize Supabase client immediately
+    const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.supabaseClient = supabaseClient;
+  </script>
+  <script>
+    // Auth check - redirect to landing if not logged in
+    (async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        window.location.href = 'landing.html';
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <!-- ===== WELCOME MODAL (signup only) ===== -->
+  <div class="modal" id="welcomeModal">
+    <div class="modal-content" style="max-width:480px;">
+      <div style="font-size:2.8rem; margin-bottom:8px;">🌱</div>
+      <h2 style="font-size:2rem; color:#a43322;">Welcome to Teccy!</h2>
+      <p id="welcomeUserName" style="font-size:1.4rem; margin-bottom:16px;">Your adventure begins now.</p>
+      <!-- Sunflower seed gift -->
+      <div
+        style="background:var(--card-bg); border:3px solid var(--menu-border-dark); border-radius:8px; padding:18px; margin:0 auto 22px; max-width:260px;">
+        <p style="font-size:1rem; color:var(--text-color); margin-bottom:10px;">🎁 A gift for signing up:</p>
+        <!-- PLACEHOLDER: replace src with actual sunflower seed image -->
+        <div
+          style="width:72px;height:72px;border:3px dashed var(--menu-border-light);border-radius:8px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;background:#fff8eb;font-size:2rem;">
+          🌻
+        </div>
+        <p style="font-size:1.1rem; font-weight:bold; color:var(--menu-border-dark);">Sunflower Seed</p>
+        <p style="font-size:0.95rem; opacity:0.8;">Plant it in your Greenhouse!</p>
+      </div>
+      <button class="roadmap-btn" style="width:100%;font-size:1.3rem;" onclick="closeWelcomeModal()">Let's Go!
+        🚀</button>
+    </div>
+  </div>
+
+  <!-- ===== STREAK GOAL MODAL ===== -->
+  <div class="modal" id="streakModal">
+    <div class="modal-content" style="max-width:600px;">
+      <div style="font-size:2.2rem; margin-bottom:4px;">🔥</div>
+      <h2 style="font-size:2rem; color:#a43322; margin-bottom:6px;">Choose Your Streak Goal!</h2>
+      <p style="font-size:1.1rem; margin-bottom:24px; opacity:0.85;">Stay consistent and earn a rare flower seed. How
+        long can you keep the streak?</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:24px;">
+        <!-- 20 days -->
+        <div class="streak-tier-card" data-days="20" onclick="selectStreakGoal(20)">
+          <!-- PLACEHOLDER: basic flower image -->
+          <div class="streak-flower-ph">🌸</div>
+          <div class="streak-tier-label">20 Days</div>
+          <div class="streak-tier-sub">Basic Flower</div>
+        </div>
+        <!-- 50 days -->
+        <div class="streak-tier-card" data-days="50" onclick="selectStreakGoal(50)">
+          <!-- PLACEHOLDER: rare flower image -->
+          <div class="streak-flower-ph">🌺</div>
+          <div class="streak-tier-label">50 Days</div>
+          <div class="streak-tier-sub">Rare Flower</div>
+        </div>
+        <!-- 100 days -->
+        <div class="streak-tier-card" data-days="100" onclick="selectStreakGoal(100)">
+          <!-- PLACEHOLDER: exotic flower image -->
+          <div class="streak-flower-ph">🌹</div>
+          <div class="streak-tier-label">100 Days</div>
+          <div class="streak-tier-sub">Exotic Flower</div>
+        </div>
+      </div>
+      <button class="roadmap-btn" id="confirmStreakBtn" style="width:100%;font-size:1.2rem;" disabled
+        onclick="confirmStreakGoal()">Confirm Goal 🔥</button>
+    </div>
+  </div>
+
+  <!-- Level selection modal -->
+  <div class="modal" id="levelModal">
+    <div class="modal-content">
+      <h2 id="modalTitle">What level are you?</h2>
+      <p id="modalDescription">Select your current skill level</p>
+      <div class="level-buttons" id="levelButtons"></div>
+      <button class="roadmap-btn" id="nextLevelBtn" style="width: 100%; margin-top: 20px;" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- Inventory Modal -->
+  <div class="inventory-modal" id="inventoryModal">
+    <div class="inventory-container">
+      <div class="inventory-title">
+        <span>Warehouse</span>
+        <button class="close-btn" onclick="toggleInventory()">X</button>
+      </div>
+      <div class="inventory-grid" id="inventoryGrid">
+        <!-- Grid slots generated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="game-menu-container">
+    <!-- Warehouse/Inventory Button -->
+    <div class="warehouse-btn" onclick="toggleInventory()">
+      <img src="assets/backpack.png" alt="Warehouse">
+    </div>
+    <!-- Streak Progress Widget (next to warehouse) -->
+    <div id="streakProgressWidget" class="streak-progress-widget" style="display:none;">
+      <!-- PLACEHOLDER: flower seed image -->
+      <div id="streakFlowerIcon" class="streak-widget-icon">🌻</div>
+      <div class="streak-widget-info">
+        <div class="streak-widget-label">Daily Streak</div>
+        <div class="streak-widget-bar-wrap">
+          <div class="streak-widget-bar" id="streakWidgetBar" style="width:0%;"></div>
+        </div>
+        <div class="streak-widget-days" id="streakWidgetDays">0 / 0 days</div>
+      </div>
+    </div>
+
+    <!-- Date/Time Widget Removed -->
+
+    <div class="sidebar">
+      <h2>Teccy</h2>
+
+      <!-- Topics -->
+      <a onclick="showCard('Algebra')">Algebra</a>
+      <a onclick="showCard('Geometry')">Geometry</a>
+      <a onclick="showCard('Calculus')">Calculus</a>
+      <a onclick="showCard('Probability')">Probability</a>
+      <a onclick="showCard('Trigonometry')">Trigonometry</a>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- Learning Tools -->
+      <a href="pages/dashboard.html">Dashboard</a>
+      <a href="pages/buddy.html">Buddy System</a>
+      <a href="pages/flashcards.html">Flashcards</a>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- Game Area -->
+      <a href="/gamification/gamesection/greenhouse/greenhouse.html" target="_blank">☘︎ Greenhouse</a>
+      <a href="/gamification/gamesection/generalstore/generalstore.html" target="_blank">🛒 General Store</a>
+      <a href="/gamification/gamesection/Almanac/almanac.html" target="_blank">ᝰ Almanac</a>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- The Final — locked until all topics reach target level -->
+      <a id="theFinalLink" href="#" style="opacity:0.45; cursor:not-allowed; pointer-events:none;"
+        title="Reach your target level in ALL topics to unlock">
+        🔒 The Final
+      </a>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- Reset Progress -->
+      <a href="#" onclick="logout(); return false;"
+        style="background-color: #7bc65d; color: white; border-color: #5e3a23;">👋 Logout</a>
+      <a href="#" onclick="resetAllProgress(); return false;"
+        style="background-color: #e63e3e; color: white; border-color: #5e3a23;">🔄 Reset
+        All Progress</a>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <h1>Welcome to Teccy</h1>
+        <p id="user-greeting">Your personalized AI tutor for Maths</p>
+      </div>
+
+      <h1 class="section-title">Choose a topic</h1>
+
+      <div class="features">
+        <!-- Algebra -->
+        <div class="card algebra-extra" id="card-diagnosis-algebra">
+          <h3>Algebra Practice</h3>
+          <p>Interactive equation builder & graph visualizer</p>
+          <div class="card-actions">
+            <a class="roadmap-btn" href="pages/diagnosis_ai.html?topic=Algebra" target="_blank"
+              style="background-color: #9c27b0;">📝 Take Diagnosis Test</a>
+          </div>
+        </div>
+
+        <div class="card" id="card-practice-algebra" style="display:none;">
+          <span class="level-badge" id="level-badge-algebra">Level: Beginner</span>
+          <h3>Algebra</h3>
+          <p>Slope, intercepts, solving, forms</p>
+          <div class="card-actions">
+            <button class="roadmap-btn" onclick="startPractice('Algebra')">Generate Question</button>
+            <span id="ft-btn-algebra">
+              <a class="roadmap-btn" onclick="openFinalTest('Algebra')"
+                style="background-color:#7bc65d;cursor:pointer;">Final Test</a>
+            </span>
+            <span id="ft-done-algebra" style="display:none;">
+              <span class="roadmap-btn" style="background:#aaa;cursor:default;">🏆 Complete</span>
+            </span>
+          </div>
+        </div>
+
+
+        <!-- Geometry -->
+        <div class="card geometry-extra" id="card-diagnosis-geometry">
+          <h3>Geometry Practice</h3>
+          <p>Explore 2D & 3D shapes with examples</p>
+          <div class="card-actions">
+            <a class="roadmap-btn" href="pages/diagnosis_ai.html?topic=Geometry" target="_blank"
+              style="background-color: #9c27b0;">📝 Take Diagnosis Test</a>
+          </div>
+        </div>
+
+        <div class="card" id="card-practice-geometry" style="display:none;">
+          <span class="level-badge" id="level-badge-geometry">Level: Beginner</span>
+          <h3>Geometry</h3>
+          <p>Shapes, area, perimeter & angles</p>
+          <div class="card-actions">
+            <button class="roadmap-btn" onclick="startPractice('Geometry')">Generate Question</button>
+            <span id="ft-btn-geometry">
+              <a class="roadmap-btn" onclick="openFinalTest('Geometry')"
+                style="background-color:#7bc65d;cursor:pointer;">Final Test</a>
+            </span>
+            <span id="ft-done-geometry" style="display:none;">
+              <span class="roadmap-btn" style="background:#aaa;cursor:default;">🏆 Complete</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Calculus -->
+        <div class="card calculus-extra" id="card-diagnosis-calculus">
+          <h3>Calculus Practice</h3>
+          <p>Visualize derivative graphs and slopes</p>
+          <div class="card-actions">
+            <a class="roadmap-btn" href="pages/diagnosis_ai.html?topic=Calculus" target="_blank"
+              style="background-color: #9c27b0;">📝 Take Diagnosis Test</a>
+          </div>
+        </div>
+        <div class="card" id="card-practice-calculus" style="display:none;">
+          <span class="level-badge" id="level-badge-calculus">Level: Beginner</span>
+          <h3>Calculus</h3>
+          <p>Limits, derivatives & integration</p>
+          <div class="card-actions">
+            <button class="roadmap-btn" onclick="startPractice('Calculus')">Generate Question</button>
+            <span id="ft-btn-calculus">
+              <a class="roadmap-btn" onclick="openFinalTest('Calculus')"
+                style="background-color:#7bc65d;cursor:pointer;">Final Test</a>
+            </span>
+            <span id="ft-done-calculus" style="display:none;">
+              <span class="roadmap-btn" style="background:#aaa;cursor:default;">🏆 Complete</span>
+            </span>
+          </div>
+        </div>
+
+
+        <!-- Probability -->
+        <div class="card probability-extra" id="card-diagnosis-probability">
+          <h3>Probability Practice</h3>
+          <p>Interactive simulations and examples</p>
+          <div class="card-actions">
+            <a class="roadmap-btn" href="pages/diagnosis_ai.html?topic=Probability" target="_blank"
+              style="background-color: #9c27b0;">📝 Take Diagnosis Test</a>
+          </div>
+        </div>
+        <div class="card" id="card-practice-probability" style="display:none;">
+          <span class="level-badge" id="level-badge-probability">Level: Beginner</span>
+          <h3>Probability</h3>
+          <p>Combinations, permutations & events</p>
+          <div class="card-actions">
+            <button class="roadmap-btn" onclick="startPractice('Probability')">Generate Question</button>
+            <span id="ft-btn-probability">
+              <a class="roadmap-btn" onclick="openFinalTest('Probability')"
+                style="background-color:#7bc65d;cursor:pointer;">Final Test</a>
+            </span>
+            <span id="ft-done-probability" style="display:none;">
+              <span class="roadmap-btn" style="background:#aaa;cursor:default;">🏆 Complete</span>
+            </span>
+          </div>
+        </div>
+
+
+        <!-- Trigonometry -->
+        <div class="card trigonometry-extra" id="card-diagnosis-trigonometry">
+          <h3>Trigonometry Practice</h3>
+          <p>Graph sine, cosine & tangent visually</p>
+          <div class="card-actions">
+            <a class="roadmap-btn" href="pages/diagnosis_ai.html?topic=Trigonometry" target="_blank"
+              style="background-color: #9c27b0;">📝 Take Diagnosis Test</a>
+          </div>
+        </div>
+        <div class="card" id="card-practice-trigonometry" style="display:none;">
+          <span class="level-badge" id="level-badge-trigonometry">Level: Beginner</span>
+          <h3>Trigonometry</h3>
+          <p>Identities, functions & equations</p>
+          <div class="card-actions">
+            <button class="roadmap-btn" onclick="startPractice('Trigonometry')">Generate Question</button>
+            <span id="ft-btn-trigonometry">
+              <a class="roadmap-btn" onclick="openFinalTest('Trigonometry')"
+                style="background-color:#7bc65d;cursor:pointer;">Final Test</a>
+            </span>
+            <span id="ft-done-trigonometry" style="display:none;">
+              <span class="roadmap-btn" style="background:#aaa;cursor:default;">🏆 Complete</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card greenhouse" style="margin: 20px auto;">
+        <h3>Greenhouse</h3>
+        <p>Grow crops and sell them!~</p>
+        <div class="card-actions">
+          <a class="roadmap-btn" href="/gamification/gamesection/greenhouse/greenhouse.html" target="_blank" style="background-color: #7bc65d;">Enter</a>
+        </div>
+      </div>
+
+      <script src="scripts/supabase-progress.js?v=16"></script>
+      <script src="scripts/menuscript.js?v=16"></script>
+
+      <footer>
+        © 2025 Teccy - AI Learning Platform
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>

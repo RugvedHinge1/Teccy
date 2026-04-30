@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECCY's General Store - Math Farm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="generalstore.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🌾 GENERAL STORE 🌾</h1>
+            <div class="currency-display">
+                <span class="coin-icon">🪙</span>
+                <span id="currency">500</span>
+                <span>SUNDIALS</span>
+            </div>
+        </div>
+
+        <div class="shop-keeper">
+            <div class="shop-keeper-text">
+                🧑‍🌾 Welcome to the General Store! I carry only the finest seeds.<br>
+                Complete math challenges to earn coins and grow your farm! 🌱
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="store-section">
+                <h2 class="section-title">🛒 SEED SHOP</h2>
+                
+                <div class="season-tabs">
+                    <button class="season-tab active" onclick="filterSeason('spring')">🌸 SPRING</button>
+                    <button class="season-tab" onclick="filterSeason('summer')">☀️ SUMMER</button>
+                    <button class="season-tab" onclick="filterSeason('fall')">🍂 FALL</button>
+                </div>
+
+                <div class="crops-grid" id="cropsGrid"></div>
+            </div>
+
+            <div class="inventory-section">
+                <h2 class="section-title">📦 STORAGE</h2>
+                <div class="inventory-storage" id="storageGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="generalstore.js"></script>
+</body>
+</html>

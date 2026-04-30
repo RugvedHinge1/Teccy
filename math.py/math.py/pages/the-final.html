@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Final — TECCY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Jersey+10&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-game-world: #69a74e;
+            --menu-bg: #ffcca8;
+            --menu-border-light: #e09f6d;
+            --menu-border-dark: #5e3a23;
+            --text-color: #4a2f1b;
+            --accent-orange: #ff8a00;
+            --accent-yellow: #ffd940;
+            --accent-red: #e63e3e;
+            --card-bg: #ffe4cd;
+            --button-default: #d95d45;
+            --button-hover: #ff7e60;
+            --shadow-color: rgba(0, 0, 0, 0.35);
+        }
+
+        html {
+            image-rendering: pixelated;
+        }
+
+        body {
+            font-family: "Jersey 10", sans-serif;
+            font-size: 20px;
+            color: var(--text-color);
+            background-color: var(--bg-game-world);
+            background-image:
+                radial-gradient(#7bc65d 15%, transparent 16%),
+                radial-gradient(#5d9e43 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 24px 16px 40px;
+        }
+
+        .page-wrap {
+            display: flex;
+            width: 100%;
+            max-width: 1100px;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            background: var(--menu-bg);
+            border: 4px solid var(--menu-border-dark);
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 3px var(--menu-border-light), 6px 6px 0 var(--shadow-color);
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.6rem;
+            color: var(--menu-border-dark);
+            text-align: center;
+            border-bottom: 3px solid var(--menu-border-light);
+            padding-bottom: 8px;
+        }
+
+        .sidebar-label {
+            font-size: 0.85rem;
+            color: var(--menu-border-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 2px solid transparent;
+            transition: all 0.15s;
+        }
+
+        .sidebar a:hover {
+            background: var(--card-bg);
+            border-color: var(--menu-border-dark);
+        }
+
+        .sidebar-divider {
+            height: 2px;
+            background: var(--menu-border-light);
+            border-radius: 2px;
+            margin: 4px 0;
+        }
+
+        /* Main */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel {
+            background: var(--menu-bg);
+            border: 4px solid var(--menu-border-dark);
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 3px var(--menu-border-light), 6px 6px 0 var(--shadow-color);
+            padding: 24px 28px;
+        }
+
+        .test-header h1 {
+            font-size: 2.4rem;
+            color: var(--menu-border-dark);
+            margin-bottom: 6px;
+        }
+
+        .test-header p {
+            font-size: 1.1rem;
+            opacity: 0.75;
+        }
+
+        .level-pill {
+            display: inline-block;
+            background: var(--accent-yellow);
+            color: var(--menu-border-dark);
+            border: 2px solid var(--menu-border-dark);
+            border-radius: 20px;
+            padding: 2px 14px;
+            font-size: 1rem;
+            margin-top: 6px;
+        }
+
+        .topic-pill {
+            display: inline-block;
+            background: var(--card-bg);
+            border: 2px solid var(--menu-border-light);
+            border-radius: 12px;
+            padding: 2px 12px;
+            font-size: 0.95rem;
+            margin-top: 6px;
+            margin-left: 6px;
+        }
+
+        .progress-label {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            color: var(--menu-border-dark);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 16px;
+            background: var(--card-bg);
+            border: 3px solid var(--menu-border-dark);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow));
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .q-label {
+            font-size: 1.1rem;
+            color: var(--accent-orange);
+            margin-bottom: 8px;
+        }
+
+        .q-text {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: var(--menu-border-dark);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            padding: 14px 18px;
+            border: 3px solid var(--menu-border-light);
+            border-radius: 8px;
+            background: var(--card-bg);
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            transition: all 0.15s;
+            font-family: "Jersey 10", sans-serif;
+        }
+
+        .option:hover:not(.disabled) {
+            border-color: var(--accent-orange);
+            background: #fff3e0;
+        }
+
+        .option.selected {
+            border-color: var(--accent-orange);
+            background: #ffe0b2;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .option.incorrect {
+            border-color: var(--accent-red);
+            background: #fdecea;
+            color: var(--accent-red);
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            font-family: "Jersey 10", sans-serif;
+            font-size: 1.3rem;
+            padding: 10px 24px;
+            border: 3px solid var(--menu-border-dark);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--button-default);
+            color: #fff;
+            box-shadow: 3px 3px 0 var(--menu-border-dark);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--menu-border-light);
+        }
+
+        .btn-green {
+            background: #5a9e4b;
+        }
+
+        .btn-green:hover:not(:disabled) {
+            background: #7bc65d;
+        }
+
+        .summary-panel {
+            display: none;
+            text-align: center;
+        }
+
+        .summary-panel.show {
+            display: block;
+        }
+
+        .result-banner {
+            font-size: 2rem;
+            padding: 14px 24px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 3px solid var(--menu-border-dark);
+        }
+
+        .result-banner.pass {
+            background: #d4edda;
+            color: #2e7d32;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            border: 3px solid var(--menu-border-dark);
+            border-radius: 8px;
+            padding: 18px 28px;
+            min-width: 130px;
+        }
+
+        .stat-box .sval {
+            font-size: 2.2rem;
+            color: var(--menu-border-dark);
+            display: block;
+        }
+
+        .stat-box .slbl {
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+
+        .analysis-panel {
+            display: none;
+        }
+
+        .analysis-panel.show {
+            display: block;
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .analysis-table th,
+        .analysis-table td {
+            border: 2px solid var(--menu-border-light);
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .analysis-table th {
+            background: var(--card-bg);
+            color: var(--menu-border-dark);
+        }
+
+        .analysis-table .row-correct {
+            background: #e8f5e9;
+        }
+
+        .analysis-table .row-wrong {
+            background: #fdecea;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            font-size: 2rem;
+            color: #fff;
+            font-family: "Jersey 10", sans-serif;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.65;
+            margin-top: 8px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--menu-border-light);
+            border-radius: 4px;
+        }
+
+        @media (max-width:820px) {
+            .page-wrap {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loading-overlay" id="loadingOverlay">⏳ Building your final challenge…</div>
+
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Teccy</h2>
+            <div class="sidebar-label">Navigation</div>
+            <a href="../index.html">⬅ Back to Subjects</a>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-label">Tools</div>
+            <a href="dashboard.html">📊 Dashboard</a>
+            <a href="buddy.html">👥 Buddy System</a>
+            <a href="flashcards.html">🃏 Flashcards</a>
+        </div>
+
+        <!-- Main -->
+        <div class="main-content">
+            <div class="panel test-header">
+                <h1>🏆 The Final</h1>
+                <p>Grand final — 25 questions across all topics</p>
+                <span class="level-pill" id="levelPill">Level: —</span>
+                <span class="topic-pill" id="topicPill">5 Topics</span>
+            </div>
+
+            <div class="panel" id="progressPanel">
+                <div class="progress-label" id="progressLabel">Question 1 of 25</div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill" style="width:4%;"></div>
+                </div>
+            </div>
+
+            <div class="panel" id="questionCard">
+                <div class="q-label" id="qLabel">QUESTION 1</div>
+                <div class="q-text" id="qText">Loading…</div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="btn-row">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="prevQ()" disabled>◀ Prev</button>
+                    <button class="btn" id="nextBtn" onclick="nextQ()" disabled>Next ▶</button>
+                </div>
+            </div>
+
+            <div class="panel summary-panel" id="summaryPanel">
+                <div class="result-banner pass" id="resultBanner">🏆 The Final — Complete!</div>
+                <div class="stat-row">
+                    <div class="stat-box"><span class="sval" id="statScore">—</span><span class="slbl">Score</span>
+                    </div>
+                    <div class="stat-box"><span class="sval" id="statCorrect">—</span><span class="slbl">Correct</span>
+                    </div>
+                    <div class="stat-box"><span class="sval" id="statTotal">—</span><span class="slbl">Total</span>
+                    </div>
+                </div>
+                <p id="resultMsg" style="margin:12px 0; font-size:1.2rem;"></p>
+                <div class="btn-row" style="margin-top:16px;">
+                    <button class="btn btn-green" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+                    <button class="btn btn-secondary" onclick="showAnalysis()">📝 Detailed Analysis</button>
+                    <button class="btn" onclick="window.location.reload()">🔄 Play Again</button>
+                </div>
+            </div>
+
+            <div class="panel analysis-panel" id="analysisPanel">
+                <h2 style="font-size:1.6rem; color:var(--menu-border-dark); margin-bottom:8px;">📝 Detailed Analysis
+                </h2>
+                <table class="analysis-table" id="analysisTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Topic</th>
+                            <th>Question</th>
+                            <th>Your Answer</th>
+                            <th>Correct</th>
+                            <th>✓/✗</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analysisBody"></tbody>
+                </table>
+            </div>
+
+            <footer>© 2025 Teccy — AI Learning Platform</footer>
+        </div>
+    </div>
+
+    <script>
+        // ── Supabase ────────────────────────────────────────
+        const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ── URL param ────────────────────────────────────────
+        const rawLevel = (new URLSearchParams(window.location.search).get('level') || 'AMATEUR').toUpperCase();
+        document.getElementById('levelPill').textContent = `Level: ${rawLevel}`;
+
+        // ── Question bank — strict one difficulty per level ──
+        // AMATEUR/BEGINNER → easy  |  INTERMEDIATE → medium  |  ADVANCED/PRO → hard
+        const DIFFICULTY = (() => {
+            if (rawLevel === 'INTERMEDIATE') return 'medium';
+            if (rawLevel === 'ADVANCED' || rawLevel === 'PRO') return 'hard';
+            return 'easy';
+        })();
+
+        const BANK = {
+            Algebra: {
+                easy: [
+                    { q: "Solve for x: x + 3 = 7", opts: ["3", "4", "5", "6"], ans: 1 },
+                    { q: "What is 2x when x = 5?", opts: ["5", "7", "10", "15"], ans: 2 },
+                    { q: "Simplify: 3x + 2x", opts: ["5x", "6x", "5", "x"], ans: 0 },
+                    { q: "Solve: 2x = 8", opts: ["2", "3", "4", "5"], ans: 2 },
+                    { q: "Expand: 2(x + 1)", opts: ["2x+1", "2x+2", "x+2", "x+1"], ans: 1 },
+                    { q: "Coefficient of x in 4x + 1?", opts: ["1", "4", "x", "4x"], ans: 1 },
+                    { q: "Solve: x / 4 = 3", opts: ["7", "12", "3", "1"], ans: 1 },
+                    { q: "What is x – 3 when x = 10?", opts: ["6", "7", "8", "13"], ans: 1 },
+                ],
+                medium: [
+                    { q: "Solve: 3x – 7 = 2", opts: ["1", "2", "3", "4"], ans: 2 },
+                    { q: "Factor: x² + 5x + 6", opts: ["(x+2)(x+3)", "(x+1)(x+6)", "(x+3)²", "(x+2)²"], ans: 0 },
+                    { q: "Expand: (x + 2)(x – 3)", opts: ["x²–x–6", "x²+x–6", "x²–5x+6", "x²+5x–6"], ans: 0 },
+                    { q: "Solve: 2(x – 4) = 6", opts: ["5", "6", "7", "8"], ans: 2 },
+                    { q: "If f(x)=2x+3, find f(4)", opts: ["10", "11", "12", "13"], ans: 1 },
+                    { q: "Solve: x² – 9 = 0", opts: ["x=3", "x=±3", "x=9", "x=±9"], ans: 1 },
+                    { q: "Solve |x – 2| = 5", opts: ["3 and –3", "7 and –3", "5 and 2", "7 and 3"], ans: 1 },
+                    { q: "Simplify: (2x²·3x)/x", opts: ["6x²", "5x²", "6x", "5x"], ans: 0 },
+                ],
+                hard: [
+                    { q: "Solve: x²–5x+6=0", opts: ["x=2,3", "x=1,6", "x=–2,–3", "x=–1,6"], ans: 0 },
+                    { q: "Simplify: (x²–4)/(x–2)", opts: ["x–2", "x+2", "x²+2", "x–4"], ans: 1 },
+                    { q: "If 2^x=16, what is x?", opts: ["2", "3", "4", "8"], ans: 2 },
+                    { q: "System: x+y=5, x–y=1. x=?", opts: ["2", "3", "4", "5"], ans: 1 },
+                    { q: "Vertex of y=x²–4x+3?", opts: ["(2,–1)", "(2,1)", "(4,3)", "(0,3)"], ans: 0 },
+                    { q: "log₂(8)=?", opts: ["2", "3", "4", "8"], ans: 1 },
+                    { q: "Discriminant of 2x²+3x–2=0?", opts: ["–7", "9", "25", "1"], ans: 2 },
+                    { q: "Expand: (2x–3)²", opts: ["4x²–12x+9", "4x²–6x+9", "4x²–9", "4x²+12x+9"], ans: 0 },
+                ],
+            },
+            Geometry: {
+                easy: [
+                    { q: "Sum of angles in a triangle?", opts: ["90°", "180°", "270°", "360°"], ans: 1 },
+                    { q: "Area of rectangle 5×3?", opts: ["8", "15", "16", "20"], ans: 1 },
+                    { q: "Sides in a hexagon?", opts: ["4", "5", "6", "7"], ans: 2 },
+                    { q: "Area of square side 4?", opts: ["8", "12", "16", "20"], ans: 2 },
+                    { q: "Perimeter of square side 5?", opts: ["10", "15", "20", "25"], ans: 2 },
+                    { q: "Right angle = ?", opts: ["45°", "60°", "90°", "180°"], ans: 2 },
+                    { q: "Circumference formula?", opts: ["πr²", "2πr", "πd/2", "r²π"], ans: 1 },
+                    { q: "Faces of a cube?", opts: ["4", "5", "6", "8"], ans: 2 },
+                ],
+                medium: [
+                    { q: "Area of circle radius 3?", opts: ["3π", "6π", "9π", "12π"], ans: 2 },
+                    { q: "Volume of cube side 2?", opts: ["4", "6", "8", "12"], ans: 2 },
+                    { q: "Area of triangle: base 4, h 3?", opts: ["6", "7", "12", "14"], ans: 0 },
+                    { q: "Pythagorean theorem?", opts: ["a+b=c", "a²+b²=c²", "a–b=c", "ab=c²"], ans: 1 },
+                    { q: "Circumference of radius 5?", opts: ["5π", "10π", "15π", "25π"], ans: 1 },
+                    { q: "8-sided polygon?", opts: ["Hexagon", "Heptagon", "Octagon", "Nonagon"], ans: 2 },
+                    { q: "Triangle: angles 40°,70°—third?", opts: ["60°", "70°", "80°", "90°"], ans: 1 },
+                    { q: "Area of trapezoid (sides 4,6; h 3)?", opts: ["15", "18", "21", "24"], ans: 0 },
+                ],
+                hard: [
+                    { q: "Right triangle legs 3,4. Hyp?", opts: ["5", "6", "7", "√25"], ans: 0 },
+                    { q: "Volume of sphere radius r?", opts: ["4πr³", "(4/3)πr³", "(2/3)πr³", "πr³"], ans: 1 },
+                    { q: "Surface area of cylinder (r,h)?", opts: ["2πr²", "2πrh", "2πr(r+h)", "πr²h"], ans: 2 },
+                    { q: "Interior angle of regular hexagon?", opts: ["108°", "120°", "135°", "150°"], ans: 1 },
+                    { q: "Area of sector r=6, 60°?", opts: ["3π", "6π", "9π", "12π"], ans: 1 },
+                    { q: "Diagonal of rectangle 3×4?", opts: ["3", "4", "5", "7"], ans: 2 },
+                    { q: "Exterior angle of regular pentagon?", opts: ["36°", "60°", "72°", "90°"], ans: 2 },
+                    { q: "Centroid divides median in ratio?", opts: ["1:1", "1:2", "2:1", "3:1"], ans: 2 },
+                ],
+            },
+            Calculus: {
+                easy: [
+                    { q: "Derivative of x²?", opts: ["x", "2x", "x²", "2"], ans: 1 },
+                    { q: "Derivative of constant c?", opts: ["c", "1", "0", "∞"], ans: 2 },
+                    { q: "Integral of 1 dx?", opts: ["0", "1", "x+C", "x²+C"], ans: 2 },
+                    { q: "Derivative of 3x?", opts: ["3", "x", "3x", "0"], ans: 0 },
+                    { q: "Limit of 5 as x→∞?", opts: ["0", "5", "∞", "–∞"], ans: 1 },
+                    { q: "Integral of 0 dx?", opts: ["0", "C", "x+C", "1"], ans: 1 },
+                    { q: "Derivative of x?", opts: ["0", "1", "x", "x²"], ans: 1 },
+                    { q: "d/dx means?", opts: ["Division", "Derivative w.r.t x", "Double integral", "Divergence"], ans: 1 },
+                ],
+                medium: [
+                    { q: "Derivative of sin(x)?", opts: ["cos(x)", "–cos(x)", "sin(x)", "tan(x)"], ans: 0 },
+                    { q: "Integral of 2x dx?", opts: ["x²", "x²+C", "2x²+C", "x+C"], ans: 1 },
+                    { q: "Derivative of e^x?", opts: ["e^x", "x·e^(x–1)", "1", "e"], ans: 0 },
+                    { q: "Limit of 1/x as x→∞?", opts: ["1", "0", "∞", "–∞"], ans: 1 },
+                    { q: "Derivative of ln(x)?", opts: ["1/x", "x", "ln(x)", "e^x"], ans: 0 },
+                    { q: "Integral of cos(x)?", opts: ["sin(x)+C", "–sin(x)+C", "cos(x)+C", "tan(x)+C"], ans: 0 },
+                    { q: "Derivative of x⁴?", opts: ["4x³", "4x", "x³", "4"], ans: 0 },
+                    { q: "Derivative of cos(x)?", opts: ["sin(x)", "–sin(x)", "cos(x)", "tan(x)"], ans: 1 },
+                ],
+                hard: [
+                    { q: "d/dx [x·sin(x)]=?", opts: ["sin(x)+x·cos(x)", "sin(x)", "x·cos(x)", "cos(x)"], ans: 0 },
+                    { q: "∫e^(2x)dx=?", opts: ["e^(2x)+C", "2e^(2x)+C", "(1/2)e^(2x)+C", "e^x+C"], ans: 2 },
+                    { q: "Critical point of f(x)=x²–4x+1?", opts: ["x=1", "x=2", "x=4", "x=–2"], ans: 1 },
+                    { q: "∫₀¹ x² dx=?", opts: ["1/2", "1/3", "2/3", "1"], ans: 1 },
+                    { q: "Derivative of tan(x)?", opts: ["sec(x)", "sec²(x)", "cot(x)", "–csc²(x)"], ans: 1 },
+                    { q: "Chain rule: d/dx[sin(x²)]=?", opts: ["cos(x²)", "2x·cos(x²)", "sin(2x)", "2cos(x²)"], ans: 1 },
+                    { q: "Local min: second derivative is?", opts: ["Negative", "Zero", "Positive", "Undefined"], ans: 2 },
+                    { q: "∫sec²(x)dx=?", opts: ["sec(x)+C", "tan(x)+C", "csc(x)+C", "sin(x)+C"], ans: 1 },
+                ],
+            },
+            Probability: {
+                easy: [
+                    { q: "P(rolling 3 on die)?", opts: ["1/6", "1/3", "1/2", "1/4"], ans: 0 },
+                    { q: "P(heads on coin)?", opts: ["1/4", "1/3", "1/2", "2/3"], ans: 2 },
+                    { q: "Sum of all probabilities?", opts: ["0", "0.5", "1", "∞"], ans: 2 },
+                    { q: "P(not A) if P(A)=0.6?", opts: ["0.4", "0.6", "0.3", "0.7"], ans: 0 },
+                    { q: "P(red card from deck)?", opts: ["1/4", "1/2", "1/3", "2/3"], ans: 1 },
+                    { q: "P(rolling even on die)?", opts: ["1/6", "1/3", "1/2", "2/3"], ans: 2 },
+                    { q: "P(impossible event)?", opts: ["0", "0.5", "1", "–1"], ans: 0 },
+                    { q: "P(certain event)?", opts: ["0", "0.5", "1", "2"], ans: 2 },
+                ],
+                medium: [
+                    { q: "P(drawing ace)?", opts: ["1/13", "1/26", "4/52", "1/52"], ans: 2 },
+                    { q: "P(two 6s on two dice)?", opts: ["1/6", "1/12", "1/36", "1/18"], ans: 2 },
+                    { q: "Arrangements of 3 items?", opts: ["3", "6", "9", "12"], ans: 1 },
+                    { q: "C(4,2)=?", opts: ["4", "6", "8", "12"], ans: 1 },
+                    { q: "Expected value of fair die?", opts: ["2.5", "3", "3.5", "4"], ans: 2 },
+                    { q: "P(A or B), P(A)=0.3, P(B)=0.4 mutual excl?", opts: ["0.12", "0.7", "0.5", "1"], ans: 1 },
+                    { q: "P(A and B) indep, P(A)=0.5, P(B)=0.4?", opts: ["0.2", "0.9", "0.1", "0.45"], ans: 0 },
+                    { q: "n! for n=4?", opts: ["12", "16", "24", "48"], ans: 2 },
+                ],
+                hard: [
+                    { q: "P(A|B)=P(A∩B)/P(B) is called?", opts: ["Joint", "Conditional", "Bayes", "Marginal"], ans: 1 },
+                    { q: "Binomial: n=4,k=2,p=0.5. P=?", opts: ["0.375", "0.25", "0.5", "0.125"], ans: 0 },
+                    { q: "Variance of fair die?", opts: ["35/12", "7/2", "12/35", "5/2"], ans: 0 },
+                    { q: "X~N(μ,σ²), P(X<μ)=?", opts: ["0", "0.25", "0.5", "1"], ans: 2 },
+                    { q: "Poisson P(X=0) when λ=2?", opts: ["e⁻²", "2e⁻²", "0.5", "e²"], ans: 0 },
+                    { q: "C(8,3)=?", opts: ["24", "56", "168", "336"], ans: 1 },
+                    { q: "Standard deviation = ?", opts: ["Variance", "√Variance", "Variance²", "1/Variance"], ans: 1 },
+                    { q: "P(A∩B)=0.1, P(B)=0.4. P(A|B)=?", opts: ["0.04", "0.25", "0.3", "0.5"], ans: 1 },
+                ],
+            },
+            Trigonometry: {
+                easy: [
+                    { q: "sin(90°)?", opts: ["0", "1/2", "√3/2", "1"], ans: 3 },
+                    { q: "cos(0°)?", opts: ["0", "1/2", "√3/2", "1"], ans: 3 },
+                    { q: "tan(45°)?", opts: ["0", "1/2", "1", "√3"], ans: 2 },
+                    { q: "sin²θ+cos²θ=?", opts: ["0", "1/2", "1", "2"], ans: 2 },
+                    { q: "sin(0°)?", opts: ["0", "1", "–1", "undefined"], ans: 0 },
+                    { q: "cos(90°)?", opts: ["0", "1", "–1", "undefined"], ans: 0 },
+                    { q: "tan(0°)?", opts: ["0", "1", "undefined", "∞"], ans: 0 },
+                    { q: "Amplitude of sin(x)?", opts: ["0", "π", "1", "2π"], ans: 2 },
+                ],
+                medium: [
+                    { q: "sin(30°)?", opts: ["1/2", "√3/2", "1", "0"], ans: 0 },
+                    { q: "cos(60°)?", opts: ["1/2", "√3/2", "1", "0"], ans: 0 },
+                    { q: "Period of sin(x)?", opts: ["π", "2π", "π/2", "1"], ans: 1 },
+                    { q: "Amplitude of 3sin(x)?", opts: ["1", "2", "3", "π"], ans: 2 },
+                    { q: "cos(30°)?", opts: ["1/2", "√3/2", "√3", "1"], ans: 1 },
+                    { q: "Period of tan(x)?", opts: ["π", "2π", "π/2", "1"], ans: 0 },
+                    { q: "Range of sin(x)?", opts: ["[0,1]", "[–1,1]", "[0,∞)", "(–∞,∞)"], ans: 1 },
+                    { q: "sin(60°)?", opts: ["1/2", "√3/2", "√3", "1"], ans: 1 },
+                ],
+                hard: [
+                    { q: "sin(x)=1/2 in [0°,360°]?", opts: ["30° only", "30° and 150°", "60° and 120°", "45° and 135°"], ans: 1 },
+                    { q: "sin(x)/cos(x) simplified?", opts: ["cot(x)", "sec(x)", "tan(x)", "csc(x)"], ans: 2 },
+                    { q: "sec²(x)=?", opts: ["1+cot²(x)", "1+tan²(x)", "1–tan²(x)", "tan²(x)"], ans: 1 },
+                    { q: "sin(A+B)=?", opts: ["sinA·cosB", "sinA·cosB+cosA·sinB", "sinA·sinB–cosA·cosB", "cosA·cosB"], ans: 1 },
+                    { q: "cos(2θ)=?", opts: ["2cos²θ–1", "1–2cos²θ", "2sinθcosθ", "(cosθ+sinθ)²"], ans: 0 },
+                    { q: "Period of y=sin(2x)?", opts: ["π/2", "π", "2π", "4π"], ans: 1 },
+                    { q: "tan(x) undefined when cos(x)=?", opts: ["1", "–1", "0", "∞"], ans: 2 },
+                    { q: "arcsin(1)=?", opts: ["0", "π/4", "π/2", "π"], ans: 2 },
+                ],
+            },
+        };
+
+        // ── Build 25 questions: exactly 5 per topic at target difficulty ──
+        const TOPICS = ['Algebra', 'Geometry', 'Calculus', 'Probability', 'Trigonometry'];
+        const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+
+        let questions = [];
+        TOPICS.forEach(t => {
+            const pool = [...(BANK[t][DIFFICULTY] || BANK[t].easy)];
+            shuffle(pool);
+            pool.slice(0, 5).forEach(q => questions.push({ ...q, topic: t }));
+        });
+        shuffle(questions);
+
+        document.getElementById('topicPill').textContent = `${DIFFICULTY.toUpperCase()} difficulty`;
+        document.getElementById('loadingOverlay').classList.add('hidden');
+
+        // ── State ────────────────────────────────────────────
+        let current = 0;
+        const answers = new Array(questions.length).fill(null);
+        const answered = new Array(questions.length).fill(false);
+
+        // ── Render ───────────────────────────────────────────
+        function loadQuestion() {
+            const q = questions[current];
+            const total = questions.length;
+
+            document.getElementById('qLabel').textContent = `QUESTION ${current + 1} — ${q.topic}`;
+            document.getElementById('qText').textContent = q.q;
+            document.getElementById('progressLabel').textContent = `Question ${current + 1} of ${total}`;
+            document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            q.opts.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = `${String.fromCharCode(65 + i)}) ${opt}`;
+                div.onclick = () => selectOpt(i);
+                if (answers[current] === i) div.classList.add('selected');
+                if (answered[current]) {
+                    div.classList.add('disabled');
+                    if (i === q.ans) div.classList.add('correct');
+                    if (answers[current] === i && i !== q.ans) div.classList.add('incorrect');
+                }
+                container.appendChild(div);
+            });
+
+            document.getElementById('prevBtn').disabled = current === 0;
+            document.getElementById('nextBtn').disabled = !answered[current];
+            document.getElementById('nextBtn').textContent = current === total - 1 ? 'Submit ✔' : 'Next ▶';
+        }
+
+        function selectOpt(i) {
+            if (answered[current]) return;
+            answers[current] = i;
+            answered[current] = true;
+            loadQuestion();
+        }
+
+        function nextQ() {
+            if (!answered[current]) return;
+            if (current < questions.length - 1) { current++; loadQuestion(); }
+            else showSummary();
+        }
+        function prevQ() { if (current > 0) { current--; loadQuestion(); } }
+
+        // ── Summary ──────────────────────────────────────────
+        async function showSummary() {
+            const correct = answers.reduce((n, a, i) => n + (a === questions[i].ans ? 1 : 0), 0);
+            const total = questions.length;
+            const pct = Math.round(correct / total * 100);
+
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('progressPanel').style.display = 'none';
+
+            document.getElementById('statScore').textContent = pct + '%';
+            document.getElementById('statCorrect').textContent = correct;
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('resultMsg').textContent =
+                pct >= 60 ? `Outstanding! You scored ${pct}% on the grand final!`
+                    : `You scored ${pct}%. Keep practising and try again!`;
+
+            document.getElementById('summaryPanel').classList.add('show');
+
+            // Credit streak
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                if (session) {
+                    const uid = session.user.id;
+                    const today = new Date().toISOString().slice(0, 10);
+                    const { data: row } = await sb.from('user_streaks').select('*').eq('user_id', uid).maybeSingle();
+                    if (row && row.streak_goal > 0 && row.last_activity !== today) {
+                        await sb.from('user_streaks').upsert({ user_id: uid, streak_done: (row.streak_done || 0) + 1, last_activity: today }, { onConflict: 'user_id' });
+                    }
+                }
+            } catch (e) { }
+        }
+
+        function showAnalysis() {
+            const body = document.getElementById('analysisBody');
+            body.innerHTML = '';
+            questions.forEach((q, i) => {
+                const sel = answers[i];
+                const ok = sel === q.ans;
+                const tr = document.createElement('tr');
+                tr.className = ok ? 'row-correct' : 'row-wrong';
+                tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${q.topic}</td>
+      <td>${q.q}</td>
+      <td>${sel !== null ? String.fromCharCode(65 + sel) + ') ' + q.opts[sel] : '—'}</td>
+      <td>${String.fromCharCode(65 + q.ans) + ') ' + q.opts[q.ans]}</td>
+      <td>${ok ? '✓' : '✗'}</td>
+    `;
+                body.appendChild(tr);
+            });
+            document.getElementById('analysisPanel').classList.add('show');
+            document.getElementById('analysisPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ── Init ─────────────────────────────────────────────
+        loadQuestion();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+body {
+  text-align: center;
+  background: #f2fff2;
+  font-family: Arial, sans-serif;
+}
+
+.wheat-container {
+  width: 128px;
+  height: 256px;
+  margin: 20px auto;
+}
+
+.sunflower-container {
+  width: 128px;
+  height: 256px;
+  margin: 20px auto;
+}
+
+#wheat {
+  width: 100%;
+  image-rendering: pixelated; /* VERY IMPORTANT for pixel art */
+}
+
+#sunflower {
+  width: 100%;
+  image-rendering: pixelated;
+}
+
+#nextDayBtn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}

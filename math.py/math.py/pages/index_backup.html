@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TECCY - AI Learning Launcher</title>
+  <!-- Pixel Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0a0c;
+      --bg-panel: #14161a;
+      --bg-card: #1c1f26;
+      --accent-primary: #00ff88;
+      --accent-secondary: #00aaff;
+      --accent-warning: #ffcc00;
+      --accent-danger: #ff4444;
+      --text-primary: #e8e8e8;
+      --text-secondary: #888888;
+      --border-color: #2a2d35;
+      --selection-glow: rgba(0, 255, 136, 0.3);
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      overflow: hidden;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-panel);
+      border-right: 2px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-header h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 16px;
+      color: var(--accent-primary);
+      text-shadow: 0 0 10px var(--accent-primary);
+      letter-spacing: 2px;
+    }
+
+    .sidebar-header .subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .nav-section {
+      padding: 0 12px;
+      margin-bottom: 20px;
+    }
+
+    .nav-label {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 8px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 12px 16px;
+      margin: 4px 0;
+      background: transparent;
+      border: 2px solid transparent;
+      transition: all 0.1s ease;
+      cursor: pointer;
+      position: relative;
+      font-size: 18px;
+    }
+
+    .sidebar a::before {
+      content: '>';
+      position: absolute;
+      left: 4px;
+      opacity: 0;
+      color: var(--accent-primary);
+      transition: opacity 0.1s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:focus,
+    .sidebar a.active {
+      background: var(--bg-card);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      padding-left: 24px;
+      box-shadow: 0 0 10px var(--selection-glow), inset 0 0 20px var(--selection-glow);
+    }
+
+    .sidebar a:hover::before,
+    .sidebar a:focus::before,
+    .sidebar a.active::before {
+      opacity: 1;
+    }
+
+    .sidebar a:focus {
+      outline: none;
+    }
+
+    .sidebar-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+      margin: 20px 12px;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background: var(--bg-dark);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      text-align: left;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .header h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 24px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      text-shadow: 2px 2px 0px var(--bg-panel);
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 20px;
+    }
+
+    h1.section-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      color: var(--accent-secondary);
+      margin: 0 0 24px 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ===== CARDS GRID ===== */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-secondary);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .level-badge {
+      display: inline-block;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      padding: 6px 10px;
+      margin-bottom: 12px;
+      border: 2px solid;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card h3 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .card p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+
+    /* ===== BUTTONS ===== */
+    .roadmap-btn {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      border: 2px solid var(--accent-secondary);
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      text-decoration: none;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .roadmap-btn:hover,
+    .roadmap-btn:focus {
+      background: var(--accent-secondary);
+      color: var(--bg-dark);
+      box-shadow: 0 0 15px rgba(0, 170, 255, 0.4);
+      outline: none;
+    }
+
+    .roadmap-btn.btn-success {
+      border-color: var(--accent-primary);
+    }
+
+    .roadmap-btn.btn-success:hover,
+    .roadmap-btn.btn-success:focus {
+      background: var(--accent-primary);
+      box-shadow: 0 0 15px var(--selection-glow);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .card-actions .roadmap-btn {
+      flex: 1;
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-panel);
+      border: 3px solid var(--accent-primary);
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 40px var(--selection-glow);
+    }
+
+    .modal-content h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+      color: var(--accent-primary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .modal-content p {
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      font-size: 18px;
+    }
+
+    .level-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .level-btn {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      padding: 14px 28px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .level-btn:hover,
+    .level-btn:focus {
+      border-color: var(--accent-secondary);
+      background: var(--bg-panel);
+      outline: none;
+    }
+
+    .level-btn.selected {
+      border-color: var(--accent-primary);
+      background: var(--accent-primary);
+      color: var(--bg-dark);
+      box-shadow: 0 0 15px var(--selection-glow);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border: 1px solid var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-secondary);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .header h1 {
+        font-size: 18px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 10px;
+      }
+
+      .sidebar-header {
+        width: 100%;
+        border-bottom: none;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .nav-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      .nav-label {
+        width: 100%;
+        text-align: center;
+      }
+
+      .sidebar-divider {
+        display: none;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+    }
+
+    /* Utility */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Level Selection Modal -->
+  <div class="modal" id="levelModal">
+    <div class="modal-content">
+      <h2 id="modalTitle">SELECT YOUR SKILL LEVEL</h2>
+      <p id="modalDescription">Choose your current experience</p>
+      <div class="level-buttons" id="levelButtons"></div>
+      <button class="roadmap-btn" id="nextLevelBtn" disabled>NEXT</button>
+    </div>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>TECCY</h2>
+      <div class="subtitle">AI MATH TRAINER</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">[ SUBJECTS ]</div>
+      <a onclick="showCard('Algebra')" tabindex="0" id="nav-algebra">Algebra</a>
+      <a onclick="showCard('Geometry')" tabindex="0" id="nav-geometry">Geometry</a>
+      <a onclick="showCard('Calculus')" tabindex="0" id="nav-calculus">Calculus</a>
+      <a onclick="showCard('Probability')" tabindex="0" id="nav-probability">Probability</a>
+      <a onclick="showCard('Trigonometry')" tabindex="0" id="nav-trigonometry">Trigonometry</a>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="nav-section">
+      <div class="nav-label">[ TOOLS ]</div>
+      <a href="dashboard.html" tabindex="0">Dashboard</a>
+      <a href="buddy.html" tabindex="0">Buddy System</a>
+      <a href="flashcards.html" tabindex="0">Flashcards</a>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <div class="header">
+      <h1>WELCOME, PLAYER</h1>
+      <p>Select a subject from the menu to begin your training session</p>
+    </div>
+
+    <h1 class="section-title">// ACTIVE MODULE</h1>
+
+    <div class="features">
+      <!-- Algebra -->
+      <div class="card algebra-extra" id="card-diagnosis-algebra">
+        <h3>ALGEBRA</h3>
+        <p>Interactive equation builder & graph visualizer. Master linear equations, polynomials, and more.</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Algebra" target="_blank">[ START DIAGNOSIS ]</a>
+      </div>
+
+      <div class="card" id="card-practice-algebra" style="display:none;">
+        <span class="level-badge" id="level-badge-algebra">LVL: BEGINNER</span>
+        <h3>ALGEBRA</h3>
+        <p>Slope, intercepts, solving, forms</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Algebra')">PRACTICE</button>
+          <a class="roadmap-btn btn-success" href="final-test.html?topic=Algebra" target="_blank">FINAL TEST</a>
+        </div>
+      </div>
+
+      <!-- Geometry -->
+      <div class="card geometry-extra" id="card-diagnosis-geometry">
+        <h3>GEOMETRY</h3>
+        <p>Explore 2D & 3D shapes with interactive examples. Calculate areas, volumes, and angles.</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Geometry" target="_blank">[ START DIAGNOSIS ]</a>
+      </div>
+
+      <div class="card" id="card-practice-geometry" style="display:none;">
+        <span class="level-badge" id="level-badge-geometry">LVL: BEGINNER</span>
+        <h3>GEOMETRY</h3>
+        <p>Shapes, area, perimeter & angles</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Geometry')">PRACTICE</button>
+          <a class="roadmap-btn btn-success" href="final-test.html?topic=Geometry" target="_blank">FINAL TEST</a>
+        </div>
+      </div>
+
+      <!-- Calculus -->
+      <div class="card calculus-extra" id="card-diagnosis-calculus">
+        <h3>CALCULUS</h3>
+        <p>Visualize derivative graphs and slopes. Understand limits, integrals, and rate of change.</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Calculus" target="_blank">[ START DIAGNOSIS ]</a>
+      </div>
+
+      <div class="card" id="card-practice-calculus" style="display:none;">
+        <span class="level-badge" id="level-badge-calculus">LVL: BEGINNER</span>
+        <h3>CALCULUS</h3>
+        <p>Limits, derivatives & integration</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Calculus')">PRACTICE</button>
+          <a class="roadmap-btn btn-success" href="final-test.html?topic=Calculus" target="_blank">FINAL TEST</a>
+        </div>
+      </div>
+
+      <!-- Probability -->
+      <div class="card probability-extra" id="card-diagnosis-probability">
+        <h3>PROBABILITY</h3>
+        <p>Interactive simulations and examples. Learn permutations, combinations, and statistics.</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Probability" target="_blank">[ START DIAGNOSIS ]</a>
+      </div>
+
+      <div class="card" id="card-practice-probability" style="display:none;">
+        <span class="level-badge" id="level-badge-probability">LVL: BEGINNER</span>
+        <h3>PROBABILITY</h3>
+        <p>Combinations, permutations & events</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Probability')">PRACTICE</button>
+          <a class="roadmap-btn btn-success" href="final-test.html?topic=Probability" target="_blank">FINAL TEST</a>
+        </div>
+      </div>
+
+      <!-- Trigonometry -->
+      <div class="card trigonometry-extra" id="card-diagnosis-trigonometry">
+        <h3>TRIGONOMETRY</h3>
+        <p>Graph sine, cosine & tangent visually. Master identities, functions, and equations.</p>
+        <a class="roadmap-btn" href="diagnosis.html?topic=Trigonometry" target="_blank">[ START DIAGNOSIS ]</a>
+      </div>
+
+      <div class="card" id="card-practice-trigonometry" style="display:none;">
+        <span class="level-badge" id="level-badge-trigonometry">LVL: BEGINNER</span>
+        <h3>TRIGONOMETRY</h3>
+        <p>Identities, functions & equations</p>
+        <div class="card-actions">
+          <button class="roadmap-btn" onclick="startPractice('Trigonometry')">PRACTICE</button>
+          <a class="roadmap-btn btn-success" href="final-test.html?topic=Trigonometry" target="_blank">FINAL TEST</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2025 TECCY // AI LEARNING PLATFORM // v1.0
+    </footer>
+  </div>
+
+  <script>
+    // ===== CARD DISPLAY LOGIC =====
+    function showCard(topic) {
+      // Hide all cards first
+      const allCards = document.querySelectorAll('.card');
+      allCards.forEach(card => card.style.display = 'none');
+
+      // Update nav active state
+      document.querySelectorAll('.nav-section a').forEach(a => a.classList.remove('active'));
+      const navItem = document.getElementById('nav-' + topic.toLowerCase());
+      if (navItem) navItem.classList.add('active');
+
+      const topicKey = topic.toLowerCase();
+
+      // Check for diagnosed level
+      const level = localStorage.getItem('userDiagnosedLevel_' + topicKey);
+
+      const diagnosisCard = document.getElementById(`card-diagnosis-${topicKey}`);
+      const practiceCard = document.getElementById(`card-practice-${topicKey}`);
+      const levelBadge = document.getElementById(`level-badge-${topicKey}`);
+
+      if (level && practiceCard) {
+        // User has already diagnosed: Show Practice Hub
+        practiceCard.style.display = 'flex';
+        if (levelBadge) {
+          levelBadge.textContent = 'LVL: ' + level.toUpperCase();
+          // Color code level
+          if (level === 'Beginner') {
+            levelBadge.style.borderColor = 'var(--accent-primary)';
+            levelBadge.style.color = 'var(--accent-primary)';
+          } else if (level === 'Intermediate') {
+            levelBadge.style.borderColor = 'var(--accent-warning)';
+            levelBadge.style.color = 'var(--accent-warning)';
+          } else if (level === 'Pro') {
+            levelBadge.style.borderColor = 'var(--accent-danger)';
+            levelBadge.style.color = 'var(--accent-danger)';
+          }
+        }
+      } else if (diagnosisCard) {
+        // No diagnosis yet: Show Start Diagnosis
+        diagnosisCard.style.display = 'flex';
+      }
+    }
+
+    // Default topic
+    showCard('Algebra');
+
+    // ===== LEVEL MODAL LOGIC =====
+    let currentLevelStep = 'current';
+    let selectedCurrentLevel = null;
+    let selectedTargetLevel = null;
+    const levels = ['Beginner', 'Intermediate', 'Pro'];
+
+    function initLevelModal() {
+      const modal = document.getElementById('levelModal');
+      const hasLevels = localStorage.getItem('userCurrentLevel') && localStorage.getItem('userTargetLevel');
+
+      if (!hasLevels) {
+        modal.classList.add('show');
+        renderLevelButtons();
+      }
+    }
+
+    function renderLevelButtons() {
+      const container = document.getElementById('levelButtons');
+      container.innerHTML = '';
+
+      levels.forEach(level => {
+        const btn = document.createElement('button');
+        btn.className = 'level-btn';
+        btn.textContent = level.toUpperCase();
+        btn.onclick = () => selectLevel(level);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectLevel(level) {
+      const buttons = document.querySelectorAll('.level-btn');
+      buttons.forEach(btn => btn.classList.remove('selected'));
+
+      event.target.classList.add('selected');
+
+      if (currentLevelStep === 'current') {
+        selectedCurrentLevel = level;
+      } else {
+        selectedTargetLevel = level;
+      }
+
+      document.getElementById('nextLevelBtn').disabled = false;
+    }
+
+    function nextLevelStep() {
+      if (currentLevelStep === 'current') {
+        currentLevelStep = 'target';
+        document.getElementById('modalTitle').textContent = 'SELECT TARGET LEVEL';
+        document.getElementById('modalDescription').textContent = 'Where do you want to reach?';
+        document.getElementById('nextLevelBtn').textContent = 'START GAME';
+        document.getElementById('nextLevelBtn').disabled = true;
+        selectedCurrentLevel = null;
+        renderLevelButtons();
+      } else {
+        // Save to localStorage
+        localStorage.setItem('userCurrentLevel', selectedCurrentLevel);
+        localStorage.setItem('userTargetLevel', selectedTargetLevel);
+        document.getElementById('levelModal').classList.remove('show');
+      }
+    }
+
+    // ===== PRACTICE LAUNCHER =====
+    function startPractice(topic) {
+      const topicKey = topic.toLowerCase();
+      const specificLevel = localStorage.getItem('userDiagnosedLevel_' + topicKey);
+      const overallLevel = localStorage.getItem('userDiagnosedLevel');
+      const selfLevel = localStorage.getItem('userCurrentLevel');
+
+      const level = specificLevel || overallLevel || selfLevel || 'Beginner';
+
+      const url = `http://localhost:8501/?topic=${topic}&level=${level}`;
+      window.open(url, '_blank');
+    }
+
+    // ===== KEYBOARD NAVIGATION =====
+    document.querySelectorAll('.sidebar a[tabindex="0"]').forEach(link => {
+      link.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          link.click();
+        }
+      });
+    });
+
+    document.getElementById('nextLevelBtn').addEventListener('click', nextLevelStep);
+
+    // Initialize on page load
+    window.addEventListener('load', initLevelModal);
+  </script>
+</body>
+
+</html>
