@@ -52,7 +52,7 @@
       padding: 24px 16px 40px;
     }
 
-    /* â”€â”€ Layout wrapper â”€â”€ */
+    /* ── Layout wrapper ── */
     .page-wrap {
       display: flex;
       width: 100%;
@@ -61,7 +61,7 @@
       align-items: flex-start;
     }
 
-    /* â”€â”€ Sidebar â”€â”€ */
+    /* ── Sidebar ── */
     .sidebar {
       width: 220px;
       flex-shrink: 0;
@@ -116,7 +116,7 @@
       margin: 4px 0;
     }
 
-    /* â”€â”€ Main content â”€â”€ */
+    /* ── Main content ── */
     .main-content {
       flex: 1;
       display: flex;
@@ -124,7 +124,7 @@
       gap: 16px;
     }
 
-    /* â”€â”€ Panel card â”€â”€ */
+    /* ── Panel card ── */
     .panel {
       background: var(--menu-bg);
       border: 4px solid var(--menu-border-dark);
@@ -133,7 +133,7 @@
       padding: 24px 28px;
     }
 
-    /* â”€â”€ Header â”€â”€ */
+    /* ── Header ── */
     .test-header h1 {
       font-size: 2.2rem;
       color: var(--menu-border-dark);
@@ -157,7 +157,7 @@
       margin-top: 6px;
     }
 
-    /* â”€â”€ Progress bar â”€â”€ */
+    /* ── Progress bar ── */
     .progress-wrap {
       margin-bottom: 4px;
     }
@@ -184,7 +184,7 @@
       transition: width 0.3s ease;
     }
 
-    /* â”€â”€ Question card â”€â”€ */
+    /* ── Question card ── */
     .q-label {
       font-size: 1.1rem;
       color: var(--accent-orange);
@@ -198,7 +198,7 @@
       color: var(--menu-border-dark);
     }
 
-    /* â”€â”€ Options â”€â”€ */
+    /* ── Options ── */
     .options {
       display: flex;
       flex-direction: column;
@@ -244,7 +244,7 @@
       cursor: not-allowed;
     }
 
-    /* â”€â”€ Buttons â”€â”€ */
+    /* ── Buttons ── */
     .btn-row {
       display: flex;
       gap: 12px;
@@ -292,7 +292,7 @@
       background: #7bc65d;
     }
 
-    /* â”€â”€ Summary / result panel â”€â”€ */
+    /* ── Summary / result panel ── */
     .summary-panel {
       display: none;
       text-align: center;
@@ -347,7 +347,7 @@
       opacity: 0.7;
     }
 
-    /* â”€â”€ Analysis table â”€â”€ */
+    /* ── Analysis table ── */
     .analysis-panel {
       display: none;
     }
@@ -418,26 +418,26 @@
 <body>
   <div class="page-wrap">
 
-    <!-- â”€â”€ Sidebar â”€â”€ -->
+    <!-- ── Sidebar ── -->
     <div class="sidebar">
       <h2>Teccy</h2>
       <div class="sidebar-label">Navigation</div>
       <a href="index.html">⬅ Back to Subjects</a>
       <div class="sidebar-divider"></div>
       <div class="sidebar-label">Tools</div>
-      <a href="dashboard.html">ðŸ“Š Dashboard</a>
-      <a href="buddy.html">ðŸ‘¥ Buddy System</a>
-      <a href="flashcards.html">ðŸƒ  Flashcards</a>
+      <a href="dashboard.html">📊 Dashboard</a>
+      <a href="buddy.html">👥 Buddy System</a>
+      <a href="flashcards.html">🃏 Flashcards</a>
     </div>
 
-    <!-- â”€â”€ Main â”€â”€ -->
+    <!-- ── Main ── -->
     <div class="main-content">
 
       <!-- Header -->
       <div class="panel test-header">
-        <h1 id="testTitle">ðŸ“‹ Final Test</h1>
+        <h1 id="testTitle">📋 Final Test</h1>
         <p id="testDescription">Challenge yourself with 20 questions</p>
-        <span class="level-pill" id="levelPill">Level: â€”</span>
+        <span class="level-pill" id="levelPill">Level: —</span>
       </div>
 
       <!-- Progress -->
@@ -451,28 +451,28 @@
       <!-- Question Card -->
       <div class="panel" id="questionCard">
         <div class="q-label" id="qLabel">QUESTION 1</div>
-        <div class="q-text" id="qText">Loadingâ€¦</div>
+        <div class="q-text" id="qText">Loading…</div>
         <div class="options" id="optionsContainer"></div>
         <div class="btn-row">
-          <button class="btn btn-secondary" id="prevBtn" onclick="prevQ()" disabled>â—€ Prev</button>
-          <button class="btn" id="nextBtn" onclick="nextQ()" disabled>Next â–¶</button>
+          <button class="btn btn-secondary" id="prevBtn" onclick="prevQ()" disabled>◀ Prev</button>
+          <button class="btn" id="nextBtn" onclick="nextQ()" disabled>Next ▶</button>
         </div>
       </div>
 
       <!-- Summary Panel -->
       <div class="panel summary-panel" id="summaryPanel">
-        <div class="result-banner" id="resultBanner">â€”</div>
+        <div class="result-banner" id="resultBanner">—</div>
         <div class="stat-row">
           <div class="stat-box">
-            <span class="sval" id="statScore">â€”</span>
+            <span class="sval" id="statScore">—</span>
             <span class="slbl">Score</span>
           </div>
           <div class="stat-box">
-            <span class="sval" id="statCorrect">â€”</span>
+            <span class="sval" id="statCorrect">—</span>
             <span class="slbl">Correct</span>
           </div>
           <div class="stat-box">
-            <span class="sval" id="statTotal">â€”</span>
+            <span class="sval" id="statTotal">—</span>
             <span class="slbl">Total</span>
           </div>
         </div>
@@ -482,7 +482,7 @@
 
       <!-- Detailed Analysis -->
       <div class="panel analysis-panel" id="analysisPanel">
-        <h2 style="font-size:1.6rem; color:var(--menu-border-dark); margin-bottom:8px;">ðŸ“ Detailed Analysis</h2>
+        <h2 style="font-size:1.6rem; color:var(--menu-border-dark); margin-bottom:8px;">📝 Detailed Analysis</h2>
         <table class="analysis-table" id="analysisTable">
           <thead>
             <tr>
@@ -490,38 +490,38 @@
               <th>Question</th>
               <th>Your Answer</th>
               <th>Correct Answer</th>
-              <th>âœ“/âœ—</th>
+              <th>✓/✗</th>
             </tr>
           </thead>
           <tbody id="analysisBody"></tbody>
         </table>
       </div>
 
-      <footer>Â© 2025 Teccy â€” AI Learning Platform</footer>
+      <footer>© 2025 Teccy — AI Learning Platform</footer>
     </div>
   </div>
 
   <script>
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     // Supabase init (same creds as index.html)
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     // URL params
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     const urlParams = new URLSearchParams(window.location.search);
     const topic = (urlParams.get('topic') || 'Algebra');
     const rawLevel = (urlParams.get('level') || 'AMATEUR').toUpperCase();
 
-    document.getElementById('testTitle').textContent = `ðŸ“‹ Final Test â€” ${topic}`;
+    document.getElementById('testTitle').textContent = `📋 Final Test — ${topic}`;
     document.getElementById('levelPill').textContent = `Level: ${rawLevel}`;
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    // Question bank â€” easy / medium / hard per topic
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
+    // Question bank — easy / medium / hard per topic
+    // ─────────────────────────────────────────────────────
     const BANK = {
       Algebra: {
         easy: [
@@ -531,103 +531,103 @@
           { q: "What is the coefficient of x in 4x + 1?", opts: ["1", "4", "x", "4x"], ans: 1 },
           { q: "Solve: 2x = 8", opts: ["2", "3", "4", "5"], ans: 2 },
           { q: "Expand: 2(x + 1)", opts: ["2x+1", "2x+2", "x+2", "x+1"], ans: 1 },
-          { q: "What is x â€“ 3 when x = 10?", opts: ["6", "7", "8", "13"], ans: 1 },
+          { q: "What is x – 3 when x = 10?", opts: ["6", "7", "8", "13"], ans: 1 },
           { q: "Solve: x / 4 = 3", opts: ["7", "12", "3", "1"], ans: 1 },
         ],
         medium: [
-          { q: "Solve: 3x â€“ 7 = 2", opts: ["1", "2", "3", "4"], ans: 2 },
-          { q: "Factor: xÂ² + 5x + 6", opts: ["(x+2)(x+3)", "(x+1)(x+6)", "(x+3)Â²", "(x+2)Â²"], ans: 0 },
-          { q: "Simplify: (2xÂ²Â·3x) / x", opts: ["6xÂ²", "5xÂ²", "6x", "5x"], ans: 0 },
-          { q: "Solve: |x â€“ 2| = 5", opts: ["3 and â€“3", "7 and â€“3", "5 and 2", "7 and 3"], ans: 1 },
-          { q: "Expand: (x + 2)(x â€“ 3)", opts: ["xÂ²â€“xâ€“6", "xÂ²+xâ€“6", "xÂ²â€“5x+6", "xÂ²+5xâ€“6"], ans: 0 },
-          { q: "Solve: 2(x â€“ 4) = 6", opts: ["5", "6", "7", "8"], ans: 2 },
+          { q: "Solve: 3x – 7 = 2", opts: ["1", "2", "3", "4"], ans: 2 },
+          { q: "Factor: x² + 5x + 6", opts: ["(x+2)(x+3)", "(x+1)(x+6)", "(x+3)²", "(x+2)²"], ans: 0 },
+          { q: "Simplify: (2x²·3x) / x", opts: ["6x²", "5x²", "6x", "5x"], ans: 0 },
+          { q: "Solve: |x – 2| = 5", opts: ["3 and –3", "7 and –3", "5 and 2", "7 and 3"], ans: 1 },
+          { q: "Expand: (x + 2)(x – 3)", opts: ["x²–x–6", "x²+x–6", "x²–5x+6", "x²+5x–6"], ans: 0 },
+          { q: "Solve: 2(x – 4) = 6", opts: ["5", "6", "7", "8"], ans: 2 },
           { q: "If f(x) = 2x + 3, find f(4)", opts: ["10", "11", "12", "13"], ans: 1 },
-          { q: "Solve: xÂ² â€“ 9 = 0", opts: ["x = 3", "x = Â±3", "x = 9", "x = Â±9"], ans: 1 },
+          { q: "Solve: x² – 9 = 0", opts: ["x = 3", "x = ±3", "x = 9", "x = ±9"], ans: 1 },
         ],
         hard: [
-          { q: "Solve: xÂ² â€“ 5x + 6 = 0", opts: ["x=2,3", "x=1,6", "x=â€“2,â€“3", "x=â€“1,6"], ans: 0 },
-          { q: "Simplify: (xÂ² â€“ 4) / (x â€“ 2)", opts: ["xâ€“2", "x+2", "xÂ²+2", "xâ€“4"], ans: 1 },
+          { q: "Solve: x² – 5x + 6 = 0", opts: ["x=2,3", "x=1,6", "x=–2,–3", "x=–1,6"], ans: 0 },
+          { q: "Simplify: (x² – 4) / (x – 2)", opts: ["x–2", "x+2", "x²+2", "x–4"], ans: 1 },
           { q: "If 2^x = 16, what is x?", opts: ["2", "3", "4", "8"], ans: 2 },
-          { q: "Solve the system: x+y=5, xâ€“y=1", opts: ["x=3,y=2", "x=4,y=1", "x=2,y=3", "x=5,y=0"], ans: 0 },
-          { q: "Expand: (2x â€“ 3)Â²", opts: ["4xÂ²â€“12x+9", "4xÂ²â€“6x+9", "4xÂ²â€“9", "4xÂ²+12x+9"], ans: 0 },
-          { q: "Find the vertex of y = xÂ² â€“ 4x + 3", opts: ["(2,â€“1)", "(2,1)", "(4,3)", "(0,3)"], ans: 0 },
-          { q: "Solve: logâ‚‚(8) = ?", opts: ["2", "3", "4", "8"], ans: 1 },
-          { q: "Find the discriminant of 2xÂ²+3xâ€“2=0", opts: ["â€“7", "9", "25", "1"], ans: 2 },
+          { q: "Solve the system: x+y=5, x–y=1", opts: ["x=3,y=2", "x=4,y=1", "x=2,y=3", "x=5,y=0"], ans: 0 },
+          { q: "Expand: (2x – 3)²", opts: ["4x²–12x+9", "4x²–6x+9", "4x²–9", "4x²+12x+9"], ans: 0 },
+          { q: "Find the vertex of y = x² – 4x + 3", opts: ["(2,–1)", "(2,1)", "(4,3)", "(0,3)"], ans: 0 },
+          { q: "Solve: log₂(8) = ?", opts: ["2", "3", "4", "8"], ans: 1 },
+          { q: "Find the discriminant of 2x²+3x–2=0", opts: ["–7", "9", "25", "1"], ans: 2 },
         ],
       },
       Geometry: {
         easy: [
-          { q: "Sum of angles in a triangle?", opts: ["90Â°", "180Â°", "270Â°", "360Â°"], ans: 1 },
-          { q: "Area of rectangle 5 Ã— 3?", opts: ["8", "15", "16", "20"], ans: 1 },
+          { q: "Sum of angles in a triangle?", opts: ["90°", "180°", "270°", "360°"], ans: 1 },
+          { q: "Area of rectangle 5 × 3?", opts: ["8", "15", "16", "20"], ans: 1 },
           { q: "How many sides does a hexagon have?", opts: ["4", "5", "6", "7"], ans: 2 },
           { q: "What is the area of a square with side 4?", opts: ["8", "12", "16", "20"], ans: 2 },
           { q: "Perimeter of a square with side 5?", opts: ["10", "15", "20", "25"], ans: 2 },
-          { q: "A right angle measures?", opts: ["45Â°", "60Â°", "90Â°", "180Â°"], ans: 2 },
-          { q: "What is the circumference of a circle? (formula)", opts: ["Ï€rÂ²", "2Ï€r", "Ï€d/2", "rÂ²Ï€"], ans: 1 },
+          { q: "A right angle measures?", opts: ["45°", "60°", "90°", "180°"], ans: 2 },
+          { q: "What is the circumference of a circle? (formula)", opts: ["πr²", "2πr", "πd/2", "r²π"], ans: 1 },
           { q: "How many faces does a cube have?", opts: ["4", "5", "6", "8"], ans: 2 },
         ],
         medium: [
-          { q: "Area of circle with radius 3?", opts: ["3Ï€", "6Ï€", "9Ï€", "12Ï€"], ans: 2 },
+          { q: "Area of circle with radius 3?", opts: ["3π", "6π", "9π", "12π"], ans: 2 },
           { q: "Volume of cube with side 2?", opts: ["4", "6", "8", "12"], ans: 2 },
           { q: "Area of triangle: base 4, height 3?", opts: ["6", "7", "12", "14"], ans: 0 },
-          { q: "If two angles of a triangle are 40Â° and 70Â°, the third is?", opts: ["60Â°", "70Â°", "80Â°", "90Â°"], ans: 1 },
+          { q: "If two angles of a triangle are 40° and 70°, the third is?", opts: ["60°", "70°", "80°", "90°"], ans: 1 },
           { q: "Area of trapezoid (parallel sides 4,6; height 3)?", opts: ["15", "18", "21", "24"], ans: 0 },
-          { q: "Pythagorean theorem formula?", opts: ["a+b=c", "aÂ²+bÂ²=cÂ²", "aâ€“b=c", "ab=cÂ²"], ans: 1 },
-          { q: "Circumference of circle radius 5?", opts: ["5Ï€", "10Ï€", "15Ï€", "25Ï€"], ans: 1 },
+          { q: "Pythagorean theorem formula?", opts: ["a+b=c", "a²+b²=c²", "a–b=c", "ab=c²"], ans: 1 },
+          { q: "Circumference of circle radius 5?", opts: ["5π", "10π", "15π", "25π"], ans: 1 },
           { q: "A polygon with 8 sides is called?", opts: ["Hexagon", "Heptagon", "Octagon", "Nonagon"], ans: 2 },
         ],
         hard: [
-          { q: "In right triangle: legs 3 and 4. Hypotenuse?", opts: ["5", "6", "7", "âˆš25"], ans: 0 },
-          { q: "Volume of sphere radius r?", opts: ["4Ï€rÂ³", "(4/3)Ï€rÂ³", "(2/3)Ï€rÂ³", "Ï€rÂ³"], ans: 1 },
-          { q: "Surface area of cylinder (radius r, height h)?", opts: ["2Ï€rÂ²", "2Ï€rh", "2Ï€r(r+h)", "Ï€rÂ²h"], ans: 2 },
-          { q: "A regular hexagon has interior angles of?", opts: ["108Â°", "120Â°", "135Â°", "150Â°"], ans: 1 },
-          { q: "Area of a sector with radius 6 and angle 60Â°?", opts: ["3Ï€", "6Ï€", "9Ï€", "12Ï€"], ans: 1 },
-          { q: "Diagonal of rectangle 3Ã—4?", opts: ["3", "4", "5", "7"], ans: 2 },
-          { q: "Exterior angle of regular pentagon?", opts: ["36Â°", "60Â°", "72Â°", "90Â°"], ans: 2 },
+          { q: "In right triangle: legs 3 and 4. Hypotenuse?", opts: ["5", "6", "7", "√25"], ans: 0 },
+          { q: "Volume of sphere radius r?", opts: ["4πr³", "(4/3)πr³", "(2/3)πr³", "πr³"], ans: 1 },
+          { q: "Surface area of cylinder (radius r, height h)?", opts: ["2πr²", "2πrh", "2πr(r+h)", "πr²h"], ans: 2 },
+          { q: "A regular hexagon has interior angles of?", opts: ["108°", "120°", "135°", "150°"], ans: 1 },
+          { q: "Area of a sector with radius 6 and angle 60°?", opts: ["3π", "6π", "9π", "12π"], ans: 1 },
+          { q: "Diagonal of rectangle 3×4?", opts: ["3", "4", "5", "7"], ans: 2 },
+          { q: "Exterior angle of regular pentagon?", opts: ["36°", "60°", "72°", "90°"], ans: 2 },
           { q: "Centroid divides median in ratio?", opts: ["1:1", "1:2", "2:1", "3:1"], ans: 2 },
         ],
       },
       Calculus: {
         easy: [
-          { q: "Derivative of xÂ²?", opts: ["x", "2x", "xÂ²", "2"], ans: 1 },
-          { q: "Derivative of a constant c?", opts: ["c", "1", "0", "âˆž"], ans: 2 },
-          { q: "Integral of 1 dx?", opts: ["0", "1", "x+C", "xÂ²+C"], ans: 2 },
+          { q: "Derivative of x²?", opts: ["x", "2x", "x²", "2"], ans: 1 },
+          { q: "Derivative of a constant c?", opts: ["c", "1", "0", "∞"], ans: 2 },
+          { q: "Integral of 1 dx?", opts: ["0", "1", "x+C", "x²+C"], ans: 2 },
           { q: "Derivative of 3x?", opts: ["3", "x", "3x", "0"], ans: 0 },
           { q: "What does d/dx mean?", opts: ["Division of x", "Derivative w.r.t x", "Double integral", "Divergence"], ans: 1 },
-          { q: "Limit of 5 as xâ†’âˆž?", opts: ["0", "5", "âˆž", "â€“âˆž"], ans: 1 },
+          { q: "Limit of 5 as x→∞?", opts: ["0", "5", "∞", "–∞"], ans: 1 },
           { q: "Integral of 0 dx?", opts: ["0", "C", "x+C", "1"], ans: 1 },
-          { q: "Derivative of x?", opts: ["0", "1", "x", "xÂ²"], ans: 1 },
+          { q: "Derivative of x?", opts: ["0", "1", "x", "x²"], ans: 1 },
         ],
         medium: [
-          { q: "Derivative of sin(x)?", opts: ["cos(x)", "â€“cos(x)", "sin(x)", "tan(x)"], ans: 0 },
-          { q: "Integral of 2x dx?", opts: ["xÂ²", "xÂ²+C", "2xÂ²+C", "x+C"], ans: 1 },
-          { q: "Derivative of e^x?", opts: ["e^x", "xÂ·e^(xâ€“1)", "1", "e"], ans: 0 },
-          { q: "Limit of 1/x as xâ†’âˆž?", opts: ["1", "0", "âˆž", "â€“âˆž"], ans: 1 },
+          { q: "Derivative of sin(x)?", opts: ["cos(x)", "–cos(x)", "sin(x)", "tan(x)"], ans: 0 },
+          { q: "Integral of 2x dx?", opts: ["x²", "x²+C", "2x²+C", "x+C"], ans: 1 },
+          { q: "Derivative of e^x?", opts: ["e^x", "x·e^(x–1)", "1", "e"], ans: 0 },
+          { q: "Limit of 1/x as x→∞?", opts: ["1", "0", "∞", "–∞"], ans: 1 },
           { q: "Derivative of ln(x)?", opts: ["1/x", "x", "ln(x)", "e^x"], ans: 0 },
-          { q: "Integral of cos(x) dx?", opts: ["sin(x)+C", "â€“sin(x)+C", "cos(x)+C", "tan(x)+C"], ans: 0 },
-          { q: "Derivative of xâ´?", opts: ["4xÂ³", "4x", "xÂ³", "4"], ans: 0 },
-          { q: "Derivative of cos(x)?", opts: ["sin(x)", "â€“sin(x)", "cos(x)", "tan(x)"], ans: 1 },
+          { q: "Integral of cos(x) dx?", opts: ["sin(x)+C", "–sin(x)+C", "cos(x)+C", "tan(x)+C"], ans: 0 },
+          { q: "Derivative of x⁴?", opts: ["4x³", "4x", "x³", "4"], ans: 0 },
+          { q: "Derivative of cos(x)?", opts: ["sin(x)", "–sin(x)", "cos(x)", "tan(x)"], ans: 1 },
         ],
         hard: [
-          { q: "d/dx [xÂ·sin(x)] = ?", opts: ["sin(x)+xÂ·cos(x)", "sin(x)", "xÂ·cos(x)", "cos(x)"], ans: 0 },
-          { q: "âˆ« e^(2x) dx = ?", opts: ["e^(2x)+C", "2e^(2x)+C", "(1/2)e^(2x)+C", "e^x+C"], ans: 2 },
-          { q: "Critical point of f(x)=xÂ²â€“4x+1?", opts: ["x=1", "x=2", "x=4", "x=â€“2"], ans: 1 },
-          { q: "âˆ«â‚€Â¹ xÂ² dx = ?", opts: ["1/2", "1/3", "2/3", "1"], ans: 1 },
-          { q: "Derivative of tan(x)?", opts: ["sec(x)", "secÂ²(x)", "cot(x)", "â€“cscÂ²(x)"], ans: 1 },
-          { q: "By chain rule: d/dx[sin(xÂ²)] = ?", opts: ["cos(xÂ²)", "2xÂ·cos(xÂ²)", "sin(2x)", "2cos(xÂ²)"], ans: 1 },
+          { q: "d/dx [x·sin(x)] = ?", opts: ["sin(x)+x·cos(x)", "sin(x)", "x·cos(x)", "cos(x)"], ans: 0 },
+          { q: "∫ e^(2x) dx = ?", opts: ["e^(2x)+C", "2e^(2x)+C", "(1/2)e^(2x)+C", "e^x+C"], ans: 2 },
+          { q: "Critical point of f(x)=x²–4x+1?", opts: ["x=1", "x=2", "x=4", "x=–2"], ans: 1 },
+          { q: "∫₀¹ x² dx = ?", opts: ["1/2", "1/3", "2/3", "1"], ans: 1 },
+          { q: "Derivative of tan(x)?", opts: ["sec(x)", "sec²(x)", "cot(x)", "–csc²(x)"], ans: 1 },
+          { q: "By chain rule: d/dx[sin(x²)] = ?", opts: ["cos(x²)", "2x·cos(x²)", "sin(2x)", "2cos(x²)"], ans: 1 },
           { q: "A function has a local min if second derivative is?", opts: ["Negative", "Zero", "Positive", "Undefined"], ans: 2 },
-          { q: "âˆ« secÂ²(x) dx = ?", opts: ["sec(x)+C", "tan(x)+C", "csc(x)+C", "sin(x)+C"], ans: 1 },
+          { q: "∫ sec²(x) dx = ?", opts: ["sec(x)+C", "tan(x)+C", "csc(x)+C", "sin(x)+C"], ans: 1 },
         ],
       },
       Probability: {
         easy: [
           { q: "P(rolling 3 on die)?", opts: ["1/6", "1/3", "1/2", "1/4"], ans: 0 },
           { q: "P(heads on coin)?", opts: ["1/4", "1/3", "1/2", "2/3"], ans: 2 },
-          { q: "Sum of all probabilities?", opts: ["0", "0.5", "1", "âˆž"], ans: 2 },
+          { q: "Sum of all probabilities?", opts: ["0", "0.5", "1", "∞"], ans: 2 },
           { q: "If P(A)=0.6, P(not A)?", opts: ["0.4", "0.6", "0.3", "0.7"], ans: 0 },
           { q: "P(red card from deck)?", opts: ["1/4", "1/2", "1/3", "2/3"], ans: 1 },
           { q: "P(rolling even on die)?", opts: ["1/6", "1/3", "1/2", "2/3"], ans: 2 },
-          { q: "P(impossible event)?", opts: ["0", "0.5", "1", "â€“1"], ans: 0 },
+          { q: "P(impossible event)?", opts: ["0", "0.5", "1", "–1"], ans: 0 },
           { q: "P(certain event)?", opts: ["0", "0.5", "1", "2"], ans: 2 },
         ],
         medium: [
@@ -641,53 +641,53 @@
           { q: "n! for n=4?", opts: ["12", "16", "24", "48"], ans: 2 },
         ],
         hard: [
-          { q: "P(A|B) = P(Aâˆ©B)/P(B). This is called?", opts: ["Joint probability", "Conditional probability", "Bayes theorem", "Marginal prob"], ans: 1 },
-          { q: "Binomial P(X=k): (n choose k)Â·p^kÂ·(1â€“p)^(nâ€“k). For n=4,k=2,p=0.5?", opts: ["0.375", "0.25", "0.5", "0.125"], ans: 0 },
+          { q: "P(A|B) = P(A∩B)/P(B). This is called?", opts: ["Joint probability", "Conditional probability", "Bayes theorem", "Marginal prob"], ans: 1 },
+          { q: "Binomial P(X=k): (n choose k)·p^k·(1–p)^(n–k). For n=4,k=2,p=0.5?", opts: ["0.375", "0.25", "0.5", "0.125"], ans: 0 },
           { q: "Variance of fair die?", opts: ["35/12", "7/2", "12/35", "5/2"], ans: 0 },
-          { q: "If X~N(Î¼,ÏƒÂ²), P(X<Î¼)=?", opts: ["0", "0.25", "0.5", "1"], ans: 2 },
-          { q: "Poisson: P(X=0) when Î»=2?", opts: ["eâ»Â²", "2eâ»Â²", "0.5", "eÂ²"], ans: 0 },
+          { q: "If X~N(μ,σ²), P(X<μ)=?", opts: ["0", "0.25", "0.5", "1"], ans: 2 },
+          { q: "Poisson: P(X=0) when λ=2?", opts: ["e⁻²", "2e⁻²", "0.5", "e²"], ans: 0 },
           { q: "C(8,3)=?", opts: ["24", "56", "168", "336"], ans: 1 },
-          { q: "Standard deviation = ?", opts: ["Variance", "âˆšVariance", "VarianceÂ²", "1/Variance"], ans: 1 },
-          { q: "P(Aâˆ©B)=0.1, P(B)=0.4. P(A|B)=?", opts: ["0.04", "0.25", "0.3", "0.5"], ans: 1 },
+          { q: "Standard deviation = ?", opts: ["Variance", "√Variance", "Variance²", "1/Variance"], ans: 1 },
+          { q: "P(A∩B)=0.1, P(B)=0.4. P(A|B)=?", opts: ["0.04", "0.25", "0.3", "0.5"], ans: 1 },
         ],
       },
       Trigonometry: {
         easy: [
-          { q: "sin(90Â°)?", opts: ["0", "1/2", "âˆš3/2", "1"], ans: 3 },
-          { q: "cos(0Â°)?", opts: ["0", "1/2", "âˆš3/2", "1"], ans: 3 },
-          { q: "tan(45Â°)?", opts: ["0", "1/2", "1", "âˆš3"], ans: 2 },
-          { q: "sinÂ²Î¸ + cosÂ²Î¸ = ?", opts: ["0", "1/2", "1", "2"], ans: 2 },
-          { q: "sin(0Â°)?", opts: ["0", "1", "â€“1", "undefined"], ans: 0 },
-          { q: "cos(90Â°)?", opts: ["0", "1", "â€“1", "undefined"], ans: 0 },
-          { q: "tan(0Â°)?", opts: ["0", "1", "undefined", "âˆž"], ans: 0 },
-          { q: "Amplitude of sin(x)?", opts: ["0", "Ï€", "1", "2Ï€"], ans: 2 },
+          { q: "sin(90°)?", opts: ["0", "1/2", "√3/2", "1"], ans: 3 },
+          { q: "cos(0°)?", opts: ["0", "1/2", "√3/2", "1"], ans: 3 },
+          { q: "tan(45°)?", opts: ["0", "1/2", "1", "√3"], ans: 2 },
+          { q: "sin²θ + cos²θ = ?", opts: ["0", "1/2", "1", "2"], ans: 2 },
+          { q: "sin(0°)?", opts: ["0", "1", "–1", "undefined"], ans: 0 },
+          { q: "cos(90°)?", opts: ["0", "1", "–1", "undefined"], ans: 0 },
+          { q: "tan(0°)?", opts: ["0", "1", "undefined", "∞"], ans: 0 },
+          { q: "Amplitude of sin(x)?", opts: ["0", "π", "1", "2π"], ans: 2 },
         ],
         medium: [
-          { q: "sin(30Â°)?", opts: ["1/2", "âˆš3/2", "1", "0"], ans: 0 },
-          { q: "cos(60Â°)?", opts: ["1/2", "âˆš3/2", "1", "0"], ans: 0 },
-          { q: "Period of sin(x)?", opts: ["Ï€", "2Ï€", "Ï€/2", "1"], ans: 1 },
-          { q: "Amplitude of 3sin(x)?", opts: ["1", "2", "3", "Ï€"], ans: 2 },
-          { q: "cos(30Â°)?", opts: ["1/2", "âˆš3/2", "âˆš3", "1"], ans: 1 },
-          { q: "Period of tan(x)?", opts: ["Ï€", "2Ï€", "Ï€/2", "1"], ans: 0 },
-          { q: "Range of sin(x)?", opts: ["[0,1]", "[â€“1,1]", "[0,âˆž)", "(â€“âˆž,âˆž)"], ans: 1 },
-          { q: "sin(60Â°)?", opts: ["1/2", "âˆš3/2", "âˆš3", "1"], ans: 1 },
+          { q: "sin(30°)?", opts: ["1/2", "√3/2", "1", "0"], ans: 0 },
+          { q: "cos(60°)?", opts: ["1/2", "√3/2", "1", "0"], ans: 0 },
+          { q: "Period of sin(x)?", opts: ["π", "2π", "π/2", "1"], ans: 1 },
+          { q: "Amplitude of 3sin(x)?", opts: ["1", "2", "3", "π"], ans: 2 },
+          { q: "cos(30°)?", opts: ["1/2", "√3/2", "√3", "1"], ans: 1 },
+          { q: "Period of tan(x)?", opts: ["π", "2π", "π/2", "1"], ans: 0 },
+          { q: "Range of sin(x)?", opts: ["[0,1]", "[–1,1]", "[0,∞)", "(–∞,∞)"], ans: 1 },
+          { q: "sin(60°)?", opts: ["1/2", "√3/2", "√3", "1"], ans: 1 },
         ],
         hard: [
-          { q: "Solve sin(x)=1/2 in [0Â°,360Â°]?", opts: ["30Â° only", "30Â° and 150Â°", "60Â° and 120Â°", "45Â° and 135Â°"], ans: 1 },
+          { q: "Solve sin(x)=1/2 in [0°,360°]?", opts: ["30° only", "30° and 150°", "60° and 120°", "45° and 135°"], ans: 1 },
           { q: "Simplify: sin(x)/cos(x)?", opts: ["cot(x)", "sec(x)", "tan(x)", "csc(x)"], ans: 2 },
-          { q: "secÂ²(x) = ?", opts: ["1+cotÂ²(x)", "1+tanÂ²(x)", "1â€“tanÂ²(x)", "tanÂ²(x)"], ans: 1 },
-          { q: "sin(A+B) = ?", opts: ["sinAÂ·cosB", "sinAÂ·cosB+cosAÂ·sinB", "sinAÂ·sinBâ€“cosAÂ·cosB", "cosAÂ·cosB"], ans: 1 },
-          { q: "cos(2Î¸) expressed as?", opts: ["2cosÂ²Î¸â€“1", "1â€“2cosÂ²Î¸", "2sinÎ¸cosÎ¸", "(cosÎ¸+sinÎ¸)Â²"], ans: 0 },
-          { q: "Graph of y=sin(2x) has period?", opts: ["Ï€/2", "Ï€", "2Ï€", "4Ï€"], ans: 1 },
-          { q: "tan(x) is undefined when cos(x)=?", opts: ["1", "â€“1", "0", "âˆž"], ans: 2 },
-          { q: "arcsin(1)=?", opts: ["0", "Ï€/4", "Ï€/2", "Ï€"], ans: 2 },
+          { q: "sec²(x) = ?", opts: ["1+cot²(x)", "1+tan²(x)", "1–tan²(x)", "tan²(x)"], ans: 1 },
+          { q: "sin(A+B) = ?", opts: ["sinA·cosB", "sinA·cosB+cosA·sinB", "sinA·sinB–cosA·cosB", "cosA·cosB"], ans: 1 },
+          { q: "cos(2θ) expressed as?", opts: ["2cos²θ–1", "1–2cos²θ", "2sinθcosθ", "(cosθ+sinθ)²"], ans: 0 },
+          { q: "Graph of y=sin(2x) has period?", opts: ["π/2", "π", "2π", "4π"], ans: 1 },
+          { q: "tan(x) is undefined when cos(x)=?", opts: ["1", "–1", "0", "∞"], ans: 2 },
+          { q: "arcsin(1)=?", opts: ["0", "π/4", "π/2", "π"], ans: 2 },
         ],
       },
     };
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     // Difficulty pools based on level
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     function getQuestions(levelStr, topicStr) {
       const pool = BANK[topicStr] || BANK['Algebra'];
       const lvl = levelStr.toUpperCase();
@@ -712,17 +712,17 @@
       return qs.slice(0, 20);
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     // State
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     const questions = getQuestions(rawLevel, topic);
     let current = 0;
     const answers = new Array(questions.length).fill(null);
     const answered = new Array(questions.length).fill(false);
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     // Render question
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     function loadQuestion() {
       const q = questions[current];
       const total = questions.length;
@@ -754,7 +754,7 @@
       document.getElementById('nextBtn').disabled = !answered[current];
 
       const isLast = current === questions.length - 1;
-      document.getElementById('nextBtn').textContent = isLast ? 'Submit âœ”' : 'Next â–¶';
+      document.getElementById('nextBtn').textContent = isLast ? 'Submit ✔' : 'Next ▶';
     }
 
     function selectOpt(i) {
@@ -778,9 +778,9 @@
       if (current > 0) { current--; loadQuestion(); }
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     // Summary / pass-fail
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     async function showSummary() {
       const correctCount = answers.reduce((n, a, i) => n + (a === questions[i].ans ? 1 : 0), 0);
       const total = questions.length;
@@ -799,11 +799,11 @@
       const banner = document.getElementById('resultBanner');
       const msg = document.getElementById('resultMsg');
       if (passed) {
-        banner.textContent = 'ðŸ† PASSED!';
+        banner.textContent = '🏆 PASSED!';
         banner.className = 'result-banner pass';
         msg.textContent = 'Congratulations! You passed. Module complete!';
       } else {
-        banner.textContent = 'âŒ FAILED â€” Try Again';
+        banner.textContent = '❌ FAILED — Try Again';
         banner.className = 'result-banner fail';
         msg.textContent = `You need at least 60% to pass. You scored ${pct}%.`;
       }
@@ -813,14 +813,14 @@
       btnRow.innerHTML = '';
       if (passed) {
         btnRow.innerHTML = `
-      <button class="btn btn-green" onclick="window.location.href='dashboard.html'">ðŸ“Š Dashboard</button>
-      <button class="btn btn-secondary" onclick="showAnalysis()">ðŸ“ Detailed Analysis</button>
-      <button class="btn" onclick="retake()">ðŸ”„ Try Again</button>
+      <button class="btn btn-green" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+      <button class="btn btn-secondary" onclick="showAnalysis()">📝 Detailed Analysis</button>
+      <button class="btn" onclick="retake()">🔄 Try Again</button>
     `;
       } else {
         btnRow.innerHTML = `
-      <button class="btn" onclick="retake()">ðŸ”„ Try Again</button>
-      <button class="btn btn-secondary" onclick="window.location.href='../index.html'">â¬… Back to Practice</button>
+      <button class="btn" onclick="retake()">🔄 Try Again</button>
+      <button class="btn btn-secondary" onclick="window.location.href='index.html'">⬅ Back to Practice</button>
     `;
       }
 
@@ -878,9 +878,9 @@
         tr.innerHTML = `
       <td>${i + 1}</td>
       <td>${q.q}</td>
-      <td>${selected !== null ? String.fromCharCode(65 + selected) + ') ' + q.opts[selected] : 'â€”'}</td>
+      <td>${selected !== null ? String.fromCharCode(65 + selected) + ') ' + q.opts[selected] : '—'}</td>
       <td>${String.fromCharCode(65 + correct) + ') ' + q.opts[correct]}</td>
-      <td>${ok ? 'âœ“' : 'âœ—'}</td>
+      <td>${ok ? '✓' : '✗'}</td>
     `;
         body.appendChild(tr);
       });
@@ -892,9 +892,9 @@
       window.location.reload();
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     // Init
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─────────────────────────────────────────────────────
     loadQuestion();
   </script>
 </body>
