@@ -487,7 +487,11 @@ async function startPractice(topic) {
   const level = (progress?.diagnosed_level || progress?.current_level || 'Beginner').toUpperCase();
   const target = (progress?.target_level || '').toUpperCase();
 
-  const url = `http://localhost:8501/?topic=${topic}&level=${level}&target=${target}`;
+  // Change this URL to your deployed Streamlit app URL once you deploy it!
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const baseUrl = isLocal ? 'http://localhost:8501/' : 'https://teccy.streamlit.app/'; 
+  
+  const url = `${baseUrl}?topic=${topic}&level=${level}&target=${target}`;
   window.open(url, '_blank');
 }
 

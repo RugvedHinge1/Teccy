@@ -139,7 +139,11 @@ async function startPractice(topic) {
   const progress = await loadProgressFromSupabase(topic);
   const level = progress?.diagnosed_level || progress?.current_level || 'Beginner';
 
-  const url = `http://localhost:8502/?topic=${topic}&level=${level}`;
+  // Change this URL to your deployed Streamlit app URL once you deploy it!
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const baseUrl = isLocal ? 'http://localhost:8501/' : 'https://teccy.streamlit.app/'; 
+  
+  const url = `${baseUrl}?topic=${topic}&level=${level}`;
   window.open(url, '_blank');
 }
 
