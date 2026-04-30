@@ -141,8 +141,8 @@ async function startPractice(topic) {
 
   // Change this URL to your deployed Streamlit app URL once you deploy it!
   const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const baseUrl = isLocal ? 'http://localhost:8501/' : 'https://tecchy.streamlit.app/'; 
-  
+  const baseUrl = isLocal ? 'http://localhost:8501/' : 'https://tecchy.streamlit.app/';
+
   const url = `${baseUrl}?topic=${topic}&level=${level}`;
   window.open(url, '_blank');
 }
