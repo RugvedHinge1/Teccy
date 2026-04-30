@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Test - TECCY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0a0c;
+      --bg-panel: #14161a;
+      --bg-card: #1c1f26;
+      --accent-primary: #00ff88;
+      --accent-secondary: #00aaff;
+      --accent-warning: #ffcc00;
+      --accent-danger: #ff4444;
+      --text-primary: #e8e8e8;
+      --text-secondary: #888888;
+      --border-color: #2a2d35;
+      --selection-glow: rgba(0, 255, 136, 0.3);
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: var(--bg-panel);
+      border-right: 2px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-header h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 16px;
+      color: var(--accent-primary);
+      text-shadow: 0 0 10px var(--accent-primary);
+    }
+
+    .sidebar-header .subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .nav-section {
+      padding: 0 12px;
+      margin-bottom: 20px;
+    }
+
+    .nav-label {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      color: var(--text-secondary);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 8px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 12px 16px;
+      margin: 4px 0;
+      border: 2px solid transparent;
+      transition: all 0.1s ease;
+      position: relative;
+    }
+
+    .sidebar a::before {
+      content: '>';
+      position: absolute;
+      left: 4px;
+      opacity: 0;
+      color: var(--accent-primary);
+    }
+
+    .sidebar a:hover {
+      background: var(--bg-card);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      padding-left: 24px;
+      box-shadow: 0 0 10px var(--selection-glow);
+    }
+
+    .sidebar a:hover::before {
+      opacity: 1;
+    }
+
+    .sidebar-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+      margin: 20px 12px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background: var(--bg-dark);
+      overflow-y: auto;
+    }
+
+    .header {
+      text-align: left;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .header h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 20px;
+      color: var(--accent-danger);
+      margin-bottom: 12px;
+      text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+    }
+
+    .header p {
+      color: var(--text-secondary);
+    }
+
+    .progress-section {
+      margin-bottom: 30px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      padding: 16px 20px;
+    }
+
+    .progress-text {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: var(--accent-danger);
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-danger), var(--accent-warning));
+      box-shadow: 0 0 10px var(--accent-danger);
+      transition: width 0.3s ease;
+    }
+
+    .question-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .question-card::before {
+      content: '';
+      display: block;
+      height: 3px;
+      background: var(--accent-danger);
+      margin: -30px -30px 20px -30px;
+    }
+
+    .question-card h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      color: var(--accent-danger);
+      margin-bottom: 20px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      margin-bottom: 25px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .option {
+      padding: 16px 20px;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      background: var(--bg-panel);
+      font-size: 18px;
+      color: var(--text-primary);
+    }
+
+    .option:hover:not(.disabled) {
+      border-color: var(--accent-secondary);
+      background: rgba(0, 170, 255, 0.1);
+    }
+
+    .option.selected {
+      border-color: var(--accent-secondary);
+      background: rgba(0, 170, 255, 0.2);
+      color: var(--accent-secondary);
+    }
+
+    .option.correct {
+      border-color: var(--accent-primary);
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--accent-primary);
+    }
+
+    .option.incorrect {
+      border-color: var(--accent-danger);
+      background: rgba(255, 68, 68, 0.2);
+      color: var(--accent-danger);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      padding: 14px 28px;
+      border: 2px solid;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      min-width: 140px;
+    }
+
+    .btn-primary {
+      background: var(--bg-panel);
+      border-color: var(--accent-danger);
+      color: var(--text-primary);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-danger);
+      color: var(--bg-dark);
+      box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg-panel);
+      border-color: var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .summary-section {
+      background: var(--bg-card);
+      border: 3px solid var(--accent-primary);
+      padding: 40px;
+      text-align: center;
+      display: none;
+      box-shadow: 0 0 40px var(--selection-glow);
+    }
+
+    .summary-section.show {
+      display: block;
+    }
+
+    .summary-section h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 16px;
+      color: var(--accent-primary);
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px var(--accent-primary);
+    }
+
+    .summary-stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      min-width: 150px;
+      padding: 24px;
+      background: var(--bg-panel);
+      border: 2px solid var(--accent-primary);
+    }
+
+    .stat-box h3 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .stat-box .value {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 24px;
+      color: var(--accent-primary);
+      text-shadow: 0 0 10px var(--selection-glow);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+    }
+
+    @media (max-width: 880px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+
+      .summary-stats {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>TECCY</h2>
+      <div class="subtitle">FINAL TEST</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">[ NAVIGATION ]</div>
+      <a href="index.html">Back to Subjects</a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-section">
+      <div class="nav-label">[ TOOLS ]</div>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="buddy.html">Buddy System</a>
+      <a href="flashcards.html">Flashcards</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 id="testTitle">// FINAL BOSS</h1>
+      <p id="testDescription">Challenge yourself with 10 questions</p>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-text" id="progressText">STAGE 1 OF 10</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 10%;"></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <h2 id="questionNumber">QUESTION 1</h2>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="button-group">
+        <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>[ PREV ]</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>[ NEXT ]</button>
+      </div>
+    </div>
+
+    <div class="summary-section" id="summarySection">
+      <h2>MISSION COMPLETE!</h2>
+      <div class="summary-stats">
+        <div class="stat-box">
+          <h3>SCORE</h3>
+          <div class="value" id="scorePercentage">0%</div>
+        </div>
+        <div class="stat-box">
+          <h3>CORRECT</h3>
+          <div class="value" id="correctCount">0/10</div>
+        </div>
+      </div>
+      <p style="color: var(--text-secondary); margin: 20px 0;">Congratulations on completing the final test!</p>
+      <div class="button-group" style="margin-top: 30px;">
+        <button class="btn btn-secondary" onclick="backToDashboard()">[ DASHBOARD ]</button>
+      </div>
+    </div>
+
+    <footer>&copy; 2025 TECCY // AI LEARNING PLATFORM</footer>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const topic = (urlParams.get('topic') || 'algebra').toLowerCase();
+
+    const allQuestions = {
+      algebra: [
+        { question: "Solve for x: 2x + 5 = 13", options: ["2", "3", "4", "5"], correct: 2 },
+        { question: "What is the value of x in: 3x - 7 = 2?", options: ["1", "2", "3", "4"], correct: 2 },
+        { question: "Simplify: 2x + 3x - x", options: ["3x", "4x", "5x", "6x"], correct: 1 },
+        { question: "Expand: 2(x + 3)", options: ["2x + 3", "2x + 6", "x + 6", "2x + 5"], correct: 1 },
+        { question: "Factor: x² + 5x + 6", options: ["(x+2)(x+3)", "(x+1)(x+6)", "(x+2)(x+2)", "(x+3)(x+3)"], correct: 0 },
+        { question: "Solve: x/2 = 4", options: ["2", "4", "6", "8"], correct: 3 },
+        { question: "What is 2x when x = 5?", options: ["7", "10", "15", "20"], correct: 1 },
+        { question: "Simplify: 4x² - 2x²", options: ["2x", "2x²", "6x²", "x²"], correct: 1 },
+        { question: "Solve: 5x = 25", options: ["4", "5", "6", "7"], correct: 1 },
+        { question: "Coefficient of x in 3x + 2?", options: ["2", "3", "5", "6"], correct: 1 }
+      ],
+      geometry: [
+        { question: "Sum of angles in a triangle?", options: ["90°", "180°", "270°", "360°"], correct: 1 },
+        { question: "Area of rectangle 5 × 3?", options: ["8", "15", "16", "20"], correct: 1 },
+        { question: "Sides in a hexagon?", options: ["4", "5", "6", "7"], correct: 2 },
+        { question: "Circumference of circle radius 2?", options: ["4π", "2π", "8π", "π"], correct: 0 },
+        { question: "Area of circle radius 3?", options: ["3π", "6π", "9π", "12π"], correct: 2 },
+        { question: "Volume of cube side 2?", options: ["4", "6", "8", "12"], correct: 2 },
+        { question: "Pythagorean theorem?", options: ["a+b=c", "a²+b²=c²", "a-b=c", "ab=c²"], correct: 1 },
+        { question: "Area of triangle base 4, height 3?", options: ["6", "7", "12", "14"], correct: 0 },
+        { question: "Right angle degrees?", options: ["45°", "60°", "90°", "180°"], correct: 2 },
+        { question: "Perimeter of square side 5?", options: ["10", "15", "20", "25"], correct: 2 }
+      ],
+      calculus: [
+        { question: "Derivative of x²?", options: ["x", "2x", "x²", "2"], correct: 1 },
+        { question: "Derivative of 3x?", options: ["3", "x", "3x", "0"], correct: 0 },
+        { question: "Integral of 2x?", options: ["x²", "x² + C", "2x² + C", "x + C"], correct: 1 },
+        { question: "Limit of 1/x as x → ∞?", options: ["1", "0", "∞", "-∞"], correct: 1 },
+        { question: "Derivative of sin(x)?", options: ["cos(x)", "-cos(x)", "sin(x)", "tan(x)"], correct: 0 },
+        { question: "Derivative of e^x?", options: ["e^x", "x·e^x", "1", "e"], correct: 0 },
+        { question: "Integral of cos(x)?", options: ["sin(x)+C", "-sin(x)+C", "cos(x)+C", "tan(x)+C"], correct: 0 },
+        { question: "Derivative of ln(x)?", options: ["1/x", "x", "ln(x)", "e^x"], correct: 0 },
+        { question: "Derivative of x⁴?", options: ["4x³", "4x", "x³", "4"], correct: 0 },
+        { question: "Integral of 1?", options: ["0", "1", "x + C", "x"], correct: 2 }
+      ],
+      probability: [
+        { question: "P(rolling 3 on die)?", options: ["1/6", "1/3", "1/2", "1/4"], correct: 0 },
+        { question: "P(heads on coin)?", options: ["1/4", "1/3", "1/2", "2/3"], correct: 2 },
+        { question: "P(drawing ace from deck)?", options: ["1/13", "1/26", "4/52", "1/52"], correct: 2 },
+        { question: "Sum of all probabilities?", options: ["0", "0.5", "1", "∞"], correct: 2 },
+        { question: "P(two 6s on two dice)?", options: ["1/6", "1/12", "1/36", "1/18"], correct: 2 },
+        { question: "If P(A)=0.6, P(not A)?", options: ["0.4", "0.6", "0.3", "0.7"], correct: 0 },
+        { question: "P(red card from deck)?", options: ["1/4", "1/2", "1/3", "2/3"], correct: 1 },
+        { question: "Arrange 3 items?", options: ["3", "6", "9", "12"], correct: 1 },
+        { question: "Combinations of 2 from 4?", options: ["4", "6", "8", "12"], correct: 1 },
+        { question: "Expected value of fair die?", options: ["2.5", "3", "3.5", "4"], correct: 2 }
+      ],
+      trigonometry: [
+        { question: "sin(90°)?", options: ["0", "1/2", "√3/2", "1"], correct: 3 },
+        { question: "cos(0°)?", options: ["0", "1/2", "√3/2", "1"], correct: 3 },
+        { question: "tan(45°)?", options: ["0", "1/2", "1", "√3"], correct: 2 },
+        { question: "sin(30°)?", options: ["1/2", "√3/2", "1", "0"], correct: 0 },
+        { question: "cos(60°)?", options: ["1/2", "√3/2", "1", "0"], correct: 0 },
+        { question: "sin²θ + cos²θ = ?", options: ["0", "1/2", "1", "2"], correct: 2 },
+        { question: "Period of sin(x)?", options: ["π", "2π", "π/2", "1"], correct: 1 },
+        { question: "Period of tan(x)?", options: ["π", "2π", "π/2", "1"], correct: 0 },
+        { question: "Range of sin(x)?", options: ["[0,1]", "[-1,1]", "[0,∞)", "(-∞,∞)"], correct: 1 },
+        { question: "Amplitude of 3sin(x)?", options: ["1", "2", "3", "π"], correct: 2 }
+      ]
+    };
+
+    const questions = allQuestions[topic] || allQuestions.algebra;
+    let currentQuestion = 0;
+    let answers = new Array(questions.length).fill(null);
+    let answered = new Array(questions.length).fill(false);
+
+    document.getElementById('testTitle').textContent = `// FINAL: ${topic.toUpperCase()}`;
+
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById('questionNumber').textContent = `QUESTION ${currentQuestion + 1}`;
+      document.getElementById('questionText').textContent = q.question;
+      document.getElementById('progressText').textContent = `STAGE ${currentQuestion + 1} OF ${questions.length}`;
+      document.getElementById('progressFill').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        optionDiv.textContent = `${String.fromCharCode(65 + index)}) ${option}`;
+        optionDiv.onclick = () => selectOption(index);
+
+        if (answers[currentQuestion] === index) optionDiv.classList.add('selected');
+        if (answered[currentQuestion] && index === q.correct) optionDiv.classList.add('correct');
+        if (answered[currentQuestion] && answers[currentQuestion] === index && index !== q.correct) optionDiv.classList.add('incorrect');
+
+        optionsContainer.appendChild(optionDiv);
+      });
+
+      document.getElementById('prevBtn').disabled = currentQuestion === 0;
+      document.getElementById('nextBtn').disabled = !answered[currentQuestion];
+    }
+
+    function selectOption(index) {
+      if (!answered[currentQuestion]) {
+        answers[currentQuestion] = index;
+        answered[currentQuestion] = true;
+        loadQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1 && answered[currentQuestion]) {
+        currentQuestion++;
+        loadQuestion();
+      } else if (currentQuestion === questions.length - 1 && answered[currentQuestion]) {
+        showSummary();
+      }
+    }
+
+    function previousQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+      }
+    }
+
+    function showSummary() {
+      const correctCount = answers.reduce((count, answer, index) => count + (answer === questions[index].correct ? 1 : 0), 0);
+      const percentage = Math.round((correctCount / questions.length) * 100);
+
+      document.getElementById('correctCount').textContent = `${correctCount}/${questions.length}`;
+      document.getElementById('scorePercentage').textContent = percentage + '%';
+
+      document.getElementById('questionCard').classList.add('hidden');
+      document.getElementById('summarySection').classList.add('show');
+    }
+
+    function backToDashboard() { window.location.href = 'dashboard.html'; }
+
+    loadQuestion();
+  </script>
+</body>
+
+</html>

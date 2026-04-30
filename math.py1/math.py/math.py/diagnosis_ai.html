@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Diagnosis - TECCY</title>
+    <link rel="stylesheet" href="menustyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <style>
+        /* Conflicting layout styles removed, keeping only component styles */
+
+        .progress-section {
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            border: 3px solid var(--menu-border-dark);
+            padding: 14px 18px;
+            box-shadow: 6px 6px var(--shadow-color);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-text {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .difficulty-badge {
+            padding: 4px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 2px solid var(--menu-border-dark);
+        }
+
+        .difficulty-badge.easy {
+            background: #28a745;
+            color: white;
+        }
+
+        .difficulty-badge.medium {
+            background: #ffc107;
+            color: black;
+        }
+
+        .difficulty-badge.hard {
+            background: #e63e3e;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #fff;
+            border: 2px solid var(--menu-border-dark);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-yellow);
+            transition: width 0.3s;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border: 3px solid var(--menu-border-dark);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 8px 8px var(--shadow-color);
+        }
+
+        .question-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            padding: 18px;
+            background: #fff;
+            border: 2px solid var(--menu-border-dark);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            padding: 14px 18px;
+            background: #fff;
+            border: 2px solid var(--menu-border-dark);
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 4px 4px var(--shadow-color);
+        }
+
+        .option:hover:not(.disabled) {
+            background: var(--accent-yellow);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px var(--shadow-color);
+        }
+
+        .option.selected {
+            background: var(--accent-yellow);
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: white;
+        }
+
+        .option.incorrect {
+            background: #e63e3e;
+            color: white;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+        }
+
+        .feedback-section {
+            display: none;
+            padding: 15px;
+            margin-top: 15px;
+            background: #fff;
+            border: 2px solid var(--menu-border-dark);
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-section h4 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .feedback-section p {
+            font-size: 1rem;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .btn {
+            font-size: 1.2rem;
+            padding: 12px 24px;
+            border: 2px solid var(--menu-border-dark);
+            cursor: pointer;
+            box-shadow: 4px 4px var(--shadow-color);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px var(--shadow-color);
+        }
+
+        .btn-primary {
+            background: var(--button-default);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #fff;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .summary-section {
+            background: var(--card-bg);
+            border: 3px solid var(--menu-border-dark);
+            padding: 35px;
+            text-align: center;
+            display: none;
+            box-shadow: 8px 8px var(--shadow-color);
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .summary-section.show {
+            display: block;
+        }
+
+        .summary-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+        }
+
+        .score-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .score-card {
+            min-width: 130px;
+            padding: 18px;
+            background: #fff;
+            border: 3px solid var(--menu-border-dark);
+            box-shadow: 4px 4px var(--shadow-color);
+        }
+
+        .score-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .score-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .score-card.easy {
+            border-top: 5px solid #28a745;
+        }
+
+        .score-card.medium {
+            border-top: 5px solid #ffc107;
+        }
+
+        .score-card.hard {
+            border-top: 5px solid #e63e3e;
+        }
+
+        .diagnosed-level-box {
+            background: var(--accent-yellow);
+            border: 3px solid var(--menu-border-dark);
+            padding: 25px;
+            margin: 25px auto;
+            max-width: 350px;
+            box-shadow: 6px 6px var(--shadow-color);
+        }
+
+        .diagnosed-level-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .diagnosed-level-box .level-text {
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+
+        .recommendation {
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff;
+            border: 2px solid var(--menu-border-dark);
+            font-size: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Level Selection Modal -->
+    <div id="levelModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 20px; color: var(--text-color);" id="modalQuestion">What's your current level?
+            </h2>
+            <p style="margin-bottom: 25px; color: var(--text-color); opacity: 0.8;" id="modalDescription">This helps us
+                personalize your experience</p>
+            <div id="levelButtons" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                <!-- Level buttons will be inserted here -->
+            </div>
+            <button id="nextLevelBtn" disabled class="btn btn-primary" style="width: 100%;">NEXT</button>
+        </div>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div class="inventory-modal" id="inventoryModal">
+        <div class="inventory-container">
+            <div class="inventory-title">
+                <span>Warehouse</span>
+                <button class="close-btn" onclick="toggleInventory()">X</button>
+            </div>
+            <div class="inventory-grid" id="inventoryGrid">
+                <!-- Grid slots generated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="game-menu-container">
+        <!-- Warehouse/Inventory Button -->
+        <div class="warehouse-btn" onclick="toggleInventory()">
+            <img src="assets/backpack.png" alt="Warehouse">
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>TECCY</h2>
+                <div class="subtitle">AI DIAGNOSIS</div>
+            </div>
+            <!-- Matches index.html structure for menustyle.css compatibility -->
+            <a href="index.html">Back to Subjects</a>
+
+            <div class="sidebar-divider"></div>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="buddy.html">Buddy System</a>
+            <a href="flashcards.html">Flashcards</a>
+
+            <div class="sidebar-divider"></div>
+
+            <a href="#" onclick="resetAllProgress(); return false;" style="background:#ff4444;color:white;">🔄 Reset All
+                Progress</a>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1 id="diagnosisTitle">// AI DIAGNOSIS</h1>
+                <p>Adaptive skill assessment • 15 questions • 5 Easy, 5 Medium, 5 Hard</p>
+            </div>
+            <div class="progress-section" id="progressSection">
+                <div class="progress-header">
+                    <div class="progress-text" id="progressText">QUESTION 1 OF 15</div>
+                    <div class="difficulty-badge easy" id="difficultyBadge">EASY</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div class="question-card" id="questionCard">
+                <h2 id="questionNumber">QUESTION 1</h2>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="feedback-section" id="feedbackSection">
+                    <h4>📝 Solution:</h4>
+                    <p id="solutionText"></p>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>[ NEXT ]</button>
+                </div>
+            </div>
+            <div class="summary-section" id="summarySection">
+                <h2>🎯 DIAGNOSIS COMPLETE!</h2>
+                <div class="score-breakdown">
+                    <div class="score-card easy">
+                        <h3>EASY</h3>
+                        <div class="value" id="easyScore">0/5</div>
+                    </div>
+                    <div class="score-card medium">
+                        <h3>MEDIUM</h3>
+                        <div class="value" id="mediumScore">0/5</div>
+                    </div>
+                    <div class="score-card hard">
+                        <h3>HARD</h3>
+                        <div class="value" id="hardScore">0/5</div>
+                    </div>
+                </div>
+                <div class="diagnosed-level-box">
+                    <h3>YOUR LEVEL</h3>
+                    <div class="level-text" id="diagnosedLevel">BEGINNER</div>
+                </div>
+                <div class="recommendation" id="recommendation"
+                    style="margin-top: 15px; padding: 10px; text-align: center;"></div>
+
+                <div class="button-group" style="margin-top: 25px;">
+                    <button class="btn btn-secondary" id="toggleResultsBtn" onclick="toggleResults()">[ VIEW DETAILED
+                        RESULTS ]</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">[ DASHBOARD
+                        ]</button>
+                    <button class="btn btn-primary" id="restartTestBtn" onclick="restartTest()">[ TRY AGAIN ]</button>
+                </div>
+
+                <!-- Detailed Results Panel -->
+                <div id="resultsPanel" style="display: none; margin-top: 25px; text-align: left;">
+                    <h3 style="text-align: center; margin-bottom: 15px; background: #333; color: #fff; padding: 10px;">
+                        📋
+                        DETAILED RESULTS - ALL QUESTIONS</h3>
+                    <div id="resultsContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Minimal inventory toggle - no dependency on menuscript.js
+        function toggleInventory() {
+            const modal = document.getElementById('inventoryModal');
+            if (modal) {
+                modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+            }
+        }
+
+        // Initialize inventory grid
+        const inventoryGrid = document.getElementById('inventoryGrid');
+        if (inventoryGrid) {
+            for (let i = 0; i < 64; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'inventory-slot';
+                inventoryGrid.appendChild(slot);
+            }
+        }
+    </script>
+
+    <!-- Supabase Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase client inline
+        const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        window.supabaseClient = supabaseClient;
+    </script>
+    <script src="supabase-progress.js?v=3"></script>
+
+    <script src="question_bank.js?v=3"></script>
+    <script>
+        // Wrap in IIFE to prevent global variable conflicts with menuscript.js
+        (function () {
+            'use strict';
+            const urlParams = new URLSearchParams(window.location.search);
+            const topic = (urlParams.get('topic') || 'algebra').toLowerCase();
+            const topicDisplay = topic.charAt(0).toUpperCase() + topic.slice(1);
+            document.getElementById('diagnosisTitle').textContent = `// AI DIAGNOSIS: ${topicDisplay.toUpperCase()}`;
+
+            // Get questions from bank or use fallback
+            let bank = { easy: [], medium: [], hard: [] };
+            console.log('🔍 questionBankWithDifficulty type:', typeof questionBankWithDifficulty);
+            if (typeof questionBankWithDifficulty !== 'undefined') {
+                console.log('✅ Topics available:', Object.keys(questionBankWithDifficulty));
+                bank = questionBankWithDifficulty[topic] || questionBankWithDifficulty.algebra || bank;
+                console.log(`📊 ${topic} bank - Easy:${bank.easy?.length}, Med:${bank.medium?.length}, Hard:${bank.hard?.length}`);
+            } else {
+                console.error('❌ question_bank.js not loaded!');
+            }
+
+            // Track used questions to prevent repetition
+            const usedKey = `usedQuestions_${topic}`;
+            let usedQuestions = JSON.parse(localStorage.getItem(usedKey) || '[]');
+
+            // Shuffle function
+            function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+            // Filter out used questions, then shuffle and pick 5 from each difficulty
+            function getUnusedQuestions(questionList, count) {
+                const unused = questionList.filter(q => !usedQuestions.includes(q.question));
+
+                let selected;
+
+                if (unused.length >= count) {
+                    // Enough unused questions - pick from unused only
+                    selected = shuffle(unused).slice(0, count);
+                } else {
+                    // Not enough unused - combine unused with some used questions
+                    const shuffledUnused = shuffle(unused);
+                    const used = questionList.filter(q => usedQuestions.includes(q.question));
+                    const shuffledUsed = shuffle(used);
+
+                    // Take all unused + fill remaining from used
+                    const needed = count - shuffledUnused.length;
+                    selected = [...shuffledUnused, ...shuffledUsed.slice(0, needed)];
+                }
+
+                // Mark these questions as used
+                selected.forEach(q => {
+                    if (!usedQuestions.includes(q.question)) {
+                        usedQuestions.push(q.question);
+                    }
+                });
+
+                return selected;
+            }
+
+            const easyQs = getUnusedQuestions(bank.easy || [], 5);
+            const medQs = getUnusedQuestions(bank.medium || [], 5);
+            const hardQs = getUnusedQuestions(bank.hard || [], 5);
+
+            // Save updated used questions to localStorage
+            localStorage.setItem(usedKey, JSON.stringify(usedQuestions));
+
+            // Build test sequence: Easy → Medium → Hard
+            const questions = [
+                ...easyQs.map(q => ({ ...q, difficulty: 'Easy' })),
+                ...medQs.map(q => ({ ...q, difficulty: 'Medium' })),
+                ...hardQs.map(q => ({ ...q, difficulty: 'Hard' }))
+            ];
+
+            let currentIndex = 0;
+            let answered = false;
+            let scores = { Easy: 0, Medium: 0, Hard: 0 };
+            let userAnswers = []; // Track user's answers for results view
+
+            // YouTube video recommendations by subtopic
+            const videoRecommendations = {
+                'Linear Equations': 'https://www.youtube.com/results?search_query=linear+equations+tutorial',
+                'Substitution': 'https://www.youtube.com/results?search_query=algebra+substitution+method',
+                'Like Terms': 'https://www.youtube.com/results?search_query=combining+like+terms',
+                'Exponents': 'https://www.youtube.com/results?search_query=exponent+rules+tutorial',
+                'Factoring': 'https://www.youtube.com/results?search_query=factoring+polynomials',
+                'Quadratic Equations': 'https://www.youtube.com/results?search_query=quadratic+equations+tutorial',
+                'Functions': 'https://www.youtube.com/results?search_query=functions+in+math',
+                'Logarithms': 'https://www.youtube.com/results?search_query=logarithms+tutorial',
+                'Polygons': 'https://www.youtube.com/results?search_query=polygons+geometry',
+                'Area': 'https://www.youtube.com/results?search_query=area+formulas+geometry',
+                'Angles': 'https://www.youtube.com/results?search_query=angles+in+geometry',
+                'Pythagorean': 'https://www.youtube.com/results?search_query=pythagorean+theorem',
+                'Volume': 'https://www.youtube.com/results?search_query=volume+formulas+3d+shapes',
+                'Circles': 'https://www.youtube.com/results?search_query=circle+formulas+area+circumference',
+                'Derivatives': 'https://www.youtube.com/results?search_query=derivatives+calculus+tutorial',
+                'Integrals': 'https://www.youtube.com/results?search_query=integrals+calculus+tutorial',
+                'Limits': 'https://www.youtube.com/results?search_query=limits+calculus+tutorial',
+                'Basic': 'https://www.youtube.com/results?search_query=basic+probability+tutorial',
+                'Permutations': 'https://www.youtube.com/results?search_query=permutations+combinations',
+                'Combinations': 'https://www.youtube.com/results?search_query=combinations+math',
+                'Values': 'https://www.youtube.com/results?search_query=trigonometric+values+unit+circle',
+                'Identities': 'https://www.youtube.com/results?search_query=trig+identities+tutorial',
+                'Double Angle': 'https://www.youtube.com/results?search_query=double+angle+formulas'
+            };
+
+            function displayQuestion() {
+                if (currentIndex >= questions.length) { showSummary(); return; }
+                const q = questions[currentIndex];
+                answered = false;
+
+                document.getElementById('progressText').textContent = `QUESTION ${currentIndex + 1} OF ${questions.length}`;
+                document.getElementById('progressFill').style.width = ((currentIndex + 1) / questions.length * 100) + '%';
+
+                const badge = document.getElementById('difficultyBadge');
+                badge.textContent = q.difficulty.toUpperCase();
+                badge.className = 'difficulty-badge ' + q.difficulty.toLowerCase();
+
+                document.getElementById('questionNumber').textContent = `QUESTION ${currentIndex + 1} - ${q.difficulty.toUpperCase()}`;
+                document.getElementById('questionText').textContent = q.question;
+
+                const container = document.getElementById('optionsContainer');
+                container.innerHTML = '';
+                q.options.forEach((opt, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'option';
+                    div.textContent = `${String.fromCharCode(65 + i)}) ${opt}`;
+                    div.onclick = () => selectOption(i);
+                    container.appendChild(div);
+                });
+
+                document.getElementById('feedbackSection').classList.remove('show');
+                document.getElementById('nextBtn').disabled = true;
+            }
+            window.displayQuestion = displayQuestion;
+
+            function selectOption(index) {
+                if (answered) return;
+                answered = true;
+
+                const q = questions[currentIndex];
+                const isCorrect = index === q.correct;
+                if (isCorrect) scores[q.difficulty]++;
+
+                // Store user's answer for results view
+                userAnswers[currentIndex] = {
+                    question: q.question,
+                    userAnswer: index,
+                    correctAnswer: q.correct,
+                    options: q.options,
+                    isCorrect: isCorrect,
+                    solution: q.solution,
+                    subtopic: q.subtopic,
+                    difficulty: q.difficulty
+                };
+
+                // Highlight selected answer only (no correct/incorrect feedback yet)
+                const options = document.querySelectorAll('.option');
+                options.forEach((opt, i) => {
+                    opt.classList.add('disabled');
+                    if (i === index) opt.classList.add('selected');
+                });
+
+                // Don't show solution yet - only at the end
+                // Enable NEXT button
+                document.getElementById('nextBtn').disabled = false;
+            }
+            window.selectOption = selectOption;
+
+            function nextQuestion() { currentIndex++; displayQuestion(); }
+            window.nextQuestion = nextQuestion;
+
+            function showSummary() {
+                document.getElementById('progressSection').classList.add('hidden');
+                document.getElementById('questionCard').classList.add('hidden');
+                document.getElementById('summarySection').classList.add('show');
+
+                document.getElementById('easyScore').textContent = `${scores.Easy}/5`;
+                document.getElementById('mediumScore').textContent = `${scores.Medium}/5`;
+                document.getElementById('hardScore').textContent = `${scores.Hard}/5`;
+
+                const easyPct = (scores.Easy / 5) * 100;
+                const medPct = (scores.Medium / 5) * 100;
+                const hardPct = (scores.Hard / 5) * 100;
+                const overallPct = ((scores.Easy + scores.Medium + scores.Hard) / 15) * 100;
+
+                // Classification formula based on performance tiers
+                // AMATEUR: Less than 3 correct in Easy (< 60%)
+                // INTERMEDIATE: 3+ Easy correct, but less than 3 Medium
+                // ADVANCED: 3+ Easy AND 3+ Medium, but less than 3 Hard
+                // PRO: 3+ correct in all difficulty levels
+
+                let level, recommendation;
+                if (scores.Easy < 3) {
+                    level = 'AMATEUR';
+                    recommendation = 'Focus on fundamental concepts and basic problem-solving techniques.';
+                } else if (scores.Medium < 3) {
+                    level = 'INTERMEDIATE';
+                    recommendation = "You've mastered basics! Work on multi-step problems and connecting concepts.";
+                } else if (scores.Hard < 3) {
+                    level = 'ADVANCED';
+                    recommendation = 'Great progress! Challenge yourself with complex problems and proofs.';
+                } else {
+                    level = 'PRO';
+                    recommendation = "Excellent! You're ready for competition-level and advanced applications.";
+                }
+
+                document.getElementById('diagnosedLevel').textContent = level;
+                document.getElementById('recommendation').textContent = recommendation;
+
+                // Save to localStorage
+                localStorage.setItem('userDiagnosedLevel_' + topic, level);
+                localStorage.setItem('userDiagnosedLevel', level);
+
+                // Save score to sessionStorage for dashboard
+                const scorePercentage = Math.round(overallPct);
+                sessionStorage.setItem('diagnosisScore_' + topic, scorePercentage);
+
+                // ✅ SAVE TO SUPABASE
+                (async () => {
+                    try {
+                        const progressData = {
+                            diagnosed_level: level,
+                            current_level: localStorage.getItem(`userCurrentLevel_${topic}`) || 'AMATEUR',
+                            target_level: localStorage.getItem(`userTargetLevel_${topic}`) || 'PRO',
+                            total_questions: 15,
+                            correct_answers: scores.Easy + scores.Medium + scores.Hard
+                        };
+                        await saveProgressToSupabase(topic, progressData);
+                        console.log('✅ Diagnosis saved to Supabase:', topic, level);
+                    } catch (error) {
+                        console.error('❌ Error saving to Supabase:', error);
+                    }
+                })();
+
+                // Populate results for viewing
+                populateResults();
+            }
+
+            function toggleResults() {
+                const panel = document.getElementById('resultsPanel');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            }
+            window.toggleResults = toggleResults;
+
+            function populateResults() {
+                const container = document.getElementById('resultsContainer');
+                container.innerHTML = '';
+
+                userAnswers.forEach((ans, i) => {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'margin-bottom: 15px; padding: 15px; background: #fff; border: 3px solid var(--border-color); border-left: 6px solid ' + (ans.isCorrect ? '#28a745' : '#ff4444');
+
+                    div.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">
+                        Q${i + 1}. ${ans.question} 
+                        <span style="font-size: 0.8rem; padding: 3px 10px; background: ${ans.difficulty === 'Easy' ? '#28a745' : ans.difficulty === 'Medium' ? '#ffc107' : '#ff4444'}; color: ${ans.difficulty === 'Medium' ? 'black' : 'white'}; margin-left: 10px;">${ans.difficulty.toUpperCase()}</span>
+                        ${ans.isCorrect ? '<span style="color: #28a745; margin-left: 10px;">✅ CORRECT</span>' : '<span style="color: #ff4444; margin-left: 10px;">❌ WRONG</span>'}
+                    </div>
+                    <div style="margin-bottom: 8px; padding: 8px; background: ${ans.isCorrect ? '#d4edda' : '#f8d7da'};">
+                        <strong>Your Answer:</strong> ${String.fromCharCode(65 + ans.userAnswer)}) ${ans.options[ans.userAnswer]}
+                    </div>
+                    ${!ans.isCorrect ? `
+                    <div style="margin-bottom: 8px; padding: 8px; background: #d4edda;">
+                        <strong>Correct Answer:</strong> ${String.fromCharCode(65 + ans.correctAnswer)}) ${ans.options[ans.correctAnswer]}
+                    </div>
+                    ` : ''}
+                    <div style="padding: 10px; background: #e2e3e5; border-left: 4px solid #6c757d;">
+                        <strong>📝 Solution/Method:</strong><br>
+                        ${ans.solution || 'Review this topic for the correct approach.'}
+                    </div>
+                `;
+                    container.appendChild(div);
+                });
+            }
+
+            function restartTest() {
+                // Reload the page to get fresh questions from unused pool
+                location.reload();
+            }
+            window.restartTest = restartTest;
+
+            function resetAllProgress() {
+                if (confirm('Are you sure you want to reset ALL diagnosis progress for all topics?')) {
+                    localStorage.clear();
+                    alert('All progress has been reset!');
+                    location.reload();
+                }
+            }
+            window.resetAllProgress = resetAllProgress;
+
+            // Level Selection Modal Logic
+            const diagnosisLevels = ['AMATEUR', 'INTERMEDIATE', 'ADVANCED', 'PRO'];
+            let currentLevelStep = 'current'; // 'current' or 'target'
+            let selectedCurrentLevel = null;
+            let selectedTargetLevel = null;
+
+            function showLevelModal() {
+                const modal = document.getElementById('levelModal');
+
+                // Check if levels already set for this topic
+                const currentKey = `userCurrentLevel_${topic}`;
+                const targetKey = `userTargetLevel_${topic}`;
+
+                if (localStorage.getItem(currentKey) && localStorage.getItem(targetKey)) {
+                    // Already set, start test
+                    modal.style.display = 'none';
+                    displayQuestion();
+                } else {
+                    // Show modal
+                    modal.style.display = 'flex';
+                    renderLevelButtons();
+                }
+            }
+
+            function renderLevelButtons() {
+                const container = document.getElementById('levelButtons');
+                container.innerHTML = '';
+
+                diagnosisLevels.forEach(level => {
+                    const btn = document.createElement('button');
+                    btn.textContent = level;
+                    btn.style.cssText = 'padding: 12px 20px; border: 2px solid var(--border-color); background: #fff; cursor: pointer; font-size: 1rem; transition: all 0.2s;';
+                    btn.onclick = () => selectLevel(level, btn);
+                    container.appendChild(btn);
+                });
+            }
+
+            function selectLevel(level, btnElement) {
+                // Remove previous selections
+                const buttons = document.querySelectorAll('#levelButtons button');
+                buttons.forEach(b => b.style.background = '#fff');
+
+                // Highlight selected
+                btnElement.style.background = 'var(--accent-secondary)';
+
+                if (currentLevelStep === 'current') {
+                    selectedCurrentLevel = level;
+                } else {
+                    selectedTargetLevel = level;
+                }
+
+                document.getElementById('nextLevelBtn').disabled = false;
+            }
+
+            function nextLevelStep() {
+                if (currentLevelStep === 'current') {
+                    // Move to target level
+                    currentLevelStep = 'target';
+                    document.getElementById('modalQuestion').textContent = `What level do you want to reach in ${topicDisplay}?`;
+                    document.getElementById('modalDescription').textContent = 'Set your goal';
+                    document.getElementById('nextLevelBtn').textContent = 'START TEST';
+                    document.getElementById('nextLevelBtn').disabled = true;
+                    renderLevelButtons();
+                } else {
+                    // Save and start test
+                    localStorage.setItem(`userCurrentLevel_${topic}`, selectedCurrentLevel);
+                    localStorage.setItem(`userTargetLevel_${topic}`, selectedTargetLevel);
+
+                    document.getElementById('levelModal').style.display = 'none';
+                    displayQuestion();
+                }
+            }
+
+            // Attach click handler to NEXT button
+            document.getElementById('nextLevelBtn').addEventListener('click', nextLevelStep);
+
+            // Start - Show modal or test
+            showLevelModal();
+        })(); // End IIFE
+    </script>
+</body>
+
+</html>

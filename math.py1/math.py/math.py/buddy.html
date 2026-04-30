@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buddy System - TECCY</title>
+  <link rel="stylesheet" href="menustyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+  <style>
+    /* Page specific styles to work within menu container */
+
+    /* ===== BUDDY GRID ===== */
+    .buddy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .buddy-card {
+      background: #ffffff;
+      border: 3px solid var(--menu-border-dark);
+      padding: 24px;
+      transition: all 0.15s ease;
+      position: relative;
+      box-shadow: 6px 6px var(--shadow-color);
+    }
+
+    .buddy-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-yellow);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .buddy-card:hover {
+      transform: translate(3px, 3px);
+      box-shadow: 3px 3px var(--shadow-color);
+    }
+
+    .buddy-card h3 {
+      font-size: 1.4rem;
+      color: var(--text-color);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mentor-badge {
+      font-size: 1rem;
+      color: var(--text-color);
+      border: 2px solid var(--menu-border-dark);
+      padding: 2px 8px;
+      background: var(--accent-yellow);
+    }
+
+    .connection-status {
+      font-size: 1rem;
+      padding: 2px 8px;
+      border: 2px solid var(--menu-border-dark);
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .connection-status.pending {
+      background: var(--accent-orange);
+      border-color: var(--menu-border-dark);
+    }
+
+    .buddy-info {
+      font-size: 16px;
+      color: var(--text-color);
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+
+    .buddy-info p {
+      margin-bottom: 4px;
+    }
+
+    .buddy-info strong {
+      color: var(--text-color);
+    }
+
+    .online-status {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    .online-status.online {
+      background: #28a745;
+      box-shadow: 0 0 6px #28a745;
+    }
+
+    .online-status.offline {
+      background: #666;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #ffffff;
+      border: 2px solid var(--menu-border-dark);
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent-yellow);
+      border-right: 2px solid var(--menu-border-dark);
+    }
+
+    .buddy-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    /* Buttons reuse menustyle vars */
+    .btn {
+      flex: 1;
+      font-size: 1.2rem;
+      padding: 12px 16px;
+      border: 2px solid var(--menu-border-dark);
+      cursor: pointer;
+      transition: all 0.1s ease;
+      text-align: center;
+      box-shadow: 4px 4px var(--shadow-color);
+    }
+
+    .btn-primary {
+      background: var(--button-default);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--button-hover);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--shadow-color);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-color);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--card-bg);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--shadow-color);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+      background: var(--menu-bg);
+      border: 4px solid var(--menu-border-dark);
+      margin: 5% auto;
+      padding: 24px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 8px 8px var(--shadow-color);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--menu-border-dark);
+      margin-bottom: 16px;
+    }
+
+    .modal-header h3 {
+      font-size: 1.2rem;
+      color: var(--text-color);
+    }
+
+    .close-modal {
+      font-size: 28px;
+      color: var(--text-color);
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .close-modal:hover {
+      color: var(--accent-red);
+    }
+
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--card-bg);
+      border: 2px solid var(--menu-border-dark);
+      padding: 16px;
+      margin-bottom: 16px;
+      min-height: 250px;
+    }
+
+    .message {
+      margin-bottom: 12px;
+      padding: 12px;
+      max-width: 80%;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .message.sent {
+      background: var(--accent-yellow);
+      color: var(--text-color);
+      margin-left: auto;
+      text-align: right;
+      border: 2px solid var(--menu-border-dark);
+    }
+
+    .message.received {
+      background: #ffffff;
+      border: 2px solid var(--menu-border-dark);
+      color: var(--text-color);
+    }
+
+    .chat-input-area {
+      display: flex;
+      gap: 12px;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid var(--menu-border-dark);
+      background: #ffffff;
+      color: var(--text-color);
+      font-size: 1.2rem;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--text-color);
+    }
+
+    .send-btn {
+      padding: 12px 24px;
+      background: var(--button-default);
+      border: 2px solid var(--menu-border-dark);
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 4px 4px var(--shadow-color);
+    }
+
+    .send-btn:hover {
+      background: var(--button-hover);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--shadow-color);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-color);
+      font-size: 14px;
+      border-top: 1px solid var(--menu-border-dark);
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--menu-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--menu-border-dark);
+    }
+
+    @media (max-width: 880px) {
+      .buddy-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Inventory Modal -->
+  <div class="inventory-modal" id="inventoryModal">
+    <div class="inventory-container">
+      <div class="inventory-title">
+        <span>Warehouse</span>
+        <button class="close-btn" onclick="toggleInventory()">X</button>
+      </div>
+      <div class="inventory-grid" id="inventoryGrid">
+        <!-- Grid slots generated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="game-menu-container">
+    <!-- Warehouse/Inventory Button -->
+    <div class="warehouse-btn" onclick="toggleInventory()">
+      <img src="assets/backpack.png" alt="Warehouse">
+    </div>
+
+    <div class="sidebar">
+      <h2>Teccy</h2>
+
+      <div class="nav-section">
+        <a href="index.html">Back to Subjects</a>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="nav-section">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="buddy.html" class="active" style="background-color: var(--accent-yellow);">Buddy System</a>
+        <a href="flashcards.html">Flashcards</a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <h1>// CO-OP MODE</h1>
+        <p>Find study partners at your skill level</p>
+      </div>
+
+      <div class="buddy-grid" id="buddyGrid"></div>
+
+      <footer>&copy; 2025 TECCY // AI LEARNING PLATFORM</footer>
+    </div>
+  </div>
+
+  <!-- Chat Modal -->
+  <div id="chatModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="chatPartnerName">CHAT</h3>
+        <span class="close-modal" onclick="closeChatModal()">&times;</span>
+      </div>
+      <div class="chat-area" id="chatArea"></div>
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Type message..."
+          onkeypress="handleChatKeyPress(event)">
+        <button class="send-btn" onclick="sendChatMessage()">SEND</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Study Session Modal -->
+  <div id="studyModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="studyPartnerName">STUDY SESSION</h3>
+        <span class="close-modal" onclick="closeStudyModal()">&times;</span>
+      </div>
+      <div class="chat-area" id="studyArea">
+        <div class="message received">
+          <strong>PROBLEM:</strong><br>
+          <span id="problemText"></span>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="studyInput" placeholder="Share solution..."
+          onkeypress="handleStudyKeyPress(event)">
+        <button class="send-btn" onclick="sendStudySolution()">SHARE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Initialize Supabase client inline to ensure proper loading order
+    const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.supabaseClient = supabaseClient;
+  </script>
+  <script src="supabase-progress.js?v=3"></script>
+
+  <script src="menuscript.js"></script>
+  <script>
+    // =============================================
+    // DYNAMIC BUDDY DATA FROM SUPABASE
+    // =============================================
+
+    /**
+     * Calculate numeric score for diagnosed level
+     * Pro (4) > Advanced (3) > Intermediate (2) > Beginner (1)
+     */
+    function calculateLevelScore(diagnosedLevel) {
+      if (!diagnosedLevel) return 0;
+      const level = diagnosedLevel.toLowerCase();
+      if (level.includes('pro')) return 4;
+      if (level.includes('advanced')) return 3;
+      if (level.includes('intermediate')) return 2;
+      if (level.includes('beginner')) return 1;
+      return 0;
+    }
+
+    /**
+     * Select the topic with the highest diagnosed level for a user
+     * Returns the progress object for that topic
+     */
+    function selectBestTopicForUser(userProgressArray) {
+      if (!userProgressArray || userProgressArray.length === 0) return null;
+
+      let bestTopic = userProgressArray[0];
+      let bestScore = calculateLevelScore(bestTopic.diagnosed_level);
+
+      for (let i = 1; i < userProgressArray.length; i++) {
+        const score = calculateLevelScore(userProgressArray[i].diagnosed_level);
+        if (score > bestScore) {
+          bestScore = score;
+          bestTopic = userProgressArray[i];
+        }
+      }
+
+      return bestTopic;
+    }
+
+    /**
+     * Calculate progress percentage from scores
+     */
+    function calculateProgress(topicProgress) {
+      const total = topicProgress.total_questions || 0;
+      const correct = topicProgress.correct_answers || 0;
+      if (total === 0) return 50; // Default for new users
+      return Math.round((correct / total) * 100);
+    }
+
+    /**
+     * Generate default values based on level
+     */
+    function generateDefaultsByLevel(level) {
+      const levelLower = (level || 'intermediate').toLowerCase();
+
+      if (levelLower.includes('pro')) {
+        return {
+          streak: Math.floor(Math.random() * 15) + 20, // 20-35 days
+          rating: (Math.random() * 0.3 + 4.7).toFixed(1), // 4.7-5.0
+          studentsHelped: Math.floor(Math.random() * 15) + 35 // 35-50
+        };
+      } else if (levelLower.includes('advanced')) {
+        return {
+          streak: Math.floor(Math.random() * 10) + 15, // 15-25 days
+          rating: (Math.random() * 0.3 + 4.5).toFixed(1), // 4.5-4.8
+          studentsHelped: Math.floor(Math.random() * 10) + 25 // 25-35
+        };
+      } else if (levelLower.includes('intermediate')) {
+        return {
+          streak: Math.floor(Math.random() * 10) + 8, // 8-18 days
+          rating: (Math.random() * 0.3 + 4.3).toFixed(1), // 4.3-4.6
+          studentsHelped: Math.floor(Math.random() * 10) + 15 // 15-25
+        };
+      } else { // Beginner
+        return {
+          streak: Math.floor(Math.random() * 8) + 3, // 3-11 days
+          rating: (Math.random() * 0.3 + 4.0).toFixed(1), // 4.0-4.3
+          studentsHelped: Math.floor(Math.random() * 5) + 5 // 5-10
+        };
+      }
+    }
+
+    /**
+     * Map Supabase user data to buddy card format
+     */
+    function mapUserToBuddyFormat(profile, topicProgress) {
+      const defaults = generateDefaultsByLevel(topicProgress.diagnosed_level);
+
+      return {
+        id: profile.id,
+        name: profile.username || profile.email.split('@')[0],
+        level: topicProgress.diagnosed_level || 'Intermediate',
+        progress: calculateProgress(topicProgress),
+        board: topicProgress.topic,
+        streak: defaults.streak,
+        role: 'mentor', // All users with diagnosis data are mentors
+        expertise: [topicProgress.topic],
+        rating: parseFloat(defaults.rating),
+        studentsHelped: defaults.studentsHelped,
+        availability: 'online', // Can be enhanced with real-time presence later
+        connected: false
+      };
+    }
+
+    /**
+     * Fetch all users with diagnosis data from Supabase
+     */
+    async function fetchBuddiesFromSupabase() {
+      try {
+        // Get current user to exclude them
+        const { data: { user: currentUser } } = await supabaseClient.auth.getUser();
+        if (!currentUser) {
+          console.error('No user logged in');
+          return [];
+        }
+
+        // Fetch all user progress records (only users with diagnosis data)
+        const { data: allProgress, error: progressError } = await supabaseClient
+          .from('user_progress')
+          .select('*')
+          .not('diagnosed_level', 'is', null); // Only users who have completed diagnosis
+
+        if (progressError) {
+          console.error('Error fetching user progress:', progressError);
+          return [];
+        }
+
+        if (!allProgress || allProgress.length === 0) {
+          console.log('No users with diagnosis data found');
+          return [];
+        }
+
+        // Group progress by user_id
+        const progressByUser = {};
+        allProgress.forEach(progress => {
+          if (!progressByUser[progress.user_id]) {
+            progressByUser[progress.user_id] = [];
+          }
+          progressByUser[progress.user_id].push(progress);
+        });
+
+        // Fetch profiles for all users with progress
+        const userIds = Object.keys(progressByUser);
+        const { data: profiles, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .in('id', userIds);
+
+        if (profileError) {
+          console.error('Error fetching profiles:', profileError);
+          return [];
+        }
+
+        // Map to buddy format
+        const buddies = [];
+        profiles.forEach(profile => {
+          // Exclude current user
+          if (profile.id === currentUser.id) return;
+
+          const userProgress = progressByUser[profile.id];
+          const bestTopic = selectBestTopicForUser(userProgress);
+
+          if (bestTopic) {
+            buddies.push(mapUserToBuddyFormat(profile, bestTopic));
+          }
+        });
+
+        console.log('Fetched buddies from Supabase:', buddies);
+        return buddies;
+      } catch (err) {
+        console.error('Exception fetching buddies:', err);
+        return [];
+      }
+    }
+
+    let connections = JSON.parse(localStorage.getItem('buddyConnections')) || {};
+    let activeChats = JSON.parse(localStorage.getItem('activeChats')) || {};
+    let currentChatPartner = null;
+    let currentStudyPartner = null;
+    let currentStudyPartnerName = null; // Store partner name for study sessions
+    let buddyCache = []; // Cache fetched buddies for later reference
+    let friendRequests = []; // Track all friend requests (sent + received)
+    let friendships = new Map(); // Map of userId -> friendship status ('pending', 'accepted', 'rejected')
+    let messageSubscription = null; // Real-time message listener
+
+    const sampleProblems = {
+      'Algebra': ['Solve for x: 2x + 5 = 15', 'Factor: x² + 5x + 6', 'Simplify: (3x + 2)(x - 4)'],
+      'Geometry': ['Find area of triangle: base 10cm, height 8cm', 'Circumference of circle: radius 7cm', 'Volume of cube: side 5cm'],
+      'Calculus': ['Derivative of f(x) = 3x² + 2x', 'Integral: ∫(2x + 1)dx', 'Limit: lim(x→2) (x² - 4)/(x - 2)'],
+      'Probability': ['P(rolling 6 on fair die)?', 'P(drawing red card from deck)?', 'P(A ∪ B) if P(A)=0.3, P(B)=0.4, independent'],
+      'Trigonometry': ['Find sin(45°)', 'Solve: cos(x) = 0.5', 'Prove: sin²(x) + cos²(x) = 1']
+    };
+
+
+    // --- Friend Request & Chat Functions ---
+
+    async function fetchFriendRequests() {
+      if (!window.supabaseClient) return;
+
+      try {
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (!user) return;
+
+        const { data, error } = await window.supabaseClient
+          .from('friend_requests')
+          .select('*')
+          .or(`from_user_id.eq.${user.id},to_user_id.eq.${user.id}`);
+
+        if (error) throw error;
+
+        friendRequests = data || [];
+
+        // Update connections map
+        friendships.clear();
+        friendRequests.forEach(req => {
+          if (req.status === 'accepted') {
+            const partnerId = req.from_user_id === user.id ? req.to_user_id : req.from_user_id;
+            friendships.set(partnerId, 'accepted');
+          } else if (req.status === 'pending') {
+            if (req.from_user_id === user.id) {
+              friendships.set(req.to_user_id, 'sent');
+            } else {
+              friendships.set(req.from_user_id, 'received');
+              // Store request ID for accepting/rejecting
+              friendships.set(`${req.from_user_id}_req_id`, req.id);
+            }
+          }
+        });
+      } catch (err) {
+        console.error('Error fetching friend requests:', err);
+      }
+    }
+
+    async function sendFriendRequest(toUserId) {
+      try {
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (!user) return;
+
+        const { error } = await window.supabaseClient
+          .from('friend_requests')
+          .insert({ from_user_id: user.id, to_user_id: toUserId });
+
+        if (error) throw error;
+
+        alert('Friend request sent!');
+        await fetchFriendRequests();
+        renderBuddies(buddyCache); // Re-render to update button
+      } catch (err) {
+        console.error('Error sending friend request:', err);
+        alert('Failed to send request. You might have already sent one.');
+      }
+    }
+
+    async function respondToFriendRequest(userId, status) {
+      try {
+        const reqId = friendships.get(`${userId}_req_id`);
+        if (!reqId) return;
+
+        const { error } = await window.supabaseClient
+          .from('friend_requests')
+          .update({ status: status })
+          .eq('id', reqId);
+
+        if (error) throw error;
+
+        await fetchFriendRequests();
+        renderBuddies(buddyCache);
+      } catch (err) {
+        console.error('Error responding to request:', err);
+        alert('Failed to update request.');
+      }
+    }
+
+    function getFriendshipStatus(userId) {
+      return friendships.get(userId) || 'none';
+    }
+
+    // --- End Friend Request Functions ---
+
+    async function loadBuddies() {
+      // 1. Fetch friend requests first
+      await fetchFriendRequests();
+
+      const userLevel = localStorage.getItem('userCurrentLevel') || 'Intermediate';
+      const userTopic = localStorage.getItem('currentTopic') || 'Algebra';
+      const buddyGrid = document.getElementById('buddyGrid');
+      buddyGrid.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-color);" >Loading buddies...</p>';
+
+      // 2. Fetch buddies from Supabase
+      const buddyDatabase = await fetchBuddiesFromSupabase();
+      buddyCache = buddyDatabase; // Cache for later use
+
+      if (buddyDatabase.length === 0) {
+        buddyGrid.innerHTML = '<p style="text-align: center; padding: 40px; color: var(--text-color); font-size: 1.2rem;" >No mentors available yet. Complete a diagnosis test to become a mentor!</p>';
+        return;
+      }
+
+      buddyGrid.innerHTML = ''; // Clear loading message
+
+      let matchedBuddies = buddyDatabase.filter(buddy => {
+        if (userLevel === 'Beginner') return buddy.level !== 'Beginner' && buddy.role === 'mentor';
+        else if (userLevel === 'Pro') return buddy.level === 'Pro' || buddy.level === 'Intermediate';
+        else return true;
+      });
+
+      matchedBuddies.sort((a, b) => {
+        let scoreA = 0, scoreB = 0;
+        if (a.expertise && a.expertise.includes(userTopic)) scoreA += 3;
+        if (b.expertise && b.expertise.includes(userTopic)) scoreB += 3;
+        if (a.availability === 'online') scoreA += 2;
+        if (b.availability === 'online') scoreB += 2;
+        scoreA += a.rating;
+        scoreB += b.rating;
+        return scoreB - scoreA;
+      });
+
+      matchedBuddies.forEach(buddy => {
+        const status = getFriendshipStatus(buddy.id);
+        const card = document.createElement('div');
+        card.className = 'buddy-card';
+
+        let actionButtons = '';
+        if (status === 'accepted') {
+          actionButtons = `
+                <button class="btn btn-primary" onclick="openChat('${buddy.id}', '${buddy.name}')">MESSAGE</button>
+                <button class="btn btn-secondary" onclick="startStudySession('${buddy.id}', '${buddy.name}', '${buddy.board}')">STUDY</button>`;
+        } else if (status === 'sent') {
+          actionButtons = `<button class="btn btn-secondary" disabled>REQUEST SENT</button>`;
+        } else if (status === 'received') {
+          actionButtons = `
+                <button class="btn btn-primary" onclick="respondToFriendRequest('${buddy.id}', 'accepted')">ACCEPT</button>
+                <button class="btn btn-secondary" onclick="respondToFriendRequest('${buddy.id}', 'rejected')">REJECT</button>`;
+        } else {
+          actionButtons = `
+                <button class="btn btn-primary" onclick="sendFriendRequest('${buddy.id}')">CONNECT</button>
+                <button class="btn btn-secondary" disabled>STUDY</button>`;
+        }
+
+        card.innerHTML = `
+            <h3>
+              ${buddy.name.toUpperCase()}
+              ${buddy.role === 'mentor' ? '<span class="mentor-badge">★ MENTOR</span>' : ''}
+              ${status === 'accepted' ? '<span class="connection-status">LINKED</span>' : ''}
+            </h3>
+            <div class="buddy-info">
+              <p><strong>LVL:</strong> ${buddy.level.toUpperCase()}</p>
+              <p><strong>BOARD:</strong> ${buddy.board}</p>
+              <p><strong>SKILLS:</strong> ${buddy.expertise ? buddy.expertise.join(', ') : 'General'}</p>
+              <p><strong>RATING:</strong> ⭐ ${buddy.rating}/5.0 (${buddy.studentsHelped} helped)</p>
+              <p><strong>STREAK:</strong> 🔥 ${buddy.streak} days</p>
+              <p><strong>STATUS:</strong> <span class="online-status ${buddy.availability}"></span>${buddy.availability.toUpperCase()}</p>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${buddy.progress}%"></div>
+            </div>
+            <div class="buddy-info">Progress: ${buddy.progress}%</div>
+            <div class="buddy-actions">
+              ${actionButtons}
+            </div>
+          `;
+        buddyGrid.appendChild(card);
+      });
+    }
+
+    // Helper to re-render using cached buddies
+    function renderBuddies(buddies) {
+      loadBuddies();
+    }
+
+    function connectWithBuddy(buddyId, buddyName) {
+      connections[buddyId] = true;
+      localStorage.setItem('buddyConnections', JSON.stringify(connections));
+      if (!activeChats[buddyId]) activeChats[buddyId] = [];
+      localStorage.setItem('activeChats', JSON.stringify(activeChats));
+      alert(`Connected with ${buddyName}! You can now message and study together.`);
+      loadBuddies();
+    }
+
+    // --- Real Chat Functions ---
+
+    let currentSubscription = null;
+
+    async function loadConversation(buddyId, containerId) {
+      const { data: { user } } = await window.supabaseClient.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await window.supabaseClient
+        .from('messages')
+        .select('*')
+        .or(`and(from_user_id.eq.${user.id},to_user_id.eq.${buddyId}),and(from_user_id.eq.${buddyId},to_user_id.eq.${user.id})`)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error loading chat:', error);
+        return;
+      }
+
+      const chatArea = document.getElementById(containerId);
+      // Keep existing content (like study problem) if any, but usually we clear
+      // For study session, we might want to preserve the problem header
+      const problemHeader = containerId === 'studyArea' ? chatArea.querySelector('.problem-header') : null;
+
+      chatArea.innerHTML = '';
+      if (problemHeader) chatArea.appendChild(problemHeader);
+
+      if (data.length === 0) {
+        chatArea.innerHTML += `<div class="message received" style="opacity: 0.7;">No messages yet. Say hi!</div>`;
+      } else {
+        data.forEach(msg => {
+          const type = msg.from_user_id === user.id ? 'sent' : 'received';
+          const prefix = msg.content.startsWith('[SOLUTION]') ? '<strong>SOLUTION:</strong><br>' : '';
+          const content = msg.content.replace('[SOLUTION] ', '');
+          chatArea.innerHTML += `<div class="message ${type}">${prefix}${content}</div>`;
+        });
+      }
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function subscribeToMessages(buddyId, containerId) {
+      if (currentSubscription) window.supabaseClient.removeChannel(currentSubscription);
+
+      currentSubscription = window.supabaseClient
+        .channel('public:messages')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, async (payload) => {
+          const { new: msg } = payload;
+          const { data: { user } } = await window.supabaseClient.auth.getUser();
+
+          // Check if message belongs to this conversation
+          if ((msg.from_user_id === user.id && msg.to_user_id === buddyId) ||
+            (msg.from_user_id === buddyId && msg.to_user_id === user.id)) {
+
+            const chatArea = document.getElementById(containerId);
+
+            // Only append if it's from the OTHER person (we optimistically appended ours)
+            if (msg.from_user_id === buddyId) {
+              const prefix = msg.content.startsWith('[SOLUTION]') ? '<strong>SOLUTION:</strong><br>' : '';
+              const content = msg.content.replace('[SOLUTION] ', '');
+              chatArea.innerHTML += `<div class="message received">${prefix}${content}</div>`;
+              chatArea.scrollTop = chatArea.scrollHeight;
+            }
+          }
+        })
+        .subscribe();
+    }
+
+    async function sendMessageToSupabase(content, buddyId, containerId) {
+      const { data: { user } } = await window.supabaseClient.auth.getUser();
+      if (!user) return;
+
+      // Optimistic UI update
+      const chatArea = document.getElementById(containerId);
+      const prefix = content.startsWith('[SOLUTION]') ? '<strong>SOLUTION:</strong><br>' : '';
+      const displayContent = content.replace('[SOLUTION] ', '');
+
+      chatArea.innerHTML += `<div class="message sent">${prefix}${displayContent}</div>`;
+      chatArea.scrollTop = chatArea.scrollHeight;
+
+      const { error } = await window.supabaseClient
+        .from('messages')
+        .insert({ from_user_id: user.id, to_user_id: buddyId, content: content });
+
+      if (error) {
+        console.error('Error sending message:', error);
+        alert('Failed to send message');
+      }
+    }
+
+    // --- Updated UI Functions ---
+
+    function openChat(buddyId, buddyName) {
+      currentChatPartner = buddyId;
+      const modal = document.getElementById('chatModal');
+      document.getElementById('chatPartnerName').textContent = `CHAT: ${buddyName.toUpperCase()}`;
+
+      modal.style.display = 'block';
+      loadConversation(buddyId, 'chatArea');
+      subscribeToMessages(buddyId, 'chatArea');
+      document.getElementById('chatInput').focus();
+    }
+
+    function closeChatModal() {
+      document.getElementById('chatModal').style.display = 'none';
+      if (currentSubscription) window.supabaseClient.removeChannel(currentSubscription);
+      currentChatPartner = null;
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+
+      if (message && currentChatPartner) {
+        sendMessageToSupabase(message, currentChatPartner, 'chatArea');
+        input.value = '';
+      }
+    }
+
+    function handleChatKeyPress(event) { if (event.key === 'Enter') sendChatMessage(); }
+
+    function startStudySession(buddyId, buddyName, topic) {
+      currentStudyPartner = buddyId;
+      currentStudyPartnerName = buddyName;
+      const modal = document.getElementById('studyModal');
+      document.getElementById('studyPartnerName').textContent = `STUDY: ${buddyName.toUpperCase()}`;
+
+      modal.style.display = 'block';
+
+      const problems = sampleProblems[topic] || sampleProblems['Algebra'];
+      const problem = problems[Math.floor(Math.random() * problems.length)];
+
+      const studyArea = document.getElementById('studyArea');
+      // Add problem as a special header element we can detect and preserve
+      studyArea.innerHTML = `<div class="message received problem-header" style="background:#fff; border:2px dashed #000; margin-bottom:15px;"><strong>PROBLEM TO SOLVE:</strong><br>${problem}</div>`;
+
+      loadConversation(buddyId, 'studyArea');
+      subscribeToMessages(buddyId, 'studyArea');
+      document.getElementById('studyInput').focus();
+    }
+
+    function closeStudyModal() {
+      document.getElementById('studyModal').style.display = 'none';
+      if (currentSubscription) window.supabaseClient.removeChannel(currentSubscription);
+      currentStudyPartner = null;
+    }
+
+    function sendStudySolution() {
+      const input = document.getElementById('studyInput');
+      const solution = input.value.trim();
+
+      if (solution && currentStudyPartner) {
+        sendMessageToSupabase(`[SOLUTION] ${solution}`, currentStudyPartner, 'studyArea');
+        input.value = '';
+      }
+    }
+
+    function handleStudyKeyPress(event) { if (event.key === 'Enter') sendStudySolution(); }
+
+    window.onclick = function (event) {
+      if (event.target === document.getElementById('chatModal')) closeChatModal();
+      if (event.target === document.getElementById('studyModal')) closeStudyModal();
+    }
+
+    loadBuddies();
+  </script>
+</body>
+
+</html>

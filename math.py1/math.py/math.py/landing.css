@@ -1,0 +1,409 @@
+/* Import Jersey 10 font */
+@import url("https://fonts.googleapis.com/css2?family=Jersey+10&display=swap");
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Jersey 10", sans-serif;
+}
+
+:root {
+    /* Stardew Palette - matching menustyle.css */
+    --bg-game-world: #69a74e;
+    --menu-bg: #ffcca8;
+    --menu-border-light: #e09f6d;
+    --menu-border-dark: #5e3a23;
+    --text-color: #4a2f1b;
+    --accent-orange: #ff8a00;
+    --accent-yellow: #ffd940;
+    --accent-red: #e63e3e;
+    --card-bg: #ffe4cd;
+    --button-default: #d95d45;
+    --button-hover: #ff7e60;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+body {
+    background-color: var(--bg-game-world);
+    background-image:
+        radial-gradient(#7bc65d 15%, transparent 16%),
+        radial-gradient(#5d9e43 15%, transparent 16%);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 20px;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+    background-color: var(--menu-bg);
+    border: 4px solid var(--menu-border-dark);
+    border-radius: 12px;
+    padding: 60px 40px;
+    box-shadow:
+        inset 0 0 0 4px var(--menu-border-light),
+        8px 8px 0 var(--shadow-color);
+    position: relative;
+    z-index: 10;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    color: #a43322;
+    text-shadow: 3px 3px 0 var(--menu-bg);
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.cta-btn {
+    background-color: var(--button-default);
+    color: #fff;
+    border: 3px solid var(--menu-border-dark);
+    border-radius: 6px;
+    padding: 18px 40px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #9e2b1e;
+    transition: all 150ms;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.cta-btn:hover {
+    background-color: var(--button-hover);
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 #9e2b1e;
+}
+
+.cta-btn:active {
+    transform: translateY(6px);
+    box-shadow: none;
+}
+
+/* Floating Decorations */
+.hero-decoration {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.floating-card {
+    position: absolute;
+    font-size: 4rem;
+    opacity: 0.3;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-card:nth-child(1) {
+    top: 15%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-card:nth-child(2) {
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.floating-card:nth-child(3) {
+    bottom: 20%;
+    left: 15%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Features Section */
+.features-section {
+    padding: 80px 20px;
+    background-color: rgba(255, 204, 168, 0.3);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 3rem;
+    color: var(--menu-border-dark);
+    margin-bottom: 60px;
+    text-shadow: 2px 2px 0 var(--menu-border-light);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.feature-card {
+    background-color: var(--card-bg);
+    border: 3px solid var(--menu-border-dark);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 4px 4px 0 var(--shadow-color);
+    transition: transform 200ms;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 6px 6px 0 var(--shadow-color);
+}
+
+.feature-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.feature-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--menu-border-dark);
+}
+
+.feature-card p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    opacity: 0.85;
+}
+
+/* How It Works */
+.how-it-works {
+    padding: 80px 20px;
+    background-color: var(--menu-bg);
+}
+
+.steps-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.step {
+    background-color: var(--card-bg);
+    border: 3px solid var(--menu-border-dark);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+    box-shadow: 4px 4px 0 var(--shadow-color);
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background-color: var(--accent-yellow);
+    border: 3px solid var(--menu-border-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 auto 20px;
+}
+
+.step h3 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    color: var(--menu-border-dark);
+}
+
+.step p {
+    font-size: 1.1rem;
+    opacity: 0.85;
+}
+
+.step-arrow {
+    font-size: 3rem;
+    color: var(--menu-border-dark);
+    opacity: 0.5;
+}
+
+/* Auth Section */
+.auth-section {
+    padding: 80px 20px;
+    background-color: rgba(105, 167, 78, 0.3);
+}
+
+.auth-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: var(--menu-bg);
+    border: 4px solid var(--menu-border-dark);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow:
+        inset 0 0 0 4px var(--menu-border-light),
+        8px 8px 0 var(--shadow-color);
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 12px;
+    background-color: var(--card-bg);
+    border: 2px solid var(--menu-border-dark);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    transition: all 150ms;
+}
+
+.auth-tab:hover {
+    background-color: #fff;
+}
+
+.auth-tab.active {
+    background-color: var(--accent-yellow);
+    border-width: 3px;
+}
+
+.auth-form h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--menu-border-dark);
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border: 2px solid var(--menu-border-dark);
+    border-radius: 4px;
+    background-color: #fff;
+    font-family: inherit;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 2px rgba(255, 138, 0, 0.2);
+}
+
+.error-message {
+    color: var(--accent-red);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    min-height: 24px;
+    text-align: center;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--button-default);
+    color: #fff;
+    border: 3px solid var(--menu-border-dark);
+    border-radius: 6px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #9e2b1e;
+    transition: all 150ms;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.submit-btn:hover {
+    background-color: var(--button-hover);
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #9e2b1e;
+}
+
+.submit-btn:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Footer */
+.landing-footer {
+    text-align: center;
+    padding: 30px 20px;
+    background-color: var(--menu-border-dark);
+    color: var(--menu-bg);
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+    }
+
+    .steps-container {
+        flex-direction: column;
+    }
+
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+
+    .floating-card {
+        display: none;
+    }
+}

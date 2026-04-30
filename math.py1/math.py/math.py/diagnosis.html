@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnosis - TECCY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+  <style>
+    /* GLOBAL RESET & FONT */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Jersey 10', sans-serif;
+    }
+
+    /* PIXELATION */
+    html {
+      image-rendering: pixelated;
+    }
+
+    /* THEME VARIABLES (YELLOW RETRO) */
+    :root {
+      --bg-dark: #ffffb7;
+      /* Main Background: Yellow */
+      --bg-panel: #ffd400;
+      /* Sidebar/Panels: Darker Yellow/Gold */
+      --bg-card: #fff192;
+      /* Cards: Light Yellow */
+      --accent-primary: #121212;
+      /* Primary Logic/Text: Black */
+      --accent-secondary: #ffdd3c;
+      /* Hover/Secondary: Middle Yellow */
+      --accent-warning: #121212;
+      /* Warning/Highlight: Black */
+      --accent-danger: #ff4444;
+      /* Error: Red */
+      --text-primary: #121212;
+      /* Text: Black */
+      --text-secondary: #333333;
+      /* Subtext: Dark Gray */
+      --border-color: #121212;
+      /* Borders: Black */
+      --selection-glow: rgba(18, 18, 18, 0.2);
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-size: 18px;
+      overflow: hidden;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-panel);
+      border-right: 4px solid var(--border-color);
+      /* Thicker border for retro feel */
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 4px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      text-shadow: none;
+      letter-spacing: 2px;
+    }
+
+    .sidebar-header .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .nav-section {
+      padding: 0 12px;
+      margin-bottom: 20px;
+    }
+
+    .nav-label {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 8px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 12px 16px;
+      margin: 4px 0;
+      background: #fff192;
+      border: 2px solid var(--border-color);
+      box-shadow: 4px 4px var(--border-color);
+      transition: all 0.1s ease;
+      cursor: pointer;
+      position: relative;
+      font-size: 1.2rem;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:focus,
+    .sidebar a.active {
+      background: #ffdd3c;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    .sidebar-divider {
+      height: 3px;
+      background: var(--border-color);
+      margin: 20px 12px;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background: var(--bg-dark);
+      overflow-y: auto;
+    }
+
+    .header {
+      text-align: left;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 4px solid var(--border-color);
+    }
+
+    .header h1 {
+      font-size: 2.4rem;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      text-shadow: none;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+    }
+
+    /* ===== PROGRESS SECTION ===== */
+    .progress-section {
+      margin-bottom: 30px;
+      background: var(--bg-card);
+      border: 3px solid var(--border-color);
+      padding: 16px 20px;
+      box-shadow: 6px 6px var(--border-color);
+    }
+
+    .progress-text {
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--bg-panel);
+      border-right: 2px solid var(--border-color);
+      transition: width 0.3s ease;
+    }
+
+    /* ===== QUESTION CARD ===== */
+    .question-card {
+      background: var(--bg-card);
+      border: 3px solid var(--border-color);
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 8px 8px var(--border-color);
+    }
+
+    /* Decorative bar/line inside card */
+    .question-card::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: var(--border-color);
+      margin: -30px -30px 20px -30px;
+      width: calc(100% + 60px);
+    }
+
+    .question-card h2 {
+      font-size: 1.4rem;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    .question-text {
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .option {
+      padding: 16px 20px;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      background: #ffffff;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .option:hover:not(.disabled) {
+      background: var(--accent-secondary);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    .option.selected {
+      background: var(--bg-panel);
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px var(--border-color);
+      border-width: 3px;
+    }
+
+    .option.correct {
+      background: #00ff88;
+      border-color: var(--border-color);
+    }
+
+    .option.incorrect {
+      background: #ff4444;
+      border-color: var(--border-color);
+    }
+
+    .option.disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* ===== FEEDBACK ===== */
+    .feedback-section {
+      background: #ffffff;
+      border: 3px solid var(--border-color);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: none;
+      box-shadow: 6px 6px var(--border-color);
+    }
+
+    .feedback-section.show {
+      display: block;
+    }
+
+    .feedback-text {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .feedback-text.correct {
+      color: #009900;
+    }
+
+    .feedback-text.incorrect {
+      color: #cc0000;
+    }
+
+    .video-link {
+      display: inline-block;
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      padding: 10px 20px;
+      border: 2px solid var(--border-color);
+      text-decoration: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 4px 4px var(--border-color);
+      transition: all 0.1s;
+    }
+
+    .video-link:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    /* ===== BUTTONS ===== */
+    .button-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-size: 1.3rem;
+      padding: 14px 28px;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.1s ease;
+      min-width: 140px;
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translate(4px, 4px);
+      box-shadow: 0 0 var(--border-color);
+    }
+
+    .btn-primary {
+      background: var(--bg-panel);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ===== SUMMARY SECTION ===== */
+    .summary-section {
+      background: var(--bg-card);
+      border: 3px solid var(--border-color);
+      padding: 40px;
+      text-align: center;
+      display: none;
+      box-shadow: 8px 8px var(--border-color);
+    }
+
+    .summary-section.show {
+      display: block;
+    }
+
+    .summary-section h2 {
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin-bottom: 30px;
+    }
+
+    .summary-stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      min-width: 140px;
+      padding: 20px;
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .stat-box h3 {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .stat-box .value {
+      font-size: 2rem;
+      color: var(--text-primary);
+      font-weight: bold;
+    }
+
+    .diagnosed-level-box {
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .diagnosed-level-box h3 {
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .diagnosed-level-box .level-text {
+      font-size: 2.2rem;
+      color: var(--text-primary);
+    }
+
+    .weak-topics-box {
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      padding: 20px;
+      margin: 20px 0;
+      text-align: left;
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .weak-topics-box h3 {
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      margin-bottom: 15px;
+    }
+
+    .weak-topics-box ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .weak-topics-box li {
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    /* ===== LEVEL MODAL (YELLOW) ===== */
+    .level-modal {
+      display: block;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(18, 18, 18, 0.85);
+      /* Dark scrim */
+      overflow: auto;
+    }
+
+    .level-modal-content {
+      background: var(--bg-card);
+      border: 4px solid var(--border-color);
+      margin: 8% auto;
+      padding: 40px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 12px 12px var(--border-color);
+      text-align: center;
+    }
+
+    .level-modal h2 {
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .level-question {
+      margin-bottom: 30px;
+    }
+
+    .level-question h3 {
+      font-size: 1.4rem;
+      color: var(--text-primary);
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .level-options {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .level-option {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      background: #ffffff;
+      text-align: center;
+      transition: all 0.1s ease;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .level-option:hover {
+      background: var(--accent-secondary);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    .level-option.selected {
+      background: var(--bg-panel);
+      font-weight: bold;
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px var(--border-color);
+      border-width: 3px;
+    }
+
+    .level-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.1s;
+      box-shadow: 4px 4px var(--border-color);
+      margin-top: 20px;
+    }
+
+    .level-submit:hover:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--border-color);
+    }
+
+    .level-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ===== ANSWERS REVIEW SECTION ===== */
+    .answers-review {
+      margin-top: 30px;
+      text-align: left;
+      padding: 20px;
+      background: #ffffff;
+      border: 3px solid var(--border-color);
+      box-shadow: 6px 6px var(--border-color);
+    }
+
+    .answers-review h3 {
+      font-size: 1.4rem;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .review-item {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 4px 4px var(--border-color);
+    }
+
+    .review-item.correct {
+      border-left: 6px solid #28a745;
+    }
+
+    .review-item.incorrect {
+      border-left: 6px solid var(--accent-danger);
+    }
+
+    .review-status {
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 4px 12px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .review-status.correct {
+      background: #28a745;
+      color: #ffffff;
+    }
+
+    .review-status.incorrect {
+      background: var(--accent-danger);
+      color: #ffffff;
+    }
+
+    .review-question {
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .review-details {
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    .review-row {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .review-row:last-child {
+      border-bottom: none;
+    }
+
+    .review-label {
+      font-weight: bold;
+      min-width: 140px;
+      color: var(--text-secondary);
+    }
+
+    .review-value {
+      flex: 1;
+      color: var(--text-primary);
+    }
+
+    .review-value.user-correct {
+      color: #28a745;
+    }
+
+    .review-value.user-incorrect {
+      color: var(--accent-danger);
+    }
+
+    .review-value.correct-answer {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .review-solution {
+      background: #fffde7;
+      border: 2px dashed var(--border-color);
+      padding: 15px;
+      margin-top: 10px;
+    }
+
+    .review-solution h4 {
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .review-solution p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .review-video-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      text-decoration: none;
+      font-size: 1rem;
+      box-shadow: 3px 3px var(--border-color);
+    }
+
+    .review-video-link:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px var(--border-color);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 880px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+
+      .level-options {
+        flex-direction: column;
+      }
+
+      .summary-stats {
+        flex-direction: column;
+      }
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Level Selection Modal -->
+  <div id="levelModal" class="level-modal">
+    <div class="level-modal-content">
+      <h2>SKILL CALIBRATION</h2>
+
+      <div class="level-question">
+        <h3>Current skill level?</h3>
+        <div class="level-options">
+          <div class="level-option" onclick="selectCurrentLevel('Beginner')">BEGINNER</div>
+          <div class="level-option" onclick="selectCurrentLevel('Intermediate')">INTERMEDIATE</div>
+          <div class="level-option" onclick="selectCurrentLevel('Pro')">PRO</div>
+        </div>
+      </div>
+
+      <div class="level-question">
+        <h3>Target level?</h3>
+        <div class="level-options">
+          <div class="level-option" onclick="selectTargetLevel('Beginner')">BEGINNER</div>
+          <div class="level-option" onclick="selectTargetLevel('Intermediate')">INTERMEDIATE</div>
+          <div class="level-option" onclick="selectTargetLevel('Pro')">PRO</div>
+        </div>
+      </div>
+
+      <button class="level-submit" id="startTestBtn" onclick="startTest()" disabled>[ START DIAGNOSIS ]</button>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>TECCY</h2>
+      <div class="subtitle">DIAGNOSIS</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">[ NAVIGATION ]</div>
+      <a href="index.html">Back to Subjects</a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-section">
+      <div class="nav-label">[ TOOLS ]</div>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="buddy.html">Buddy System</a>
+      <a href="flashcards.html">Flashcards</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <h1 id="diagnosisTitle">// DIAGNOSIS</h1>
+      <p id="diagnosisDescription">Assessing your skills (20 questions)</p>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-text" id="progressText">STAGE 1 OF 20</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 5%;"></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <h2 id="questionNumber">QUESTION 1</h2>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback-section" id="feedbackSection">
+        <div class="feedback-text" id="feedbackText"></div>
+        <a class="video-link" id="videoLink" href="#" target="_blank" style="display: none;">WATCH TUTORIAL</a>
+      </div>
+      <div class="button-group">
+        <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>[ PREV ]</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>[ NEXT ]</button>
+      </div>
+    </div>
+
+    <div class="summary-section" id="summarySection">
+      <h2>DIAGNOSIS COMPLETE!</h2>
+      <div class="summary-stats">
+        <div class="stat-box">
+          <h3>SCORE</h3>
+          <div class="value" id="scorePercentage">0%</div>
+        </div>
+        <div class="stat-box">
+          <h3>CORRECT</h3>
+          <div class="value" id="correctCount">0/20</div>
+        </div>
+      </div>
+
+      <div class="diagnosed-level-box">
+        <h3>DIAGNOSED LEVEL</h3>
+        <div class="level-text" id="diagnosedLevel">BEGINNER</div>
+      </div>
+
+      <div class="weak-topics-box">
+        <h3>FOCUS AREAS</h3>
+        <ul id="weakTopicsList"></ul>
+      </div>
+
+      <p style="color: var(--text-secondary); margin: 20px 0;">Practice these topics to level up!</p>
+      <div class="button-group" style="margin-top: 30px;">
+        <button class="btn btn-secondary" onclick="backToDashboard()">[ DASHBOARD ]</button>
+        <button class="btn btn-secondary" onclick="toggleCheckAnswers()">[ REVIEW ]</button>
+        <button class="btn btn-primary" onclick="startResults()">[ RESULTS ]</button>
+      </div>
+
+      <div id="answersReview" class="answers-review hidden">
+        <h3>📋 ANSWER KEY</h3>
+        <div id="reviewContainer"></div>
+      </div>
+
+    </div>
+
+    <footer>&copy; 2025 TECCY // AI LEARNING PLATFORM</footer>
+  </div>
+
+  <!-- Supabase Scripts - Initialize inline to ensure proper loading -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Wait for supabase library to load, then initialize client
+    const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.supabaseClient = supabaseClient;
+    console.log('✅ Supabase client initialized:', supabaseClient);
+  </script>
+  <script src="supabase-progress.js"></script>
+
+  <script>
+    let selectedCurrentLevel = null;
+    let selectedTargetLevel = null;
+
+    const videoDatabase = {
+      algebra: { 'Linear Equations': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Simplification': 'https://www.youtube.com/embed/l3XzepN03KQ', 'Expansion': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Factorization': 'https://www.youtube.com/embed/qeFHcxNzXYY', 'Substitution': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Terminology': 'https://www.youtube.com/embed/l3XzepN03KQ' },
+      geometry: { 'Angles': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Area': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Polygons': 'https://www.youtube.com/embed/qeFHcxNzXYY', 'Circle': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Volume': 'https://www.youtube.com/embed/l3XzepN03KQ', 'Triangles': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Perimeter': 'https://www.youtube.com/embed/qeFHcxNzXYY', '3D Shapes': 'https://www.youtube.com/embed/xCS8cqyzzz4' },
+      calculus: { 'Derivatives': 'https://www.youtube.com/embed/9vKqVkMQHKk', 'Integrals': 'https://www.youtube.com/embed/rfG8ge9sBzg', 'Limits': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Applications': 'https://www.youtube.com/embed/l3XzepN03KQ' },
+      probability: { 'Basic Probability': 'https://www.youtube.com/embed/uzkc-qNVoOk', 'Independent Events': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Card Probability': 'https://www.youtube.com/embed/l3XzepN03KQ', 'Complement': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Addition Rule': 'https://www.youtube.com/embed/qeFHcxNzXYY', 'Permutations': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Combinations': 'https://www.youtube.com/embed/l3XzepN03KQ', 'Compound Events': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Expected Value': 'https://www.youtube.com/embed/qeFHcxNzXYY', 'Without Replacement': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Conditional Probability': 'https://www.youtube.com/embed/l3XzepN03KQ', 'Binomial Probability': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Mutually Exclusive': 'https://www.youtube.com/embed/qeFHcxNzXYY' },
+      trigonometry: { 'Trigonometric Values': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Definitions': 'https://www.youtube.com/embed/l3XzepN03KQ', 'Identities': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Periodic Functions': 'https://www.youtube.com/embed/qeFHcxNzXYY', 'Special Triangles': 'https://www.youtube.com/embed/xCS8cqyzzz4', 'Angle Subtraction': 'https://www.youtube.com/embed/l3XzepN03KQ', 'Function Properties': 'https://www.youtube.com/embed/U8-_VeUBJXc', 'Transformations': 'https://www.youtube.com/embed/qeFHcxNzXYY' }
+    };
+
+    // Solution methods for each question
+    const solutionMethods = {
+      algebra: {
+        "Solve for x: 2x + 5 = 13": "Step 1: Subtract 5 from both sides: 2x = 8\nStep 2: Divide both sides by 2: x = 4",
+        "What is the value of x in: 3x - 7 = 2?": "Step 1: Add 7 to both sides: 3x = 9\nStep 2: Divide by 3: x = 3",
+        "Simplify: 2x + 3x - x": "Combine like terms: (2 + 3 - 1)x = 4x",
+        "Expand: 2(x + 3)": "Apply distributive property: 2×x + 2×3 = 2x + 6",
+        "Factor: x² + 5x + 6": "Find two numbers that multiply to 6 and add to 5: 2 and 3\nSo: (x+2)(x+3)",
+        "Solve: x/2 = 4": "Multiply both sides by 2: x = 8",
+        "What is 2x when x = 5?": "Substitute x = 5: 2 × 5 = 10",
+        "Simplify: 4x² - 2x²": "Combine like terms: (4 - 2)x² = 2x²",
+        "Solve: 5x = 25": "Divide both sides by 5: x = 5",
+        "What is the coefficient of x in 3x + 2?": "The coefficient is the number multiplying x, which is 3",
+        "Expand: (x + 2)²": "Use formula (a+b)² = a² + 2ab + b²\n= x² + 2(x)(2) + 2² = x² + 4x + 4",
+        "Factor: x² - 9": "This is a difference of squares: a² - b² = (a-b)(a+b)\nx² - 9 = (x-3)(x+3)",
+        "Solve: 2x + 3 = x + 5": "Step 1: Subtract x from both sides: x + 3 = 5\nStep 2: Subtract 3: x = 2",
+        "Simplify: 3(x + 2) - 2x": "Expand: 3x + 6 - 2x\nCombine: x + 6",
+        "What is x² when x = 3?": "Substitute: 3² = 9",
+        "Solve: 4x - 8 = 0": "Add 8: 4x = 8\nDivide by 4: x = 2",
+        "Factor: 2x² + 4x": "Find GCF (2x): 2x(x + 2)",
+        "Expand: 3(2x - 1)": "Distribute 3: 3×2x - 3×1 = 6x - 3",
+        "Solve: x + 7 = 12": "Subtract 7 from both sides: x = 5",
+        "Simplify: 5x - 3x + 2x": "Combine: (5 - 3 + 2)x = 4x"
+      },
+      geometry: {
+        "Sum of angles in a triangle?": "The interior angles of any triangle always sum to 180°",
+        "Area of rectangle 5 × 3?": "Area = length × width = 5 × 3 = 15",
+        "Sides in a hexagon?": "A hexagon has 6 sides (hex = six)",
+        "Circumference of circle radius 2?": "C = 2πr = 2 × π × 2 = 4π",
+        "Area of circle radius 3?": "A = πr² = π × 3² = 9π",
+        "Volume of cube side 2?": "V = side³ = 2³ = 8",
+        "Pythagorean theorem?": "In a right triangle: a² + b² = c² where c is the hypotenuse",
+        "Area of triangle base 4, height 3?": "A = ½ × base × height = ½ × 4 × 3 = 6",
+        "Right angle degrees?": "A right angle measures exactly 90°",
+        "Perimeter of square side 5?": "P = 4 × side = 4 × 5 = 20",
+        "Sum of angles in quadrilateral?": "Interior angles sum = (n-2) × 180° = (4-2) × 180° = 360°",
+        "Volume of prism 2×3×4?": "V = length × width × height = 2 × 3 × 4 = 24",
+        "Area of parallelogram base 6, height 4?": "A = base × height = 6 × 4 = 24",
+        "Vertices of a cube?": "A cube has 8 vertices (corners)",
+        "Diagonal of square side 1?": "Diagonal = side × √2 = 1 × √2 = √2",
+        "Area of trapezoid (3,5) height 2?": "A = ½ × (a + b) × h = ½ × (3 + 5) × 2 = 8",
+        "Circumference diameter 4?": "C = πd = π × 4 = 4π",
+        "Edges of a cube?": "A cube has 12 edges",
+        "Perimeter of rectangle 5×3?": "P = 2(l + w) = 2(5 + 3) = 16",
+        "Area of rhombus diagonals 6,8?": "A = ½ × d₁ × d₂ = ½ × 6 × 8 = 24"
+      },
+      calculus: {
+        "Derivative of x²?": "Power rule: d/dx(xⁿ) = n×x^(n-1)\nd/dx(x²) = 2x",
+        "Derivative of 3x?": "d/dx(3x) = 3 (derivative of constant × x is the constant)",
+        "Integral of 2x?": "∫2x dx = 2×(x²/2) + C = x² + C",
+        "Limit of 1/x as x → ∞?": "As x gets infinitely large, 1/x approaches 0",
+        "Derivative of sin(x)?": "d/dx(sin x) = cos(x)",
+        "Derivative of e^x?": "The derivative of e^x is itself: e^x",
+        "Integral of cos(x)?": "∫cos(x) dx = sin(x) + C",
+        "Derivative of ln(x)?": "d/dx(ln x) = 1/x",
+        "Limit of (x²-1)/(x-1) as x→1?": "Factor: (x-1)(x+1)/(x-1) = x+1\nAt x=1: 1+1 = 2",
+        "Second derivative of x³?": "First: 3x²\nSecond: 6x",
+        "Integral of 1?": "∫1 dx = x + C",
+        "Derivative of x⁴?": "Power rule: 4x³",
+        "Critical point of x²-4x?": "f'(x) = 2x - 4 = 0\nx = 2",
+        "Integral of e^x?": "∫e^x dx = e^x + C",
+        "Limit sin(x)/x as x→0?": "This is a fundamental limit = 1",
+        "Derivative of cos(x)?": "d/dx(cos x) = -sin(x)",
+        "Integral of x²?": "∫x² dx = x³/3 + C",
+        "Derivative of 5?": "Derivative of any constant is 0",
+        "Limit of 2x as x→3?": "Direct substitution: 2 × 3 = 6",
+        "Integral of sin(x)?": "∫sin(x) dx = -cos(x) + C"
+      },
+      probability: {
+        "P(rolling 3 on die)?": "There's 1 favorable outcome out of 6 possible: 1/6",
+        "P(heads on coin)?": "There's 1 favorable outcome out of 2 possible: 1/2",
+        "P(A)=0.3, P(B)=0.4, P(A∩B) if independent?": "For independent events: P(A∩B) = P(A) × P(B) = 0.3 × 0.4 = 0.12",
+        "P(ace from deck)?": "There are 4 aces in 52 cards: 4/52 = 1/13",
+        "Sum of all probabilities?": "Total probability of all outcomes = 1",
+        "P(two 6s on two dice)?": "P(6) × P(6) = 1/6 × 1/6 = 1/36",
+        "If P(A)=0.6, P(not A)?": "P(not A) = 1 - P(A) = 1 - 0.6 = 0.4",
+        "P(red card from deck)?": "26 red cards in 52: 26/52 = 1/2",
+        "P(A∪B) if P(A)=0.3, P(B)=0.4, P(A∩B)=0.1?": "P(A∪B) = P(A) + P(B) - P(A∩B) = 0.3 + 0.4 - 0.1 = 0.6",
+        "Arrange 3 items?": "Permutations: 3! = 3 × 2 × 1 = 6",
+        "Combinations of 2 from 4?": "C(4,2) = 4!/(2!×2!) = 6",
+        "P(at least 1 head in 2 flips)?": "1 - P(no heads) = 1 - (1/2)² = 1 - 1/4 = 3/4",
+        "P(sum=7 on two dice)?": "Favorable outcomes: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) = 6\nTotal: 36\nP = 6/36 = 1/6",
+        "Expected value of fair die?": "E = (1+2+3+4+5+6)/6 = 21/6 = 3.5",
+        "P(2 aces no replacement)?": "(4/52) × (3/51) = 12/2652 = 1/221",
+        "P(A|B)=0.5, P(B)=0.4, P(A∩B)?": "P(A∩B) = P(A|B) × P(B) = 0.5 × 0.4 = 0.2",
+        "P(even on die)?": "Even: 2,4,6 = 3 outcomes\n3/6 = 1/2",
+        "4P2?": "4!/(4-2)! = 4!/2! = 24/2 = 12",
+        "P(exactly 2 heads in 3 flips)?": "C(3,2) × (1/2)² × (1/2)¹ = 3 × 1/8 = 3/8",
+        "Mutually exclusive: P(A∩B)?": "For mutually exclusive events, P(A∩B) = 0"
+      },
+      trigonometry: {
+        "sin(90°)?": "sin(90°) = 1 (maximum value of sine)",
+        "cos(0°)?": "cos(0°) = 1 (maximum value of cosine)",
+        "tan(45°)?": "tan(45°) = sin(45°)/cos(45°) = 1",
+        "sin(30°)?": "sin(30°) = 1/2 (standard angle value)",
+        "cos(60°)?": "cos(60°) = 1/2 (complementary to sin(30°))",
+        "cos(θ) in right triangle?": "cos(θ) = adjacent side / hypotenuse",
+        "sin²θ + cos²θ?": "Pythagorean identity: sin²θ + cos²θ = 1 always",
+        "tan(θ) = ?": "tan(θ) = sin(θ)/cos(θ) or opposite/adjacent",
+        "sin(180°)?": "sin(180°) = 0 (on the x-axis)",
+        "cos(180°)?": "cos(180°) = -1 (negative x-axis)",
+        "Period of sin(x)?": "sin(x) completes one cycle every 2π radians",
+        "Period of tan(x)?": "tan(x) completes one cycle every π radians",
+        "sin(θ+360°)?": "Adding 360° returns to the same angle: sin(θ)",
+        "30° triangle: opp/hyp?": "In a 30-60-90 triangle, opp/hyp for 30° = 1/2",
+        "cot(θ)?": "cot(θ) = cos(θ)/sin(θ) = 1/tan(θ) (Both B and C)",
+        "sec(θ)?": "sec(θ) = 1/cos(θ)",
+        "csc(θ)?": "csc(θ) = 1/sin(θ)",
+        "sin(θ-90°)?": "Phase shift: sin(θ-90°) = -cos(θ)",
+        "Range of sin(x)?": "sin(x) oscillates between -1 and 1: [-1,1]",
+        "Amplitude of 3sin(x)?": "Amplitude is the coefficient: 3"
+      }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const rawTopic = (urlParams.get('topic') || 'algebra').toString().trim();
+    const topicKey = rawTopic.toLowerCase();
+
+    const diagnosisQuestions = {
+      algebra: [
+        { question: "Solve for x: 2x + 5 = 13", options: ["2", "3", "4", "5"], correct: 2, subtopic: "Linear Equations" },
+        { question: "What is the value of x in: 3x - 7 = 2?", options: ["1", "2", "3", "4"], correct: 2, subtopic: "Linear Equations" },
+        { question: "Simplify: 2x + 3x - x", options: ["3x", "4x", "5x", "6x"], correct: 1, subtopic: "Simplification" },
+        { question: "Expand: 2(x + 3)", options: ["2x + 3", "2x + 6", "x + 6", "2x + 5"], correct: 1, subtopic: "Expansion" },
+        { question: "Factor: x² + 5x + 6", options: ["(x+2)(x+3)", "(x+1)(x+6)", "(x+2)(x+2)", "(x+3)(x+3)"], correct: 0, subtopic: "Factorization" },
+        { question: "Solve: x/2 = 4", options: ["2", "4", "6", "8"], correct: 3, subtopic: "Linear Equations" },
+        { question: "What is 2x when x = 5?", options: ["7", "10", "15", "20"], correct: 1, subtopic: "Substitution" },
+        { question: "Simplify: 4x² - 2x²", options: ["2x", "2x²", "6x²", "x²"], correct: 1, subtopic: "Simplification" },
+        { question: "Solve: 5x = 25", options: ["4", "5", "6", "7"], correct: 1, subtopic: "Linear Equations" },
+        { question: "What is the coefficient of x in 3x + 2?", options: ["2", "3", "5", "6"], correct: 1, subtopic: "Terminology" },
+        { question: "Expand: (x + 2)²", options: ["x² + 4", "x² + 4x + 4", "x² + 2x + 4", "x + 4"], correct: 1, subtopic: "Expansion" },
+        { question: "Factor: x² - 9", options: ["(x-3)²", "(x+3)²", "(x-3)(x+3)", "(x-9)(x+1)"], correct: 2, subtopic: "Factorization" },
+        { question: "Solve: 2x + 3 = x + 5", options: ["1", "2", "3", "4"], correct: 1, subtopic: "Linear Equations" },
+        { question: "Simplify: 3(x + 2) - 2x", options: ["x + 6", "x + 2", "5x + 6", "x + 3"], correct: 0, subtopic: "Simplification" },
+        { question: "What is x² when x = 3?", options: ["6", "9", "12", "15"], correct: 1, subtopic: "Substitution" },
+        { question: "Solve: 4x - 8 = 0", options: ["1", "2", "3", "4"], correct: 1, subtopic: "Linear Equations" },
+        { question: "Factor: 2x² + 4x", options: ["2x(x+2)", "x(2x+4)", "2(x²+2x)", "2x(x+4)"], correct: 0, subtopic: "Factorization" },
+        { question: "Expand: 3(2x - 1)", options: ["6x - 3", "6x - 1", "3x - 3", "6x + 3"], correct: 0, subtopic: "Expansion" },
+        { question: "Solve: x + 7 = 12", options: ["4", "5", "6", "7"], correct: 1, subtopic: "Linear Equations" },
+        { question: "Simplify: 5x - 3x + 2x", options: ["2x", "3x", "4x", "5x"], correct: 2, subtopic: "Simplification" }
+      ],
+      geometry: [
+        { question: "Sum of angles in a triangle?", options: ["90°", "180°", "270°", "360°"], correct: 1, subtopic: "Angles" },
+        { question: "Area of rectangle 5 × 3?", options: ["8", "15", "16", "20"], correct: 1, subtopic: "Area" },
+        { question: "Sides in a hexagon?", options: ["4", "5", "6", "7"], correct: 2, subtopic: "Polygons" },
+        { question: "Circumference of circle radius 2?", options: ["4π", "2π", "8π", "π"], correct: 0, subtopic: "Circle" },
+        { question: "Area of circle radius 3?", options: ["3π", "6π", "9π", "12π"], correct: 2, subtopic: "Circle" },
+        { question: "Volume of cube side 2?", options: ["4", "6", "8", "12"], correct: 2, subtopic: "Volume" },
+        { question: "Pythagorean theorem?", options: ["a+b=c", "a²+b²=c²", "a-b=c", "ab=c²"], correct: 1, subtopic: "Triangles" },
+        { question: "Area of triangle base 4, height 3?", options: ["6", "7", "12", "14"], correct: 0, subtopic: "Area" },
+        { question: "Right angle degrees?", options: ["45°", "60°", "90°", "180°"], correct: 2, subtopic: "Angles" },
+        { question: "Perimeter of square side 5?", options: ["10", "15", "20", "25"], correct: 2, subtopic: "Perimeter" },
+        { question: "Sum of angles in quadrilateral?", options: ["180°", "270°", "360°", "450°"], correct: 2, subtopic: "Angles" },
+        { question: "Volume of prism 2×3×4?", options: ["9", "12", "18", "24"], correct: 3, subtopic: "Volume" },
+        { question: "Area of parallelogram base 6, height 4?", options: ["10", "20", "24", "30"], correct: 2, subtopic: "Area" },
+        { question: "Vertices of a cube?", options: ["6", "8", "10", "12"], correct: 1, subtopic: "3D Shapes" },
+        { question: "Diagonal of square side 1?", options: ["1", "√2", "2", "√3"], correct: 1, subtopic: "Triangles" },
+        { question: "Area of trapezoid (3,5) height 2?", options: ["6", "8", "10", "12"], correct: 1, subtopic: "Area" },
+        { question: "Circumference diameter 4?", options: ["2π", "4π", "8π", "16π"], correct: 1, subtopic: "Circle" },
+        { question: "Edges of a cube?", options: ["8", "10", "12", "14"], correct: 2, subtopic: "3D Shapes" },
+        { question: "Perimeter of rectangle 5×3?", options: ["8", "15", "16", "20"], correct: 2, subtopic: "Perimeter" },
+        { question: "Area of rhombus diagonals 6,8?", options: ["14", "24", "28", "48"], correct: 1, subtopic: "Area" }
+      ],
+      calculus: [
+        { question: "Derivative of x²?", options: ["x", "2x", "x²", "2"], correct: 1, subtopic: "Derivatives" },
+        { question: "Derivative of 3x?", options: ["3", "x", "3x", "0"], correct: 0, subtopic: "Derivatives" },
+        { question: "Integral of 2x?", options: ["x²", "x² + C", "2x² + C", "x + C"], correct: 1, subtopic: "Integrals" },
+        { question: "Limit of 1/x as x → ∞?", options: ["1", "0", "∞", "-∞"], correct: 1, subtopic: "Limits" },
+        { question: "Derivative of sin(x)?", options: ["cos(x)", "-cos(x)", "sin(x)", "tan(x)"], correct: 0, subtopic: "Derivatives" },
+        { question: "Derivative of e^x?", options: ["e^x", "x·e^x", "1", "e"], correct: 0, subtopic: "Derivatives" },
+        { question: "Integral of cos(x)?", options: ["sin(x)+C", "-sin(x)+C", "cos(x)+C", "tan(x)+C"], correct: 0, subtopic: "Integrals" },
+        { question: "Derivative of ln(x)?", options: ["1/x", "x", "ln(x)", "e^x"], correct: 0, subtopic: "Derivatives" },
+        { question: "Limit of (x²-1)/(x-1) as x→1?", options: ["0", "1", "2", "∞"], correct: 2, subtopic: "Limits" },
+        { question: "Second derivative of x³?", options: ["3x", "6x", "9x", "3x²"], correct: 1, subtopic: "Derivatives" },
+        { question: "Integral of 1?", options: ["0", "1", "x + C", "x"], correct: 2, subtopic: "Integrals" },
+        { question: "Derivative of x⁴?", options: ["4x³", "4x", "x³", "4"], correct: 0, subtopic: "Derivatives" },
+        { question: "Critical point of x²-4x?", options: ["0", "2", "4", "-2"], correct: 1, subtopic: "Applications" },
+        { question: "Integral of e^x?", options: ["e^x+C", "x·e^x+C", "1+C", "e+C"], correct: 0, subtopic: "Integrals" },
+        { question: "Limit sin(x)/x as x→0?", options: ["0", "1", "∞", "-1"], correct: 1, subtopic: "Limits" },
+        { question: "Derivative of cos(x)?", options: ["sin(x)", "-sin(x)", "cos(x)", "tan(x)"], correct: 1, subtopic: "Derivatives" },
+        { question: "Integral of x²?", options: ["x³/3+C", "x³+C", "2x+C", "x+C"], correct: 0, subtopic: "Integrals" },
+        { question: "Derivative of 5?", options: ["5", "1", "0", "x"], correct: 2, subtopic: "Derivatives" },
+        { question: "Limit of 2x as x→3?", options: ["2", "3", "6", "9"], correct: 2, subtopic: "Limits" },
+        { question: "Integral of sin(x)?", options: ["cos(x)+C", "-cos(x)+C", "sin(x)+C", "tan(x)+C"], correct: 1, subtopic: "Integrals" }
+      ],
+      probability: [
+        { question: "P(rolling 3 on die)?", options: ["1/6", "1/3", "1/2", "1/4"], correct: 0, subtopic: "Basic Probability" },
+        { question: "P(heads on coin)?", options: ["1/4", "1/3", "1/2", "2/3"], correct: 2, subtopic: "Basic Probability" },
+        { question: "P(A)=0.3, P(B)=0.4, P(A∩B) if independent?", options: ["0.12", "0.7", "0.3", "0.4"], correct: 0, subtopic: "Independent Events" },
+        { question: "P(ace from deck)?", options: ["1/13", "1/26", "4/52", "1/52"], correct: 2, subtopic: "Card Probability" },
+        { question: "Sum of all probabilities?", options: ["0", "0.5", "1", "∞"], correct: 2, subtopic: "Basic Probability" },
+        { question: "P(two 6s on two dice)?", options: ["1/6", "1/12", "1/36", "1/18"], correct: 2, subtopic: "Independent Events" },
+        { question: "If P(A)=0.6, P(not A)?", options: ["0.4", "0.6", "0.3", "0.7"], correct: 0, subtopic: "Complement" },
+        { question: "P(red card from deck)?", options: ["1/4", "1/2", "1/3", "2/3"], correct: 1, subtopic: "Card Probability" },
+        { question: "P(A∪B) if P(A)=0.3, P(B)=0.4, P(A∩B)=0.1?", options: ["0.6", "0.7", "0.5", "0.4"], correct: 0, subtopic: "Addition Rule" },
+        { question: "Arrange 3 items?", options: ["3", "6", "9", "12"], correct: 1, subtopic: "Permutations" },
+        { question: "Combinations of 2 from 4?", options: ["4", "6", "8", "12"], correct: 1, subtopic: "Combinations" },
+        { question: "P(at least 1 head in 2 flips)?", options: ["1/4", "1/2", "3/4", "1"], correct: 2, subtopic: "Compound Events" },
+        { question: "P(sum=7 on two dice)?", options: ["1/6", "1/12", "1/36", "1/8"], correct: 0, subtopic: "Compound Events" },
+        { question: "Expected value of fair die?", options: ["2.5", "3", "3.5", "4"], correct: 2, subtopic: "Expected Value" },
+        { question: "P(2 aces no replacement)?", options: ["1/169", "4/2652", "1/221", "1/26"], correct: 2, subtopic: "Without Replacement" },
+        { question: "P(A|B)=0.5, P(B)=0.4, P(A∩B)?", options: ["0.2", "0.5", "0.4", "0.9"], correct: 0, subtopic: "Conditional Probability" },
+        { question: "P(even on die)?", options: ["1/6", "1/3", "1/2", "2/3"], correct: 2, subtopic: "Basic Probability" },
+        { question: "4P2?", options: ["6", "8", "12", "16"], correct: 2, subtopic: "Permutations" },
+        { question: "P(exactly 2 heads in 3 flips)?", options: ["1/8", "1/4", "3/8", "1/2"], correct: 2, subtopic: "Binomial Probability" },
+        { question: "Mutually exclusive: P(A∩B)?", options: ["1", "0.5", "0", "0.25"], correct: 2, subtopic: "Mutually Exclusive" }
+      ],
+      trigonometry: [
+        { question: "sin(90°)?", options: ["0", "1/2", "√3/2", "1"], correct: 3, subtopic: "Trigonometric Values" },
+        { question: "cos(0°)?", options: ["0", "1/2", "√3/2", "1"], correct: 3, subtopic: "Trigonometric Values" },
+        { question: "tan(45°)?", options: ["0", "1/2", "1", "√3"], correct: 2, subtopic: "Trigonometric Values" },
+        { question: "sin(30°)?", options: ["1/2", "√3/2", "1", "0"], correct: 0, subtopic: "Trigonometric Values" },
+        { question: "cos(60°)?", options: ["1/2", "√3/2", "1", "0"], correct: 0, subtopic: "Trigonometric Values" },
+        { question: "cos(θ) in right triangle?", options: ["opp/hyp", "adj/hyp", "opp/adj", "hyp/adj"], correct: 1, subtopic: "Definitions" },
+        { question: "sin²θ + cos²θ?", options: ["0", "1/2", "1", "2"], correct: 2, subtopic: "Identities" },
+        { question: "tan(θ) = ?", options: ["sinθ/cosθ", "cosθ/sinθ", "sinθ·cosθ", "sinθ+cosθ"], correct: 0, subtopic: "Definitions" },
+        { question: "sin(180°)?", options: ["0", "1", "-1", "undefined"], correct: 0, subtopic: "Trigonometric Values" },
+        { question: "cos(180°)?", options: ["0", "1", "-1", "undefined"], correct: 2, subtopic: "Trigonometric Values" },
+        { question: "Period of sin(x)?", options: ["π", "2π", "π/2", "1"], correct: 1, subtopic: "Periodic Functions" },
+        { question: "Period of tan(x)?", options: ["π", "2π", "π/2", "1"], correct: 0, subtopic: "Periodic Functions" },
+        { question: "sin(θ+360°)?", options: ["sin(θ)", "-sin(θ)", "cos(θ)", "-cos(θ)"], correct: 0, subtopic: "Periodic Functions" },
+        { question: "30° triangle: opp/hyp?", options: ["1/2", "√3/2", "1", "√3"], correct: 0, subtopic: "Special Triangles" },
+        { question: "cot(θ)?", options: ["sinθ/cosθ", "cosθ/sinθ", "1/tanθ", "Both B&C"], correct: 3, subtopic: "Definitions" },
+        { question: "sec(θ)?", options: ["1/sinθ", "1/cosθ", "1/tanθ", "sinθ/cosθ"], correct: 1, subtopic: "Definitions" },
+        { question: "csc(θ)?", options: ["1/sinθ", "1/cosθ", "1/tanθ", "cosθ/sinθ"], correct: 0, subtopic: "Definitions" },
+        { question: "sin(θ-90°)?", options: ["sin(θ)", "-sin(θ)", "-cos(θ)", "cos(θ)"], correct: 2, subtopic: "Angle Subtraction" },
+        { question: "Range of sin(x)?", options: ["[0,1]", "[-1,1]", "[0,∞)", "(-∞,∞)"], correct: 1, subtopic: "Function Properties" },
+        { question: "Amplitude of 3sin(x)?", options: ["1", "2", "3", "π"], correct: 2, subtopic: "Transformations" }
+      ]
+    };
+
+    const selectedTopic = diagnosisQuestions.hasOwnProperty(topicKey) ? topicKey : 'algebra';
+    const questions = diagnosisQuestions[selectedTopic];
+    const topicTitles = { algebra: 'ALGEBRA', geometry: 'GEOMETRY', calculus: 'CALCULUS', probability: 'PROBABILITY', trigonometry: 'TRIGONOMETRY' };
+
+    document.getElementById('diagnosisTitle').textContent = `// ${topicTitles[selectedTopic]}`;
+    document.getElementById('diagnosisDescription').textContent = `Skill assessment (${questions.length} questions)`;
+
+    let currentQuestion = 0;
+    let answers = new Array(questions.length).fill(null);
+    let answered = new Array(questions.length).fill(false);
+
+    function selectCurrentLevel(level) {
+      selectedCurrentLevel = level;
+      const options = document.querySelectorAll('.level-question:first-child .level-option');
+      options.forEach(opt => { opt.classList.remove('selected'); if (opt.textContent === level.toUpperCase()) opt.classList.add('selected'); });
+      checkLevelSelection();
+    }
+
+    function selectTargetLevel(level) {
+      selectedTargetLevel = level;
+      const options = document.querySelectorAll('.level-question:last-child .level-option');
+      options.forEach(opt => { opt.classList.remove('selected'); if (opt.textContent === level.toUpperCase()) opt.classList.add('selected'); });
+      checkLevelSelection();
+    }
+
+    function checkLevelSelection() {
+      document.getElementById('startTestBtn').disabled = !(selectedCurrentLevel && selectedTargetLevel);
+    }
+
+    async function startTest() {
+      // Save self-assessed levels to Supabase (will be saved with diagnosis results)
+      // Store temporarily for use in saveProgressToSupabase later
+      window.tempCurrentLevel = selectedCurrentLevel;
+      window.tempTargetLevel = selectedTargetLevel;
+      document.getElementById('levelModal').style.display = 'none';
+    }
+
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById('questionNumber').textContent = `QUESTION ${currentQuestion + 1}`;
+      document.getElementById('questionText').textContent = q.question;
+      document.getElementById('progressText').textContent = `STAGE ${currentQuestion + 1} OF ${questions.length}`;
+      document.getElementById('progressFill').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+      document.getElementById('feedbackSection').classList.remove('show');
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        optionDiv.textContent = `${String.fromCharCode(65 + index)}) ${option}`;
+        optionDiv.onclick = () => selectOption(index);
+
+        if (answers[currentQuestion] === index) optionDiv.classList.add('selected');
+        if (answered[currentQuestion] && index === q.correct) optionDiv.classList.add('correct');
+        if (answered[currentQuestion] && answers[currentQuestion] === index && index !== q.correct) optionDiv.classList.add('incorrect');
+
+        optionsContainer.appendChild(optionDiv);
+      });
+
+      document.getElementById('prevBtn').disabled = currentQuestion === 0;
+      document.getElementById('nextBtn').disabled = !answered[currentQuestion];
+    }
+
+    function selectOption(index) {
+      if (!answered[currentQuestion]) {
+        answers[currentQuestion] = index;
+        answered[currentQuestion] = true;
+
+        const q = questions[currentQuestion];
+        const isCorrect = index === q.correct;
+        const feedbackSection = document.getElementById('feedbackSection');
+        const feedbackText = document.getElementById('feedbackText');
+        const videoLink = document.getElementById('videoLink');
+
+        if (isCorrect) {
+          feedbackText.textContent = 'CORRECT! Well done.';
+          feedbackText.className = 'feedback-text correct';
+          videoLink.style.display = 'none';
+        } else {
+          feedbackText.textContent = `WRONG. Review: ${q.subtopic}`;
+          feedbackText.className = 'feedback-text incorrect';
+          const videoUrl = videoDatabase[selectedTopic]?.[q.subtopic];
+          if (videoUrl) { videoLink.href = videoUrl; videoLink.style.display = 'inline-block'; }
+        }
+
+        feedbackSection.classList.add('show');
+        loadQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1 && answered[currentQuestion]) {
+        currentQuestion++;
+        loadQuestion();
+      } else if (currentQuestion === questions.length - 1 && answered[currentQuestion]) {
+        showSummary();
+      }
+    }
+
+    function previousQuestion() {
+      if (currentQuestion > 0) { currentQuestion--; loadQuestion(); }
+    }
+
+    function calculateDiagnosedLevel(percentage) {
+      if (percentage >= 80) return 'Pro';
+      else if (percentage >= 50) return 'Intermediate';
+      else return 'Beginner';
+    }
+
+    async function showSummary() {
+      const correctCount = answers.reduce((count, answer, index) => count + (answer === questions[index].correct ? 1 : 0), 0);
+      const percentage = Math.round((correctCount / questions.length) * 100);
+      const diagnosedLevel = calculateDiagnosedLevel(percentage);
+
+      // Save to Supabase instead of localStorage
+      const progressData = {
+        diagnosed_level: diagnosedLevel,
+        current_level: window.tempCurrentLevel || 'Beginner',
+        target_level: window.tempTargetLevel || 'Pro',
+        total_questions: questions.length,
+        correct_answers: correctCount
+      };
+
+      console.log('=== SAVING DIAGNOSIS RESULTS ===');
+      console.log('Topic:', selectedTopic);
+      console.log('Progress Data:', progressData);
+
+      try {
+        const result = await saveProgressToSupabase(selectedTopic, progressData);
+        console.log('Save result:', result);
+        console.log('✅ Diagnosis results saved to Supabase:', selectedTopic, diagnosedLevel);
+      } catch (error) {
+        console.error('❌ ERROR saving diagnosis results:', error);
+      }
+
+      const subtopicScores = {};
+      questions.forEach(q => { if (!subtopicScores[q.subtopic]) subtopicScores[q.subtopic] = { correct: 0, total: 0 }; });
+      questions.forEach((q, i) => { subtopicScores[q.subtopic].total++; if (answers[i] === q.correct) subtopicScores[q.subtopic].correct++; });
+
+      const weakTopics = Object.entries(subtopicScores).filter(([_, s]) => s.total > 0 && (s.correct / s.total) < 0.6).map(([t, s]) => `${t} (${s.correct}/${s.total})`).sort();
+
+      document.getElementById('correctCount').textContent = `${correctCount}/${questions.length}`;
+      document.getElementById('scorePercentage').textContent = percentage + '%';
+      document.getElementById('diagnosedLevel').textContent = diagnosedLevel.toUpperCase();
+
+      const weakTopicsList = document.getElementById('weakTopicsList');
+      weakTopicsList.innerHTML = '';
+      if (weakTopics.length > 0) {
+        weakTopics.forEach(t => { const li = document.createElement('li'); li.textContent = t; weakTopicsList.appendChild(li); });
+      } else {
+        const li = document.createElement('li'); li.textContent = 'All topics mastered!'; weakTopicsList.appendChild(li);
+      }
+
+      sessionStorage.setItem('diagnosisComplete_' + selectedTopic, 'true');
+      sessionStorage.setItem('diagnosisScore_' + selectedTopic, percentage);
+      sessionStorage.setItem('weakTopics_' + selectedTopic, JSON.stringify(weakTopics));
+      sessionStorage.setItem('correctCount_' + selectedTopic, correctCount);
+      sessionStorage.setItem('totalQuestions_' + selectedTopic, questions.length);
+      sessionStorage.setItem('answers_' + selectedTopic, JSON.stringify(answers));
+
+      document.getElementById('questionCard').classList.add('hidden');
+      document.getElementById('summarySection').classList.add('show');
+    }
+
+    function backToDashboard() { window.location.href = 'dashboard.html'; }
+    function startResults() { window.location.href = 'results.html?topic=' + selectedTopic; }
+
+    function toggleCheckAnswers() {
+      const reviewSection = document.getElementById('answersReview');
+      if (reviewSection.classList.contains('hidden')) { reviewSection.classList.remove('hidden'); renderReview(); }
+      else { reviewSection.classList.add('hidden'); }
+    }
+
+    function renderReview() {
+      const container = document.getElementById('reviewContainer');
+      container.innerHTML = '';
+
+      questions.forEach((q, index) => {
+        const userAnsIndex = answers[index];
+        const isCorrect = userAnsIndex === q.correct;
+        const subtopicVideo = videoDatabase[selectedTopic]?.[q.subtopic] || '#';
+        const solutionMethod = solutionMethods[selectedTopic]?.[q.question] || 'Review the topic concepts and practice similar problems.';
+
+        const item = document.createElement('div');
+        item.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
+        item.innerHTML = `
+          <div class="review-status ${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✓ CORRECT' : '✗ INCORRECT'}</div>
+          <div class="review-question">${index + 1}. ${q.question}</div>
+          <div class="review-details">
+            <div class="review-row">
+              <span class="review-label">Your Answer:</span>
+              <span class="review-value ${isCorrect ? 'user-correct' : 'user-incorrect'}">${q.options[userAnsIndex] || 'Not answered'}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Correct Answer:</span>
+              <span class="review-value correct-answer">${q.options[q.correct]}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">Topic:</span>
+              <span class="review-value">${q.subtopic}</span>
+            </div>
+            <div class="review-solution">
+              <h4>📝 How to Solve:</h4>
+              <p>${solutionMethod}</p>
+            </div>
+            <a class="review-video-link" href="${subtopicVideo}" target="_blank">📺 Watch Tutorial</a>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    loadQuestion();
+  </script>
+</body>
+
+</html>

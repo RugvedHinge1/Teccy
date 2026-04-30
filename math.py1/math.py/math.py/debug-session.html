@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Session Debug</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <h1>Supabase Session Debug</h1>
+    <button onclick="checkSession()">Check Session</button>
+    <button onclick="clearAll()">Clear Everything & Logout</button>
+    <pre id="output"></pre>
+
+    <script>
+        const SUPABASE_URL = 'https://feyodgbzzznfogexwzwa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZleW9kZ2J6enpuZm9nZXh3endhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjQ2MzAsImV4cCI6MjA4NjA0MDYzMH0.xGRkDRk9UdTKMW3ULpxBAEy5qqX_sLwTppuaPX5wFUk';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function checkSession() {
+            const output = document.getElementById('output');
+            output.textContent = 'Checking...\n';
+
+            // Check auth session
+            const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+            output.textContent += '\n=== SESSION ===\n';
+            if (sessionError) {
+                output.textContent += 'Session Error: ' + JSON.stringify(sessionError, null, 2) + '\n';
+            } else {
+                output.textContent += 'Session: ' + (session ? 'Active' : 'None') + '\n';
+                if (session) {
+                    output.textContent += 'User Email: ' + session.user.email + '\n';
+                    output.textContent += 'User ID: ' + session.user.id + '\n';
+                }
+            }
+
+            // Check user
+            const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+            output.textContent += '\n=== USER ===\n';
+            if (userError) {
+                output.textContent += 'User Error: ' + JSON.stringify(userError, null, 2) + '\n';
+            } else {
+                output.textContent += 'User: ' + (user ? user.email : 'None') + '\n';
+            }
+
+            // Check localStorage
+            output.textContent += '\n=== LOCALSTORAGE ===\n';
+            const keys = Object.keys(localStorage);
+            output.textContent += 'Total keys: ' + keys.length + '\n';
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                output.textContent += key + ': ' + (value.length > 50 ? value.substring(0, 50) + '...' : value) + '\n';
+            });
+        }
+
+        async function clearAll() {
+            // Logout
+            await supabaseClient.auth.signOut();
+
+            // Clear localStorage
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (!key.startsWith('sb-')) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+
+            document.getElementById('output').textContent = 'Cleared! Refresh page to verify.';
+        }
+
+        // Auto-check on load
+        window.onload = checkSession;
+    </script>
+</body>
+
+</html>
