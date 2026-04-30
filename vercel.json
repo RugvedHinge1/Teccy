@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "name": "teccy-math-platform",
+  "builds": [
+    {
+      "src": "Website-Project/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/Website-Project/$1" }
+  ]
+}
