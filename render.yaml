@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: teccy-diagnosis-api
+    env: python
+    buildCommand: "pip install -r math.py/math.py/python/requirements.txt"
+    startCommand: "cd math.py/math.py/python && gunicorn diagnosis_api:app"
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+
+  - type: web
+    name: teccy-practice-model
+    env: python
+    buildCommand: "pip install -r math.py/math.py/python/requirements.txt"
+    startCommand: "cd math.py/math.py/python && streamlit run question.py --server.port $PORT"
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false

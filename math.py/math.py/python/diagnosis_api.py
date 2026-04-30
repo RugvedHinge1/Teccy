@@ -12,7 +12,7 @@ import random
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_ollama import OllamaLLM
+from langchain_groq import ChatGroq
 
 # Load environment variables
 load_dotenv()
@@ -22,7 +22,7 @@ CORS(app)  # Enable CORS for frontend access
 
 # Initialize LLM
 def get_llm():
-    return OllamaLLM(model="phi3:3.8b", temperature=0.7, num_ctx=2048)
+    return ChatGroq(model="llama-3.1-8b-instant", temperature=0.7)
 
 def clean_json_string(s):
     """Clean control characters and common issues from JSON string"""
@@ -148,7 +148,7 @@ Each object should have: question, options (array of 4 strings), correct (index 
                         "options": ["Option A", "Option B", "Option C", "Option D"],
                         "correct": 0,
                         "subtopic": topic,
-                        "solution": "AI generation failed. Check if Ollama is running.",
+                        "solution": "AI generation failed. Check if API keys are configured.",
                         "difficulty": difficulty
                     })
         

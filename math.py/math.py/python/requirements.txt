@@ -2,7 +2,9 @@ langchain
 langchain-openai
 langchain-core
 langchain-community
+langchain-groq
 streamlit
 python-dotenv
 flask
 flask-cors
+gunicorn
